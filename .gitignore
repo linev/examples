@@ -1,5 +1,7 @@
 .project
 *.pcm
+*.log
+GPUCache
 
 # Prerequisites
 *.d
