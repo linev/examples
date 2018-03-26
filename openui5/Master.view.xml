@@ -1,0 +1,21 @@
+<View xmlns="sap.m" displayBlock="true" class="sapUiSizeCompact" controllerName="flexiblecolumnlayout.Master" height="100%">
+	<Page id="masterPage" title="Summary">
+	<headerContent>
+	<Toolbar>
+	<content>
+	  
+							<Button icon="sap-icon://add" tooltip="add collection"/>
+	</content>
+	</Toolbar> 
+	</headerContent>
+	<content>
+		<Tree id="tree"
+                  includeItemInSelection="true"
+		  selectionChange="onSelectionChange"
+		  >
+		</Tree>
+	</content>
+	</Page>
+</View>
+
+

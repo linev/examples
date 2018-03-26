@@ -1,0 +1,62 @@
+<core:View xmlns:core="sap.ui.core"
+                   class="sapUiSizeCompact"
+		   xmlns="sap.uxap"
+		   xmlns:layout="sap.ui.layout"
+		   xmlns:m="sap.m"
+		   xmlns:uit="sap.ui.table"
+                   displayBlock="true"
+                   controllerName="flexiblecolumnlayout.DetailDetail"
+		   height="100%"
+		>
+
+	<ObjectPageLayout id="ObjectPageLayout" enableLazyLoading="false" class="sapUiTinyMargin">
+<headerTitle class="sapUiNoMarginBottom" >
+                        <ObjectPageHeader id="headerForTest"
+                                                          objectTitle="TableView"
+                                                          objectSubtitle="Tracks"
+                                >
+                                <actions>
+                                        <ObjectPageHeaderActionButton icon="sap-icon://full-screen" press="handleFullScreen" tooltip="Enter Full Screen Mode" visible="{= ${/actionButtonsInfo/endColumn/fullScreen} !== null }"></ObjectPageHeaderActionButton>
+                                        <ObjectPageHeaderActionButton icon="sap-icon://exit-full-screen" press="handleExitFullScreen" tooltip="Exit Full Screen Mode" visible="{= ${/actionButtonsInfo/endColumn/exitFullScreen} !== null }"></ObjectPageHeaderActionButton>
+                                        <ObjectPageHeaderActionButton icon="sap-icon://decline" press="handleClose" tooltip="Close column" visible="{= ${/actionButtonsInfo/endColumn/closeColumn} !== null }"></ObjectPageHeaderActionButton>
+                                </actions>
+
+
+                        </ObjectPageHeader>
+                </headerTitle>
+
+
+
+		<sections class="sapUiNoMarginTop">
+			<ObjectPageSection title="" class="sapUiNoMarginTop">
+				<subSections class="sapUiNoMarginTop">
+					<ObjectPageSubSection title="Data" class="sapUiNoMarginTop">
+						<blocks class="sapUiNoMarginTop" >
+                                                        <uit:Table
+							     class="sapUiNoMarginTop"
+                                                             id="table"
+                                                             selectionMode="None"
+                                                             editable="false"
+                                                             height="100%"
+                                                             rowHeight="25"
+                                                             visibleRowCountMode="Auto"
+                                                        >        
+                                                        </uit:Table>
+							
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+			<ObjectPageSection title="">
+				<subSections>
+					<ObjectPageSubSection title="Sources">
+						<blocks>
+                                                        <m:Button text="To next page" press="handleDetailDetailPress" />
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+		</sections>
+
+	</ObjectPageLayout>
+</core:View>
