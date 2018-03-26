@@ -1,0 +1,115 @@
+/// \file
+/// \ingroup tutorial_webgui
+///  This macro create simple testpanel, based on webgui
+/// \macro_code
+///
+/// \author Sergey Linev
+
+
+#include <ROOT/TWebWindowsManager.hxx>
+
+#include <vector>
+#include <string>
+
+#include "TBufferJSON.h"
+#include "TROOT.h"
+
+struct ComboBoxItem {
+   std::string fId;
+   std::string fName;
+   ComboBoxItem() = default;
+   ComboBoxItem(const std::string &id, const std::string &name) : fId(id), fName(name) {}
+};
+
+struct TestPanelModel {
+   std::vector<ComboBoxItem> fDataNames;
+   std::string fSelectDataId;
+   std::vector<ComboBoxItem> fModelNames;
+   std::string fSelectModelId;
+   TestPanelModel() = default;
+};
+
+
+class WHandler {
+private:
+   std::shared_ptr<ROOT::Experimental::TWebWindow>  fWindow;
+   unsigned fConnId{0};
+   float fArr[1000];
+
+public:
+   WHandler() {};
+
+   virtual ~WHandler() { printf("Destructor!!!!\n"); }
+
+   void ProcessData(unsigned connid, const std::string &arg)
+   {
+      if (arg == "CONN_READY") {
+         fConnId = connid;
+         printf("connection established %u\n", fConnId);
+         fWindow->Send("INITDONE", fConnId);
+
+         TestPanelModel model;
+         model.fDataNames.push_back(ComboBoxItem("1", "RootData1"));
+         model.fDataNames.push_back(ComboBoxItem("2", "RootData2"));
+         model.fDataNames.push_back(ComboBoxItem("3", "RootData3"));
+         model.fSelectDataId = "1";
+
+         model.fModelNames.push_back(ComboBoxItem("1", "RootModel1"));
+         model.fModelNames.push_back(ComboBoxItem("2", "RootModel2"));
+         model.fModelNames.push_back(ComboBoxItem("3", "RootModel3"));
+         model.fSelectModelId = "3";
+
+         TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("TestPanelModel"));
+
+         fWindow->Send(std::string("MODEL:") + json.Data(), fConnId);
+
+         // try to send binary data, need special handling on the client
+         for (int n=0;n<1000;++n) fArr[n] = n;
+         auto buf = std::make_shared<ROOT::Experimental::TWebWindow::RawBuffer>(fArr,sizeof(fArr));
+         fWindow->SendBinary(buf, fConnId);
+
+         return;
+      }
+
+      if (arg == "CONN_CLOSED") {
+         printf("connection closed\n");
+         fConnId = 0;
+         return;
+      }
+
+      printf("Get msg %s \n", arg.c_str());
+
+   }
+
+   void popupWindow(const std::string &where = "")
+   {
+
+      fWindow =  ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow(false);
+
+      // this is very important, it defines name of openui5 widget, which
+      // will run on the client side
+      fWindow->SetPanelName("localapp.view.TestPanel");
+
+      // fWindow->SetDefaultPage("file:fclWithRouting.html");
+
+      // this is call-back, invoked when message received via websocket
+      fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
+
+      fWindow->SetGeometry(300, 300); // configure predefined geometry
+
+      fWindow->Show(where);
+
+      // instead showing of window just generate URL, which can be copied into the browser
+      std::string url = fWindow->GetUrl(true);
+      printf("Example: %s\n", url.c_str());
+   }
+};
+
+
+WHandler* handler = nullptr;
+
+void testPanel()
+{
+   handler = new WHandler();
+   handler->popupWindow();
+}
