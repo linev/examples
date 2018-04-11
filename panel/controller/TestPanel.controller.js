@@ -26,22 +26,9 @@ sap.ui.define([
 
       OnWebsocketMsg: function(handle, msg, offset) {
          if (typeof msg != "string") {
-            console.log('got msg size ' +  msg.byteLength + ' offset ' + offset);
+            console.log('TestPanel ArrayBuffer size ' +  msg.byteLength + ' offset ' + offset);
             var arr = new Float32Array(msg, offset);
             console.log('arr len ' + arr.length + ' [0] = ' + arr[0] + ' [77] = ' + arr[77]);
-            return;
-            
-            
-            
-            var reader = new FileReader;
-            reader.onload = function(event) {
-               // The file's text will be printed here
-                console.log('reader.onload' + (typeof event.target.result));
-                var arr = new Float32Array(event.target.result);
-                console.log('arr len ' + arr.length + ' [0] = ' + arr[0] + ' [77] = ' + arr[77]);
-
-            }
-            reader.readAsArrayBuffer(msg);
             return;
          }
 
