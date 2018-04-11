@@ -28,7 +28,7 @@ sap.ui.define([
          if (typeof msg != "string") {
             console.log('TestPanel ArrayBuffer size ' +  msg.byteLength + ' offset ' + offset);
             var arr = new Float32Array(msg, offset);
-            console.log('arr len ' + arr.length + ' [0] = ' + arr[0] + ' [77] = ' + arr[77]);
+            console.log('arr len ' + arr.length + ' [0] = ' + arr[0] + ' [7] = ' + arr[7] + '  arr[123] = ' + arr[123]);
             return;
          }
 

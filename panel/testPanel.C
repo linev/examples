@@ -34,7 +34,6 @@ class WHandler {
 private:
    std::shared_ptr<ROOT::Experimental::TWebWindow>  fWindow;
    unsigned fConnId{0};
-   float fArr[1000];
 
 public:
    WHandler() {};
@@ -63,10 +62,11 @@ public:
 
          fWindow->Send(std::string("MODEL:") + json.Data(), fConnId);
 
-         // try to send binary data, need special handling on the client
-         for (int n=0;n<1000;++n) fArr[n] = n;
-         auto buf = std::make_shared<ROOT::Experimental::TWebWindow::RawBuffer>(fArr,sizeof(fArr));
-         fWindow->SendBinary(buf, fConnId);
+         float arr[1000];
+         for (int n=0;n<1000;++n) arr[n] = n*1.11111;
+
+         // send binary data, deep copy will be performed
+         fWindow->SendBinary(arr, sizeof(arr), fConnId);
 
          return;
       }
