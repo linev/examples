@@ -3,6 +3,7 @@
 *.log
 GPUCache
 *.png
+*.pem
 
 # Prerequisites
 *.d
