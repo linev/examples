@@ -18,7 +18,7 @@ private:
 
 public:
    WHandler() {};
-   
+
    virtual ~WHandler() { printf("Destructor!!!!\n"); }
 
    void ProcessData(unsigned connid, const std::string &arg)
@@ -26,7 +26,7 @@ public:
       if (arg == "CONN_READY") {
          fConnId = connid;
          printf("connection established %u\n", fConnId);
-         fWindow->Send("INITDONE", fConnId); 
+         fWindow->Send(fConnId, "INITDONE");
 
          return;
       }
@@ -55,19 +55,18 @@ public:
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
 
-      fWindow->SetGeometry(300, 500); // configure predefined geometry 
-      
+      fWindow->SetGeometry(300, 500); // configure predefined geometry
+
       fWindow->Show(where);
    }
 
 };
-
 
 WHandler* handler = nullptr;
 
 void fclWithRouting()
 {
    handler = new WHandler();
-   
+
    handler->popupTextTest();
 }

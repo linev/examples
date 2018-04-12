@@ -32,7 +32,7 @@ struct TestPanelModel {
 
 class WHandler {
 private:
-   std::shared_ptr<ROOT::Experimental::TWebWindow>  fWindow;
+   std::shared_ptr<ROOT::Experimental::TWebWindow> fWindow;
    unsigned fConnId{0};
 
 public:
@@ -45,7 +45,7 @@ public:
       if (arg == "CONN_READY") {
          fConnId = connid;
          printf("connection established %u\n", fConnId);
-         fWindow->Send("INITDONE", fConnId);
+         fWindow->Send(fConnId, "INITDONE");
 
          TestPanelModel model;
          model.fDataNames.push_back(ComboBoxItem("1", "RootData1"));
@@ -60,13 +60,13 @@ public:
 
          TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("TestPanelModel"));
 
-         fWindow->Send(std::string("MODEL:") + json.Data(), fConnId);
+         fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
 
          float arr[1000];
          for (int n=0;n<1000;++n) arr[n] = n*1.11111;
 
          // send binary data, deep copy will be performed
-         fWindow->SendBinary(arr, sizeof(arr), fConnId);
+         fWindow->SendBinary(fConnId, arr, sizeof(arr));
 
          return;
       }
@@ -84,7 +84,7 @@ public:
    void popupWindow(const std::string &where = "")
    {
 
-      fWindow =  ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow(false);
+      fWindow = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow(false);
 
       // this is very important, it defines name of openui5 widget, which
       // will run on the client side
