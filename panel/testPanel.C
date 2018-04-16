@@ -62,18 +62,26 @@ public:
 
          fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
 
-         float arr[1000];
-         for (int n=0;n<1000;++n) arr[n] = n*1.11111;
-
-         // send binary data, deep copy will be performed
-         fWindow->SendBinary(fConnId, arr, sizeof(arr));
-
          return;
       }
 
       if (arg == "CONN_CLOSED") {
          printf("connection closed\n");
          fConnId = 0;
+         return;
+      }
+
+      if (arg == "GET_BINARY") {
+         float arr[1000];
+         for (int n=0;n<1000;++n) arr[n] = n*1.11111;
+
+         // send binary data, deep copy will be performed
+         fWindow->SendBinary(fConnId, arr, sizeof(arr));
+         return;
+      }
+
+      if (arg.find("DOFIT:") == 0) {
+         fWindow->Send(fConnId, "Did fitting");
          return;
       }
 
