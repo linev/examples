@@ -1,2 +1,2 @@
-WebGui.HttpSsl:             no
-WebGui.HttpSslCert:         server.pem
+WebGui.UseHttps:            no
+WebGui.ServerCert:          server.pem

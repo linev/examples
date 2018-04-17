@@ -44,7 +44,7 @@ void draw_file() {
   canvas->Draw(pHist)->SetLineColor(Experimental::TColor::kRed);
   canvas->Draw(pHist2)->SetLineColor(Experimental::TColor::kBlue);
 
-  canvas->Show();
+//  canvas->Show();
   
   canvas->SaveAs("th1.png");
 }
