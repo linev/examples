@@ -1,4 +1,4 @@
-#OPENUI5 Panel example
+## OPENUI5 Panel example
 
 This is special kind of openui5-based widget.
 
