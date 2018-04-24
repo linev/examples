@@ -18,7 +18,6 @@
 #include "ROOT/TFitPanel.hxx"
 #include "ROOT/TDirectory.hxx"
 
-
 void fitpanel0() 
 {
   auto panel = std::make_shared<ROOT::Experimental::TFitPanel>("FitPanel Title");
