@@ -46,5 +46,7 @@ void draw_file() {
 
 //  canvas->Show();
   
+  canvas->SaveAs("th1.jpg");
+  canvas->SaveAs("th1.json");
   canvas->SaveAs("th1.png");
 }
