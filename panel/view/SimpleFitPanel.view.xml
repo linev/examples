@@ -1,0 +1,149 @@
+ <mvc:View
+	height="100%"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m"
+	xmlns:l="sap.ui.layout"
+	xmlns:form="sap.ui.layout.form"
+	controllerName="localapp.controller.SimpleFitPanel">
+	<Page id="simplefitpanel_page" title="Simple Fit Panel" showHeader="true">
+
+		<form:SimpleForm 
+				layout="ResponsiveGridLayout"
+				editable="true"
+				adjustLabelSpan="false"
+				labelSpanXL="2"
+				labelSpanL="2"
+				labelSpanM="2"
+				labelSpanS="4"
+				emptySpanXL="0"
+				emptySpanL="0"
+				emptySpanM="0"
+				emptySpanS="0"
+				columnsXL="1"
+				columnsL="1"
+				columnsM="1"
+				columnsS="1">
+			<Label text="Data Set" labelFor="DataSet"/>
+			<ComboBox id="DataSet" selectedKey="{/fSelectDataId}" items="{ path: '/fDataSet', sorter: { path: 'fSet' } }">
+	               <core:Item key="{fId}" text="{fSet}" />
+	        </ComboBox>
+	    </form:SimpleForm>
+
+	    <l:VerticalLayout id="containerLayout" width="100%">
+	    	<l:BlockLayout id="BlockLayout">
+	    		<l:BlockLayoutRow accentCells="Accent2">
+	    			<l:BlockLayoutCell id="Accent1" width="1" title="Fit Function">
+	    				<form:SimpleForm 
+							layout="ResponsiveGridLayout"
+							editable="true"
+							adjustLabelSpan="false"
+							labelSpanXL="2"
+							labelSpanL="2"
+							labelSpanM="2"
+							labelSpanS="4"
+							emptySpanXL="0"
+							emptySpanL="0"
+							emptySpanM="0"
+							emptySpanS="0"
+							columnsXL="1"
+							columnsL="1"
+							columnsM="1"
+							columnsS="1">
+							<Label text="Type " labelFor="TypeFunc"/>
+							<ComboBox id="TypeFunc" selectedKey="{/fSelectTypeId}" items="{ path: '/fTypeFunc', sorter: { path: 'fFunc' } }">
+					               <core:Item key="{fId}" text="{fSet}" />
+					        </ComboBox>
+					        <ComboBox id="TypeXY" selectedKey="{/fSelectXYId}" items="{ path: '/fTypeXY', sorter: { path: 'fXY' } }">
+					               <core:Item key="{fId}" text="{fSet}" />
+					        </ComboBox>
+	    				</form:SimpleForm>
+	    				<l:VerticalLayout id="operationContainer" width="100%">
+	    					<l:BlockLayout id="OperationBlockLayout">
+	    						<l:BlockLayoutRow accentCells="Accent1">
+	    							<l:BlockLayoutCell title="Operation">
+	    									<RadioButtonGroup columns="4" width="100%" class="sapUiMediumMarginBottom" selectedIndex="1">
+												<buttons>
+													<RadioButton id="RB1-1" text="Nop"/>
+													<RadioButton id="RB1-2" text="Add"/>
+													<RadioButton id="RB1-3" text="NormAdd"/>
+													<RadioButton id="RB1-4" text="Conv"/>
+												</buttons>
+											</RadioButtonGroup>	
+	    							</l:BlockLayoutCell>
+	    						</l:BlockLayoutRow>
+	    					</l:BlockLayout>
+	    				</l:VerticalLayout>
+	    			</l:BlockLayoutCell>
+	    		</l:BlockLayoutRow>
+	    	</l:BlockLayout>
+	    </l:VerticalLayout>
+
+	    <IconTabBar id="Gen-Min" class="sapUiResponsiveContentPadding">
+	    	<items>
+	    		<IconTabFilter text="General">
+	    			<l:VerticalLayout id="fitOptionsContainer" width="100%">
+	    				<l:BlockLayout id="FitOptionsBlockLayout" >
+	    					<l:BlockLayoutRow accentCells="Accent1">
+	    						<l:BlockLayoutCell title="Fit Options">
+	    							<l:VerticalLayout id="fitOptionsContainer1" width="50%">
+					    				<l:BlockLayout id="FitOptionsBlockLayout1">
+					    					<l:BlockLayoutRow accentCells="Accent1">
+					    						<l:BlockLayoutCell>					    							
+					    							<CheckBox text="Integral" selected="true"/>
+													<CheckBox text="Best Errors"/>
+													<CheckBox text="All weights = 1" selected="true"/>
+													<CheckBox text="Empty bins, weights=1"/>
+												</l:BlockLayoutCell>
+											</l:BlockLayoutRow>
+										</l:BlockLayout>
+									</l:VerticalLayout>
+									<l:VerticalLayout id="fitOptionsContainer2" width="50%">
+					    				<l:BlockLayout id="FitOptionsBlockLayout2">
+					    					<l:BlockLayoutRow accentCells="Accent1">
+					    						<l:BlockLayoutCell>
+					    							<CheckBox text="Use range"/>
+													<CheckBox text="Improve fit results"/>
+													<CheckBox text="Add to list"/>
+													<CheckBox text="Use gradient"/>
+												</l:BlockLayoutCell>
+											</l:BlockLayoutRow>
+										</l:BlockLayout>
+									</l:VerticalLayout>													
+	    						</l:BlockLayoutCell>
+	    					</l:BlockLayoutRow>
+	    				</l:BlockLayout>
+	    			</l:VerticalLayout>
+	    			<l:VerticalLayout class="sapUiContentPadding" width="100%">
+	    				<RangeSlider range="{/fRange}" min="{/fMinRange}" max="{/fMaxRange}" step="{/fStep}" width="80%" class="sapUiMediumMarginBottom" />
+	    			</l:VerticalLayout>	
+	    		</IconTabFilter>
+	    		<IconTabFilter text="Minimization">
+	    			<l:VerticalLayout id="libraryContainer" width="100%">
+	    				<l:BlockLayout id="LibraryBlockLayout">
+	    					<l:BlockLayoutRow accentCells="Accent1">
+	    						<l:BlockLayoutCell title="Librady">
+	    							<RadioButtonGroup columns="3" width="100%" class="sapUiMediumMarginBottom" selectedIndex="2">
+										<buttons>
+											<RadioButton id="RB2-1" text="Minuit"/>
+											<RadioButton id="RB2-2" text="Minuit2"/>
+											<RadioButton id="RB2-3" text="Fumili"/>
+											<RadioButton id="RB2-4" text="GSL"/>
+											<RadioButton id="RB2-5" text="Genetics"/>
+										</buttons>
+									</RadioButtonGroup>	
+	    						</l:BlockLayoutCell>
+	    					</l:BlockLayoutRow>
+	    				</l:BlockLayout>
+	    			</l:VerticalLayout>
+	    		</IconTabFilter>
+	    	</items>
+	    </IconTabBar>
+	    <Toolbar>
+	    	<Button text="Update" />
+	    	<Button text="Fit" />
+	    	<Button text="Reset"/>
+	    	<Button text="Close" press="closePanel"/>
+	    </Toolbar>
+	</Page>
+</mvc:View>
