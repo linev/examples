@@ -1,1 +1,6 @@
-WebGui.HttpPort: 8088
+# WebGui.HttpPort: 8088
+
+WebGui.FirefoxInteractive: $prog '$url' &
+
+WebGui.Chrome: google-chrome
+# WebGui.Chrome: chromium-browser

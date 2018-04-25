@@ -23,6 +23,7 @@ sap.ui.define([
       // function called from GuiPanelController
       onPanelExit : function() {
       },
+      
 
       OnWebsocketMsg: function(handle, msg, offset) {
          if (typeof msg != "string") {
@@ -36,19 +37,19 @@ sap.ui.define([
                                                       ' [last] = ' + arr[arr.length-1]);
             
             return;
-         }
+        }
 
-         if (msg.indexOf("MODEL:")==0) {
+          if (msg.indexOf("MODEL:")==0) {
             var json = msg.substr(6);
             var data = JSROOT.parse(json);
 
-            this.getView().byId("SampleText").setText("Get model:\n" + json);
+           this.getView().byId("SampleText").setText("Get model:\n" + json);
             
-            if (data) {
+         if (data) {
                this.getView().setModel(new JSONModel(data));
             }
 
-         } else {
+        } else {
             this.getView().byId("SampleText").setText("Get message:\n" + msg);
          }
       },

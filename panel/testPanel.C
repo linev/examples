@@ -51,6 +51,9 @@ public:
          model.fDataNames.push_back(ComboBoxItem("1", "RootData1"));
          model.fDataNames.push_back(ComboBoxItem("2", "RootData2"));
          model.fDataNames.push_back(ComboBoxItem("3", "RootData3"));
+         model.fDataNames.push_back(ComboBoxItem("4", "RootData-4"));
+         model.fDataNames.push_back(ComboBoxItem("5", "RootData-5"));
+         model.fDataNames.push_back(ComboBoxItem("6", "RootData-6"));
          model.fSelectDataId = "1";
 
          model.fModelNames.push_back(ComboBoxItem("1", "RootModel1"));

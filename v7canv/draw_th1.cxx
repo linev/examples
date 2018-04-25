@@ -15,7 +15,8 @@
  * For the list of contributors see $ROOTSYS/README/CREDITS.             *
  *************************************************************************/
 
-R__LOAD_LIBRARY(libGpad);
+// R__LOAD_LIBRARY(libGpad);
+R__LOAD_LIBRARY(libROOTGpadv7);
 
 #include "ROOT/THist.hxx"
 #include "ROOT/TCanvas.hxx"
