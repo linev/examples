@@ -37,7 +37,7 @@ void line()
    // Please fix TLine such that {x,y} are TPadPos!
    //pad12->Draw(Experimental::TLine({100._user, 0.5_normal}, {200._user, 0.5_normal}));
 
-   canvas->Draw(ROOT::Experimental::TLine({100._user, 0.2_normal}, {200._user, 0.8_normal}));
+   canvas->Draw(ROOT::Experimental::TLine({100._user + 0.1_normal - 50._px, 0.2_normal}, {200._user, 0.8_normal}));
 
    canvas->SaveAs("line.json");
    canvas->Show();
