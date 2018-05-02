@@ -68,6 +68,7 @@ sap.ui.define([
 
          if (this.websocket && v1 && v2)
             this.websocket.Send('DOFIT:"' + v1.getValue() + '","' + v2.getValue() + '"');
+         console.log("test!" + v1);
       }
 
    });

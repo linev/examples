@@ -25,6 +25,11 @@ struct SimpleFitPanel {
    float fMaxRange;
    float fStep;
    float fRange[2];
+   float fOperation;
+   float fFitOptions1;
+   bool fLinear;
+   bool fRobust;
+
 
    SimpleFitPanel() = default;
 };
@@ -42,7 +47,8 @@ public:
 
    void ProcessData(unsigned connid, const std::string &arg)
    {
-    	printf("Start here\n");
+       if (arg == "CONN_READY") {
+    	    printf("Start here\n");
    		 
           fConnId = connid;
           //printf("connection established %u\n", fConnId);
@@ -71,13 +77,28 @@ public:
            model.fStep = 1.5;
            model.fRange[0]  = -7;
            model.fRange[1] = 7;
-
-
+           model.fOperation = 1;
+           model.fFitOptions1 = 3;
+           model.fLinear = false;
+           model.fRobust = false;
 
 	         TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("SimpleFitPanel"));
 	         fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
-	        
+
 	         return;
+         }
+         if (arg.find("MODEL:") == 0) {
+             std::string arg1 = arg;
+             arg1.erase(0,6);
+             printf("model %s\n", arg1.c_str());
+             SimpleFitPanel *obj = nullptr;
+             TBufferJSON::FromJSON(obj, arg1.c_str());
+             if (obj) {
+                 printf("fSelectDataId = %s\n", obj->fSelectDataId.c_str());
+                 delete obj;
+             }
+
+         }
 	     
     	
     }
@@ -96,7 +117,7 @@ public:
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
 
-      fWindow->SetGeometry(400, 400); // configure predefined geometry
+      fWindow->SetGeometry(350, 550); // configure predefined geometry
 
       fWindow->Show(where);
 
