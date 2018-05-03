@@ -1,0 +1,159 @@
+ <mvc:View
+ 	class="sapUiSizeCompact"
+	height="100%"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m"
+	xmlns:l="sap.ui.layout"
+	xmlns:form="sap.ui.layout.form"
+	controllerName="localapp.controller.SimpleFitPanel">
+	<Page id="simplefitpanel_page" title="Simple Fit Panel" showHeader="true">
+		<FlexBox renderType="Bare" width="100%">
+			<!-- Data Set Combo Box -->
+			<form:SimpleForm 
+					layout="ResponsiveGridLayout"
+					editable="true"
+					adjustLabelSpan="false"
+					labelSpanXL="2"
+					labelSpanL="1"
+					labelSpanM="1"
+					labelSpanS="4"
+					emptySpanXL="0"
+					emptySpanL="0"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="1"
+					columnsL="1"
+					columnsM="1"
+					columnsS="1">
+			
+				<Label text="Data Set" labelFor="DataSet"/>
+				<ComboBox id="DataSet" selectedKey="{/fSelectDataId}" items="{ path: '/fDataSet', sorter: { path: 'fSet' } }">
+		               <core:Item key="{fId}" text="{fSet}" />
+		        </ComboBox>
+		    
+		    </form:SimpleForm>
+    	</FlexBox>
+
+    <!-- Type Combo Box -->
+		<FlexBox renderType="Bare" width="100%">
+			<form:SimpleForm 
+				layout="ResponsiveGridLayout"
+				editable="true"
+				adjustLabelSpan="false"
+				labelSpanXL="2"
+				labelSpanL="2"
+				labelSpanM="2"
+				labelSpanS="4"
+				emptySpanXL="0"
+				emptySpanL="0"
+				emptySpanM="0"
+				emptySpanS="0"
+				columnsXL="1"
+				columnsL="1"
+				columnsM="1"
+				columnsS="1">
+				<Label text="Type " labelFor="TypeFunc"/>
+				<ComboBox id="TypeFunc" selectedKey="{/fSelectTypeId}" items="{ path: '/fTypeFunc', sorter: { path: 'fFunc' } }">
+		               <core:Item key="{fId}" text="{fSet}" />
+		        </ComboBox>
+		        <ComboBox id="TypeXY" selectedKey="{/fSelectXYId}" items="{ path: '/fTypeXY', sorter: { path: 'fXY' } }">
+		               <core:Item key="{fId}" text="{fSet}" />
+		        </ComboBox>
+			</form:SimpleForm>
+		</FlexBox>
+	<!-- Type Radio Buttons -->
+		<FlexBox renderType="Bare" width="100%">
+			<RadioButtonGroup columns="4" width="100%" selectedIndex="{/fOperation}">
+				<buttons>
+					<RadioButton id="RB1-1" text="Nop"/>
+					<RadioButton id="RB1-2" text="Add"/>
+					<RadioButton id="RB1-3" text="NormAdd"/>
+					<RadioButton id="RB1-4" text="Conv"/>
+				</buttons>
+			</RadioButtonGroup>	
+		</FlexBox> 							
+	<!-- Tabs Sections -->
+	    <IconTabBar id="Gen-Min">
+	    <!-- General Item -->
+	    	<items>
+	    		<IconTabFilter text="General">
+	    			<FlexBox renderType="Bare" width="100%">
+	    				<Title level="H2" text="Fit Options" />
+	    			</FlexBox>
+	    			<FlexBox renderType="Bare" width="100%">
+	    				<CheckBox id="linearFit" text="Linear Fit" selected="{/fLinear}"/>
+	    				<VBox>
+		    				<CheckBox id="robust" text="Robust" enabled="{= ${/fLinear} === true}" selected="{/fRobust}"/>
+		    				<StepInput
+								value="5"
+								min="5"
+								max="10"
+								step="1"
+								width="75px"
+								change="onChange"
+								enabled="{= ${/fLinear} === true}"/>
+						</VBox>
+					</FlexBox>
+	    			<l:VerticalLayout id="fitOptionsContainer" width="100%">
+	    				<l:BlockLayout id="FitOptionsBlockLayout" >
+	    					<l:BlockLayoutRow accentCells="Accent1">
+	    						<l:BlockLayoutCell>
+	    							<l:VerticalLayout id="fitOptionsContainer1" width="50%">
+					    				<l:BlockLayout id="FitOptionsBlockLayout1" >
+					    					<l:BlockLayoutRow accentCells="Accent1" >
+					    						<l:BlockLayoutCell visible="{= ${/fOperation} === 0}">							
+					    							<CheckBox id="Integral" text="Integral"/>
+													<CheckBox text="Best Errors" enabled="{= ${/fLinear} !== true}"/>
+													<CheckBox text="All weights = 1" />
+													<CheckBox text="Empty bins, weights=1"/>
+												</l:BlockLayoutCell>
+												<l:BlockLayoutCell visible="{= ${/fOperation} === 2}">
+					    							<CheckBox text="Use range"/>
+													<CheckBox text="Improve fit results" enabled="{= ${/fLinear} !== true}"/>
+													<CheckBox text="Add to list"/>
+													<CheckBox text="Use gradient"/>
+												</l:BlockLayoutCell>
+											</l:BlockLayoutRow>
+										</l:BlockLayout>
+									</l:VerticalLayout>												
+	    						</l:BlockLayoutCell>
+	    					</l:BlockLayoutRow>
+	    				</l:BlockLayout>
+	    			</l:VerticalLayout>
+	    			<!-- Range Slider -->
+	    			<l:VerticalLayout width="100%" visible="{= ${/fOperation} === 1 ||  ${/fOperation} === 3}">
+	    				<RangeSlider id="Slider" range="{/fRange}" min="{/fMinRange}" max="{/fMaxRange}" step="{/fStep}" width="80%"   />
+	    			</l:VerticalLayout>	
+	    		</IconTabFilter>
+	    		<IconTabFilter text="Minimization">
+	    		<!-- Minimization Item -->
+	    			<l:VerticalLayout id="libraryContainer" width="100%">
+	    				<l:BlockLayout id="LibraryBlockLayout">
+	    					<l:BlockLayoutRow accentCells="Accent1">
+	    						<l:BlockLayoutCell title="Librady">
+	    							<RadioButtonGroup columns="3" width="100%"  selectedIndex="1">
+										<buttons>
+											<RadioButton id="RB2-1" text="Minuit"/>
+											<RadioButton id="RB2-2" text="Minuit2"/>
+											<RadioButton id="RB2-3" text="Fumili"/>
+											<RadioButton id="RB2-4" text="GSL"/>
+											<RadioButton id="RB2-5" text="Genetics"/>
+										</buttons>
+									</RadioButtonGroup>	
+	    						</l:BlockLayoutCell>
+	    					</l:BlockLayoutRow>
+	    				</l:BlockLayout>
+	    			</l:VerticalLayout>
+	    		</IconTabFilter>
+	    	</items>
+	    </IconTabBar>
+	    <!-- Buttons in Footer -->
+	    <Toolbar>
+	    	<Button text="Update" />
+	    	<Button text="Fit" press="doSomething"/>
+	    	<Button text="Reset"/>
+	    	<Button text="Close" press="closePanel"/>
+	    </Toolbar>
+	</Page>
+</mvc:View>

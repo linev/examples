@@ -1,2 +1,6 @@
-WebGui.UseHttps:            no
-WebGui.ServerCert:          server.pem
+# WebGui.HttpPort: 8088
+
+WebGui.FirefoxInteractive: $prog '$url' &
+
+WebGui.Chrome: google-chrome
+# WebGui.Chrome: chromium-browser

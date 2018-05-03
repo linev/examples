@@ -1,2 +1,3 @@
 # WebGui.HttpPort: 8088
-# WebGui.Chrome: /usr/bin/chromium
+# WebGui.Chrome: google-chrome
+# WebGui.Chrome: chromium-browser
