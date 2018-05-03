@@ -4,6 +4,9 @@
 GPUCache
 *.png
 *.pem
+*.jpg
+*.json
+
 
 # Prerequisites
 *.d
