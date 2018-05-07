@@ -33,7 +33,6 @@ struct SimpleFitPanel {
    float fFitOptions1;
    bool fLinear;
    bool fRobust;
-   bool fOpText;
    bool fWeights;
    bool fBins;
    float fLibrary;
@@ -99,7 +98,6 @@ public:
            model.fFitOptions1 = 3;
            model.fLinear = false;
            model.fRobust = false;
-           model.fOpText = "gaus(0)";
            model.fWeights = false;
            model.fBins = false;
            model.fLibrary = 0;

@@ -13,7 +13,6 @@ sap.ui.define([
    			var id = this.getView().getId();
         var opText = this.getView().byId("OperationText");
         var fOpText = opText.getValue();
-       console.log("Text " + fOpText);
 
 
    		    var data = {
@@ -71,5 +70,11 @@ sap.ui.define([
    		onPanelExit: function(){
 
    		},
+
+      fOpTextleLiveChange: function(oEvent) {
+      var sfOpText = oEvent.getParameter("value");
+      this.byId("selectedOpText").setText(sfOpText);
+    },
+
    });
 });
