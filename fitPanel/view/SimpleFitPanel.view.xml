@@ -36,7 +36,64 @@
     	</FlexBox>
 
     <!-- Type Combo Box -->
-		<FlexBox renderType="Bare" width="100%">
+    	<VBox>
+			<form:SimpleForm 
+				layout="ResponsiveGridLayout"
+				editable="true"
+				title="Fit Function"
+				adjustLabelSpan="false"
+				labelSpanXL="2"
+				labelSpanL="2"
+				labelSpanM="2"
+				labelSpanS="4"
+				emptySpanXL="0"
+				emptySpanL="0"
+				emptySpanM="0"
+				emptySpanS="0"
+				columnsXL="1"
+				columnsL="1"
+				columnsM="1"
+				columnsS="1">
+
+				<Label text="Type " labelFor="TypeFunc"/>
+				<ComboBox id="TypeFunc" selectedKey="{/fSelectTypeId}" items="{ path: '/fTypeFunc', sorter: { path: 'fFunc' } }">
+		               <core:Item key="{fId}" text="{fSet}" />
+		        </ComboBox>
+		        <ComboBox id="TypeXY" selectedKey="{/fSelectXYId}" items="{ path: '/fTypeXY', sorter: { path: 'fXY' } }">
+		               <core:Item key="{fId}" text="{fSet}" />
+		        </ComboBox>
+			</form:SimpleForm>
+		</VBox>
+	<!-- Type Radio Buttons -->
+		<VBox class="sapUiSmallMargin">
+			<form:SimpleForm 
+				layout="ResponsiveGridLayout"
+				title="Operation"
+				editable="true"
+				adjustLabelSpan="false"
+				labelSpanXL="4"
+				labelSpanL="4"
+				labelSpanM="4"
+				labelSpanS="12"
+				emptySpanXL="0"
+				emptySpanL="0"
+				emptySpanM="0"
+				emptySpanS="0"
+				columnsXL="4"
+				columnsL="3"
+				columnsM="3"
+				singleContainerFullSize="false">
+				<form:content>
+					<RadioButtonGroup columns="4" width="100%" selectedIndex="{/fOperation}">
+						<buttons>
+							<RadioButton id="RB1-1" text="Nop"/>
+							<RadioButton id="RB1-2" text="Add"/>
+							<RadioButton id="RB1-3" text="NormAdd"/>
+							<RadioButton id="RB1-4" text="Conv"/>
+						</buttons>
+					</RadioButtonGroup>	
+					<TextArea id="OperationText" value="gaus(0)"/>
+					<Label text="Selected " labelFor="OperationText"/>		
 			<form:SimpleForm 
 				layout="ResponsiveGridLayout"
 				editable="true"
@@ -53,97 +110,147 @@
 				columnsL="1"
 				columnsM="1"
 				columnsS="1">
-				<Label text="Type " labelFor="TypeFunc"/>
-				<ComboBox id="TypeFunc" selectedKey="{/fSelectTypeId}" items="{ path: '/fTypeFunc', sorter: { path: 'fFunc' } }">
-		               <core:Item key="{fId}" text="{fSet}" />
-		        </ComboBox>
-		        <ComboBox id="TypeXY" selectedKey="{/fSelectXYId}" items="{ path: '/fTypeXY', sorter: { path: 'fXY' } }">
-		               <core:Item key="{fId}" text="{fSet}" />
-		        </ComboBox>
+					<Text text="{/fOpText}"/>
+					<Button text="Set Parameters..."/>				
 			</form:SimpleForm>
-		</FlexBox>
-	<!-- Type Radio Buttons -->
-		<FlexBox renderType="Bare" width="100%">
-			<RadioButtonGroup columns="4" width="100%" selectedIndex="{/fOperation}">
-				<buttons>
-					<RadioButton id="RB1-1" text="Nop"/>
-					<RadioButton id="RB1-2" text="Add"/>
-					<RadioButton id="RB1-3" text="NormAdd"/>
-					<RadioButton id="RB1-4" text="Conv"/>
-				</buttons>
-			</RadioButtonGroup>	
-		</FlexBox> 							
+				</form:content>
+			</form:SimpleForm>		
+		</VBox>	
 	<!-- Tabs Sections -->
 	    <IconTabBar id="Gen-Min">
 	    <!-- General Item -->
 	    	<items>
 	    		<IconTabFilter text="General">
-	    			<FlexBox renderType="Bare" width="100%">
-	    				<Title level="H2" text="Fit Options" />
-	    			</FlexBox>
-	    			<FlexBox renderType="Bare" width="100%">
-	    				<CheckBox id="linearFit" text="Linear Fit" selected="{/fLinear}"/>
-	    				<VBox>
-		    				<CheckBox id="robust" text="Robust" enabled="{= ${/fLinear} === true}" selected="{/fRobust}"/>
-		    				<StepInput
-								value="5"
-								min="5"
-								max="10"
-								step="1"
-								width="75px"
-								change="onChange"
-								enabled="{= ${/fLinear} === true}"/>
-						</VBox>
-					</FlexBox>
-	    			<l:VerticalLayout id="fitOptionsContainer" width="100%">
-	    				<l:BlockLayout id="FitOptionsBlockLayout" >
-	    					<l:BlockLayoutRow accentCells="Accent1">
-	    						<l:BlockLayoutCell>
-	    							<l:VerticalLayout id="fitOptionsContainer1" width="50%">
-					    				<l:BlockLayout id="FitOptionsBlockLayout1" >
-					    					<l:BlockLayoutRow accentCells="Accent1" >
-					    						<l:BlockLayoutCell visible="{= ${/fOperation} === 0}">							
-					    							<CheckBox id="Integral" text="Integral"/>
-													<CheckBox text="Best Errors" enabled="{= ${/fLinear} !== true}"/>
-													<CheckBox text="All weights = 1" />
-													<CheckBox text="Empty bins, weights=1"/>
-												</l:BlockLayoutCell>
-												<l:BlockLayoutCell visible="{= ${/fOperation} === 2}">
-					    							<CheckBox text="Use range"/>
-													<CheckBox text="Improve fit results" enabled="{= ${/fLinear} !== true}"/>
-													<CheckBox text="Add to list"/>
-													<CheckBox text="Use gradient"/>
-												</l:BlockLayoutCell>
-											</l:BlockLayoutRow>
-										</l:BlockLayout>
-									</l:VerticalLayout>												
-	    						</l:BlockLayoutCell>
-	    					</l:BlockLayoutRow>
-	    				</l:BlockLayout>
-	    			</l:VerticalLayout>
+	    			<form:SimpleForm 
+						layout="ResponsiveGridLayout"
+						title="Fit Settings"
+						editable="true"
+						adjustLabelSpan="false"
+						labelSpanXL="2"
+						labelSpanL="2"
+						labelSpanM="2"
+						labelSpanS="4"
+						emptySpanXL="1"
+						emptySpanL="0"
+						emptySpanM="0"
+						emptySpanS="0"
+						columnsXL="1"
+						columnsL="1"
+						columnsM="1"
+						columnsS="1">		    					
+						<l:VerticalLayout class="sapUiSmallMargin" >
+							<Title level="H3" text="Method"/>
+							<ComboBox id="Method" selectedKey="{/fSelectMethodId}" items="{ path: '/fMethod', sorter: { path: 'fMethod' } }">
+		               			<core:Item key="{fId}" text="{fSet}" />
+		        			</ComboBox>
+							<l:HorizontalLayout class="sapUiContentPadding">
+		    					<CheckBox id="linearFit" text="Linear Fit" selected="{/fLinear}"/>
+		    					<CheckBox id="robust" text="Robust" enabled="{= ${/fLinear} === true}" selected="{/fRobust}"/>
+			    				<StepInput
+									value="0.95"
+									min="0.01"
+									max="1"
+									step="0.01"
+									width="95px"
+									displayValuePrecision = "2"
+									enabled="{= ${/fRobust} === true}"/>
+		    				</l:HorizontalLayout>
+							<Title level="H3" text="Fit Options"/>
+		    				<l:HorizontalLayout class="sapUiSmallMargin">
+			    				<VBox>
+									<CheckBox id="Integral" text="Integral"/>
+									<CheckBox text="Best Errors" enabled="{= ${/fLinear} !== true}"/>
+									<CheckBox text="All weights = 1" selected="{/fWeights}" enabled="{= ${/fBins} === false}" />
+									<CheckBox text="Empty bins, weights=1" selected="{/fBins}" enabled="{= ${/fWeights} === false}"/>
+								</VBox>
+								<VBox>
+									<CheckBox text="Use range"/>
+									<CheckBox text="Improve fit results" enabled="{= ${/fLinear} !== true}"/>
+									<CheckBox text="Add to list"/>
+									<CheckBox text="Use gradient"/>
+								</VBox>
+							</l:HorizontalLayout>
+							<Title level="H3" text="Draw Options"/>
+		    				<l:HorizontalLayout class="sapUiContentPadding">
+			    				<VBox>
+									<CheckBox text="SAME"/>
+									<CheckBox text="No Drawing" />
+									<CheckBox text="Do not store/draw" />
+								</VBox>
+							</l:HorizontalLayout>
+						</l:VerticalLayout>
+	    			</form:SimpleForm>
 	    			<!-- Range Slider -->
-	    			<l:VerticalLayout width="100%" visible="{= ${/fOperation} === 1 ||  ${/fOperation} === 3}">
-	    				<RangeSlider id="Slider" range="{/fRange}" min="{/fMinRange}" max="{/fMaxRange}" step="{/fStep}" width="80%"   />
-	    			</l:VerticalLayout>	
+	    			<l:VerticalLayout width="100%">
+	    				<RangeSlider id="Slider1" enableTickmarks="true" range="{/fRange}" min="{/fMinRange}" max="{/fMaxRange}" step="{/fStep}" width="80%"   />
+	    			</l:VerticalLayout>
 	    		</IconTabFilter>
 	    		<IconTabFilter text="Minimization">
 	    		<!-- Minimization Item -->
 	    			<l:VerticalLayout id="libraryContainer" width="100%">
-	    				<l:BlockLayout id="LibraryBlockLayout">
-	    					<l:BlockLayoutRow accentCells="Accent1">
-	    						<l:BlockLayoutCell title="Librady">
-	    							<RadioButtonGroup columns="3" width="100%"  selectedIndex="1">
-										<buttons>
-											<RadioButton id="RB2-1" text="Minuit"/>
-											<RadioButton id="RB2-2" text="Minuit2"/>
-											<RadioButton id="RB2-3" text="Fumili"/>
-											<RadioButton id="RB2-4" text="GSL"/>
-											<RadioButton id="RB2-5" text="Genetics"/>
-										</buttons>
-									</RadioButtonGroup>	
-	    						</l:BlockLayoutCell>
-	    					</l:BlockLayoutRow>
-	    				</l:BlockLayout>
+						<l:BlockLayoutCell title="Library">
+							<RadioButtonGroup columns="3" width="100%"  selectedIndex="{/fLibrary}">
+								<buttons>
+									<RadioButton id="RB2-1" text="Minuit"/>
+									<RadioButton id="RB2-2" text="Minuit2"/>
+									<RadioButton id="RB2-3" text="Fumili"/>
+									<RadioButton id="RB2-4" text="GSL" enabled="false"/>
+									<RadioButton id="RB2-5" text="Genetics"/>
+								</buttons>
+							</RadioButtonGroup>	
+						</l:BlockLayoutCell>
+						<l:BlockLayoutCell title="Method">
+							<ComboBox id="MethodMin" selectedKey="{/fSelectMethodMinId}" items="{ path: '/fMethodMin', sorter: { path: 'fMethodMin' } }">
+		               			<core:Item key="{fId}" text="{fSet}" />
+		        			</ComboBox>
+						</l:BlockLayoutCell>
+						<l:BlockLayoutCell title="Settings">
+							<Text text="Use ENTER key to validate a new value or click on Reset button to set the defaults."/>
+						</l:BlockLayoutCell>
+						<form:SimpleForm 
+							layout="ResponsiveGridLayout"
+							editable="true"
+							adjustLabelSpan="true"
+							labelSpanXL="4"
+							labelSpanL="3"
+							labelSpanM="3"
+							labelSpanS="8"
+							emptySpanXL="0"
+							emptySpanL="0"
+							emptySpanM="0"
+							emptySpanS="0"
+							columnsXL="2"
+							columnsL="1"
+							columnsM="1"
+							columnsS="1">
+							<Label text="Error Definition (default = 1)" labelFor="testError"/>
+							<Input
+								id="testError"
+								type="Text"
+								placeholder="1.00">
+							</Input>
+							<Label text="Max tolerance (precision)" labelFor="maxTolerance"/>
+							<Input
+								id="maxTolerance"
+								type="Text"
+								placeholder="0.01">
+							</Input>
+							<Label text="Max number of interations" labelFor="maxInterations"/>
+							<Input
+								id="maxInterations"
+								type="Text"
+								placeholder="0">
+							</Input>
+					    </form:SimpleForm>	
+						<l:BlockLayoutCell title="Print Options">
+							<RadioButtonGroup columns="3" width="100%"  selectedIndex="0">
+								<buttons>
+									<RadioButton id="Print-1" text="Default"/>
+									<RadioButton id="Print-2" text="Verbose"/>
+									<RadioButton id="Print-3" text="Quiet"/>
+								</buttons>
+							</RadioButtonGroup>		
+						</l:BlockLayoutCell>						
 	    			</l:VerticalLayout>
 	    		</IconTabFilter>
 	    	</items>

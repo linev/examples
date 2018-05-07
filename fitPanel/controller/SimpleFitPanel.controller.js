@@ -11,14 +11,18 @@ sap.ui.define([
    		onPanelInit : function() {
    			console.log("I am A");
    			var id = this.getView().getId();
+        var opText = this.getView().byId("OperationText");
+        var fOpText = opText.getValue();
+       console.log("Text " + fOpText);
+
 
    		    var data = {
               fDataSet:[ { fId:"1", fSet: "----" } ],
               fSelectDataId: "0",
               fMinRange: -4,
-              fMaxRange: 5,
-              fStep: 0.5,
-              fRange: [-2,2]
+              fMaxRange: 4,
+              fStep: 0.01,
+              fRange: [-4,4]
             };
             this.getView().setModel(new JSONModel(data));
    			this._data = data;
@@ -49,6 +53,7 @@ sap.ui.define([
    				                  this.getView().getModel().getData().fSelectTypeId);
        var v1 = this.getView().byId("TypeFunc");
        var v2 = this.getView().byId("Slider");
+       
        console.log("v2 " + v2);
        console.log("v1 value " + v1.getValue());
        console.log("v1 first " + v1.getFirstItem());

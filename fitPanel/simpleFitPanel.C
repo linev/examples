@@ -21,6 +21,10 @@ struct SimpleFitPanel {
    std::string fSelectTypeId;
    std::vector<ComboBoxItem> fTypeXY;
    std::string fSelectXYId;
+   std::vector<ComboBoxItem> fMethod;
+   std::string fSelectMethodId;
+   std::vector<ComboBoxItem> fMethodMin;
+   std::string fSelectMethodMinId;
    float fMinRange;
    float fMaxRange;
    float fStep;
@@ -29,6 +33,10 @@ struct SimpleFitPanel {
    float fFitOptions1;
    bool fLinear;
    bool fRobust;
+   bool fOpText;
+   bool fWeights;
+   bool fBins;
+   float fLibrary;
 
 
    SimpleFitPanel() = default;
@@ -72,15 +80,30 @@ public:
            model.fTypeXY.push_back(ComboBoxItem("4", "pol1"));
            model.fSelectXYId = "1";
 
-           model.fMinRange = -10;
-           model.fMaxRange = 10;
-           model.fStep = 1.5;
-           model.fRange[0]  = -7;
-           model.fRange[1] = 7;
-           model.fOperation = 1;
+           model.fMethod.push_back(ComboBoxItem("1", "Chi-square"));
+           model.fMethod.push_back(ComboBoxItem("2", "Binned Likelihood"));
+           model.fSelectMethodId = "1";
+
+           model.fMethodMin.push_back(ComboBoxItem("1", "MIGRAD"));
+           model.fMethodMin.push_back(ComboBoxItem("2", "SIMPLEX"));
+           model.fMethodMin.push_back(ComboBoxItem("3", "SCAN"));
+           model.fMethodMin.push_back(ComboBoxItem("4", "Combination"));
+           model.fSelectMethodMinId = "1";
+
+           model.fMinRange = -4;
+           model.fMaxRange = 4;
+           model.fStep = 0.01;
+           model.fRange[0]  = -4;
+           model.fRange[1] = 4;
+           model.fOperation = 0;
            model.fFitOptions1 = 3;
            model.fLinear = false;
            model.fRobust = false;
+           model.fOpText = "gaus(0)";
+           model.fWeights = false;
+           model.fBins = false;
+           model.fLibrary = 0;
+
 
 	         TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("SimpleFitPanel"));
 	         fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
@@ -117,7 +140,7 @@ public:
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
 
-      fWindow->SetGeometry(350, 550); // configure predefined geometry
+      fWindow->SetGeometry(450, 550); // configure predefined geometry
 
       fWindow->Show(where);
 
