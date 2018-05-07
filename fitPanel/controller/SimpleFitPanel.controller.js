@@ -25,7 +25,6 @@ sap.ui.define([
             };
             this.getView().setModel(new JSONModel(data));
    			this._data = data;
-
    		},
 
    		OnWebsocketMsg: function(handle, msg){
@@ -39,11 +38,10 @@ sap.ui.define([
    					this._data = data;
    				}
                   console.log("Robust" + this.getView().getModel().getData().fRobust);
-
-
+                  console.log("Library " + this.getView().getModel().getData().fLibrary);
    			}
    			else {
-               this.getView().byId("SampleText").setText("Get message:\n" + msg);
+               //this.getView().byId("SampleText").setText("Get message:\n" + msg);
             }
    		},
 

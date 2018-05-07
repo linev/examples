@@ -182,14 +182,14 @@
 	    			</form:SimpleForm>
 	    			<!-- Range Slider -->
 	    			<l:VerticalLayout width="100%">
-	    				<RangeSlider id="Slider1" enableTickmarks="true" range="{/fRange}" min="{/fMinRange}" max="{/fMaxRange}" step="{/fStep}" width="80%"   />
+	    				<RangeSlider id="Slider" enableTickmarks="true" range="{/fRange}" min="{/fMinRange}" max="{/fMaxRange}" step="{/fStep}" width="80%"   />
 	    			</l:VerticalLayout>
 	    		</IconTabFilter>
 	    		<IconTabFilter text="Minimization">
 	    		<!-- Minimization Item -->
 	    			<l:VerticalLayout id="libraryContainer" width="100%">
 						<l:BlockLayoutCell title="Library">
-							<RadioButtonGroup columns="3" width="100%"  selectedIndex="{/fLibrary}">
+							<RadioButtonGroup id="libraryRB" columns="3" width="100%"  selectedIndex="{/fLibrary}">
 								<buttons>
 									<RadioButton id="RB2-1" text="Minuit"/>
 									<RadioButton id="RB2-2" text="Minuit2"/>
@@ -201,6 +201,7 @@
 						</l:BlockLayoutCell>
 						<l:BlockLayoutCell title="Method">
 							<ComboBox id="MethodMin" selectedKey="{/fSelectMethodMinId}" items="{ path: '/fMethodMin', sorter: { path: 'fMethodMin' } }">
+							<!-- <ComboBox id="MethodMin" selectedKey="{/fSelectMethodMinId}" items="{ path: '/fMethodMin[{/fLibrary}]', sorter: { path: 'fMethodMin' } }"> -->
 		               			<core:Item key="{fId}" text="{fSet}" />
 		        			</ComboBox>
 						</l:BlockLayoutCell>
