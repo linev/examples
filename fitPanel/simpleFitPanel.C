@@ -33,7 +33,6 @@ struct SimpleFitPanel {
    float fFitOptions1;
    bool fLinear;
    bool fRobust;
-   bool fOpText;
    bool fWeights;
    bool fBins;
    float fLibrary;
@@ -84,11 +83,25 @@ public:
            model.fMethod.push_back(ComboBoxItem("2", "Binned Likelihood"));
            model.fSelectMethodId = "1";
 
+          
            model.fMethodMin.push_back(ComboBoxItem("1", "MIGRAD"));
            model.fMethodMin.push_back(ComboBoxItem("2", "SIMPLEX"));
            model.fMethodMin.push_back(ComboBoxItem("3", "SCAN"));
            model.fMethodMin.push_back(ComboBoxItem("4", "Combination"));
-           model.fSelectMethodMinId = "1";
+
+
+            if(model.fLibrary == 0){
+           model.fSelectMethodMinId = "1";}
+
+            else if(model.fLibrary == 1){
+            
+           model.fSelectMethodMinId = "2";
+           }
+
+           else{
+           
+           model.fSelectMethodMinId = "3";
+           }
 
            model.fMinRange = -4;
            model.fMaxRange = 4;
@@ -99,11 +112,9 @@ public:
            model.fFitOptions1 = 3;
            model.fLinear = false;
            model.fRobust = false;
-           model.fOpText = "gaus(0)";
            model.fWeights = false;
            model.fBins = false;
            model.fLibrary = 0;
-
 
 	         TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("SimpleFitPanel"));
 	         fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
