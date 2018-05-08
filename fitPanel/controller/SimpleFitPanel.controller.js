@@ -49,11 +49,11 @@ sap.ui.define([
          var v1 = this.getView().byId("TypeFunc");
          var v2 = this.getView().byId("Slider");
 
-         console.log("v2 " + v2);
-         console.log("v1 value " + v1.getValue());
-         console.log("v1 first " + v1.getFirstItem());
-         console.log("v1 last " + v1.getLastItem());
-         console.log("Slider Range " + v2.getRange());
+         // console.log("v2 " + v2);
+         // console.log("v1 value " + v1.getValue());
+         // console.log("v1 first " + v1.getFirstItem());
+         // console.log("v1 last " + v1.getLastItem());
+         // console.log("Slider Range " + v2.getRange());
 
          if (this.websocket)
             this.websocket.Send('DOFIT:'+this.getView().getModel().getJSON());
@@ -69,10 +69,10 @@ sap.ui.define([
       fOpTextleLiveChange: function(oEvent) {
          var sfOpText = oEvent.getParameter("value");
          this.byId("selectedOpText").setText(sfOpText);
-      }
+      },
 
-    selectRB: function(){
-       var lib = this.getView().getModel().getData().fLibrary;
+      selectRB: function(){
+        var lib = this.getView().getModel().getData().fLibrary;
 
         if(lib == 0){
               console.log("1");
