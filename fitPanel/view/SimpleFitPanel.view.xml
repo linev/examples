@@ -154,10 +154,10 @@
 									width="95px"
 									displayValuePrecision = "2"
 									enabled="{= ${/fRobust} === true}"/>
-		    				</l:HorizontalLayout>
+							</l:HorizontalLayout>
 							<Title level="H3" text="Fit Options"/>
-		    				<l:HorizontalLayout class="sapUiSmallMargin">
-			    				<VBox>
+							<l:HorizontalLayout class="sapUiSmallMargin">
+								<VBox>
 									<CheckBox id="Integral" text="Integral"/>
 									<CheckBox text="Best Errors" enabled="{= ${/fLinear} !== true}"/>
 									<CheckBox text="All weights = 1" selected="{/fWeights}" enabled="{= ${/fBins} === false}" />
@@ -179,8 +179,8 @@
 								</VBox>
 							</l:HorizontalLayout>
 						</l:VerticalLayout>
-	    			</form:SimpleForm>
-	    			<!-- Range Slider -->
+						</form:SimpleForm>
+					<!-- Range Slider -->
 	    			<l:VerticalLayout width="100%">
 	    				<RangeSlider id="Slider" enableTickmarks="true" range="{/fRange}" min="{/fMinRange}" max="{/fMaxRange}" step="{/fStep}" width="80%"   />
 	    			</l:VerticalLayout>
