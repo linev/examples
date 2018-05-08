@@ -28,6 +28,7 @@ struct FitPanelModel {
    std::string fSelectMethodId;
    std::vector<ComboBoxItem> fMethodMin;
    std::string fSelectMethodMinId;
+
    float fMinRange{0};
    float fMaxRange{1};
    float fStep{0.1};
@@ -60,6 +61,7 @@ public:
 
    void ProcessData(unsigned connid, const std::string &arg)
    {
+
       if (arg == "CONN_READY") {
          printf("Start here\n");
 

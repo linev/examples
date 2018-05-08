@@ -71,5 +71,20 @@ sap.ui.define([
          this.byId("selectedOpText").setText(sfOpText);
       }
 
+    selectRB: function(){
+       var lib = this.getView().getModel().getData().fLibrary;
+
+        if(lib == 0){
+              console.log("1");
+            }
+            else if(lib == 1){
+              console.log("2");
+              this.getView().getModel().fMethodMin1 = this.getView().getModel().fMethodMin; 
+            }
+            else{
+              console.log("3");
+            }
+    },
+
    });
 });

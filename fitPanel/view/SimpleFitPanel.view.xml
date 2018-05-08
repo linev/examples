@@ -189,7 +189,7 @@
 	    		<!-- Minimization Item -->
 	    			<l:VerticalLayout id="libraryContainer" width="100%">
 						<l:BlockLayoutCell title="Library">
-							<RadioButtonGroup id="libraryRB" columns="3" width="100%"  selectedIndex="{/fLibrary}">
+							<RadioButtonGroup id="libraryRB" columns="3" width="100%"  selectedIndex="{/fLibrary}" select="selectRB">
 								<buttons>
 									<RadioButton id="RB2-1" text="Minuit"/>
 									<RadioButton id="RB2-2" text="Minuit2"/>
