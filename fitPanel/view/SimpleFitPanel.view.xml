@@ -1,4 +1,4 @@
- <mvc:View
+<mvc:View
  	class="sapUiSizeCompact"
 	height="100%"
 	xmlns:mvc="sap.ui.core.mvc"
@@ -30,8 +30,7 @@
 				<Label text="Data Set" labelFor="DataSet"/>
 				<ComboBox id="DataSet" selectedKey="{/fSelectDataId}" items="{ path: '/fDataSet', sorter: { path: 'fSet' } }">
 		               <core:Item key="{fId}" text="{fSet}" />
-		        </ComboBox>
-		    
+		        </ComboBox>		    
 		    </form:SimpleForm>
     	</FlexBox>
 
@@ -64,6 +63,7 @@
 		        </ComboBox>
 			</form:SimpleForm>
 		</VBox>
+
 	<!-- Type Radio Buttons -->
 		<VBox class="sapUiSmallMargin">
 			<form:SimpleForm 
