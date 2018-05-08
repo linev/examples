@@ -43,7 +43,7 @@ sap.ui.define([
          }
       },
 
-      doSomething: function() {
+      doFit: function() {
          console.log("model=", this.getView().getModel().getProperty("/fSelectDataId"), 
                this.getView().getModel().getData().fSelectTypeId);
          var v1 = this.getView().byId("TypeFunc");
@@ -55,10 +55,11 @@ sap.ui.define([
          console.log("v1 last " + v1.getLastItem());
          console.log("Slider Range " + v2.getRange());
 
-         // if (this.websocket)
-         //          this.websocket.Send('MODEL:'+this.getView().getModel().getJSON());
-         //         if (this.websocket)
-         //            this.websocket.Send('Range:'+ v1.getValue());
+         if (this.websocket)
+            this.websocket.Send('DOFIT:'+this.getView().getModel().getJSON());
+         
+         //if (this.websocket)
+         //   this.websocket.Send('Range:'+ v1.getValue());
       },
 
       onPanelExit: function(){

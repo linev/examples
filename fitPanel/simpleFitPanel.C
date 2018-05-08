@@ -5,6 +5,9 @@
 
 #include "TBufferJSON.h"
 #include "TROOT.h"
+#include "TH1.h"
+#include "TAxis.h"
+#include "TCanvas.h"
 
 struct ComboBoxItem {
    std::string fId;
@@ -39,15 +42,21 @@ struct FitPanelModel {
 };
 
 
-class WHandler {
+class FitPanel {
 private:
    std::shared_ptr<ROOT::Experimental::TWebWindow> fWindow;
    unsigned fConnId{0};
+   TH1 *fHist{nullptr};
 
 public:
-   WHandler() {};
+   FitPanel() {};
 
-   virtual ~WHandler() { printf("Destructor!!!!\n"); }
+   virtual ~FitPanel() {}
+
+   void AssignHistogram(TH1 *hist)
+   {
+      fHist = hist;
+   }
 
    void ProcessData(unsigned connid, const std::string &arg)
    {
@@ -102,9 +111,14 @@ public:
 
          model.fMinRange = -4;
          model.fMaxRange = 4;
-         model.fStep = 0.01;
-         model.fRange[0]  = -4;
-         model.fRange[1] = 4;
+         if (fHist) {
+            model.fMinRange = fHist->GetXaxis()->GetXmin();
+            model.fMaxRange = fHist->GetXaxis()->GetXmax();
+         }
+
+         model.fStep = (model.fMaxRange - model.fMinRange) / 100;
+         model.fRange[0]  = model.fMinRange;
+         model.fRange[1] = model.fMaxRange;
          model.fOperation = 0;
          model.fFitOptions1 = 3;
          model.fLinear = false;
@@ -118,14 +132,16 @@ public:
 
          return;
       }
-      if (arg.find("MODEL:") == 0) {
+      if (arg.find("DOFIT:") == 0) {
          std::string arg1 = arg;
          arg1.erase(0,6);
-         printf("model %s\n", arg1.c_str());
+         // printf("model %s\n", arg1.c_str());
          FitPanelModel *obj = nullptr;
          TBufferJSON::FromJSON(obj, arg1.c_str());
          if (obj) {
-            printf("fSelectDataId = %s\n", obj->fSelectDataId.c_str());
+            printf("DOFIT: range %f %f select %s\n", obj->fRange[0], obj->fRange[1], obj->fSelectDataId.c_str());
+            if (fHist)
+               fHist->Fit("gaus", "", "", obj->fRange[0], obj->fRange[1]);
             delete obj;
          }
 
@@ -134,7 +150,7 @@ public:
 
    }
 
-   void popupWindow(const std::string &where = "")
+   void Show(const std::string &where = "")
    {
 
       fWindow = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow(false);
@@ -159,10 +175,16 @@ public:
 };
 
 
-WHandler* handler = nullptr;
 void simpleFitPanel()
 {
-   handler = new WHandler();
-   handler->popupWindow();
+   auto panel = new FitPanel();
+
+   TH1F *hpx = new TH1F("hpx","This is the px distribution",100,-4,4);
+   hpx->FillRandom("gaus", 10000);
+   hpx->Draw("hist");
+
+   panel->AssignHistogram(hpx);
+
+   panel->Show();
 }
 

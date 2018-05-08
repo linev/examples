@@ -259,7 +259,7 @@
 	    <!-- Buttons in Footer -->
 	    <Toolbar>
 	    	<Button text="Update" />
-	    	<Button text="Fit" press="doSomething"/>
+	    	<Button text="Fit" press="doFit"/>
 	    	<Button text="Reset"/>
 	    	<Button text="Close" press="closePanel"/>
 	    </Toolbar>
