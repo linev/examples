@@ -5,16 +5,19 @@
 
 #include "TBufferJSON.h"
 #include "TROOT.h"
+#include "TH1.h"
+#include "TAxis.h"
+#include "TCanvas.h"
 
 struct ComboBoxItem {
    std::string fId;
    std::string fSet;
    ComboBoxItem() = default;
-   ComboBoxItem(const std::string &id, const std::string &set) : fId(id), fSet(set) {}  
+   ComboBoxItem(const std::string &id, const std::string &set) : fId(id), fSet(set) {}
 };
 
 
-struct SimpleFitPanel {
+struct FitPanelModel {
    std::vector<ComboBoxItem> fDataSet;
    std::string fSelectDataId;
    std::vector<ComboBoxItem> fTypeFunc;
@@ -26,105 +29,130 @@ struct SimpleFitPanel {
    std::vector<ComboBoxItem> fMethodMin;
    std::string fSelectMethodMinId;
 
-   float fMinRange;
-   float fMaxRange;
-   float fStep;
+   float fMinRange{0};
+   float fMaxRange{1};
+   float fStep{0.1};
    float fRange[2];
-   float fOperation;
-   float fFitOptions1;
-   bool fLinear;
-   bool fRobust;
-   bool fWeights;
-   bool fBins;
-   float fLibrary;
-
-
-   SimpleFitPanel() = default;
+   float fOperation{0};
+   float fFitOptions1{0};
+   bool fLinear{false};
+   bool fRobust{false};
+   bool fWeights{false};
+   bool fBins{false};
+   float fLibrary{0};
 };
 
 
-class WHandler {
+class FitPanel {
 private:
    std::shared_ptr<ROOT::Experimental::TWebWindow> fWindow;
    unsigned fConnId{0};
+   TH1 *fHist{nullptr};
 
 public:
-   WHandler() {};
+   FitPanel() {};
 
-   virtual ~WHandler() { printf("Destructor!!!!\n"); }
+   virtual ~FitPanel() {}
+
+   void AssignHistogram(TH1 *hist)
+   {
+      fHist = hist;
+   }
 
    void ProcessData(unsigned connid, const std::string &arg)
    {
-       if (arg == "CONN_READY") {
-    	    printf("Start here\n");
-   		 
-          fConnId = connid;
-          //printf("connection established %u\n", fConnId);
-          fWindow->Send(fConnId, "INITDONE");
 
-	         SimpleFitPanel model;
-	         model.fDataSet.push_back(ComboBoxItem("1", "No Selection"));
-	         model.fDataSet.push_back(ComboBoxItem("2", "TH1F::hpx"));
-	         model.fDataSet.push_back(ComboBoxItem("3", "TH2F::hpxhpy"));
-	         model.fDataSet.push_back(ComboBoxItem("4", "TProfile::hprof"));
-	         model.fDataSet.push_back(ComboBoxItem("5", "TNtuple::ntuple"));
-           model.fSelectDataId = "2";
+      if (arg == "CONN_READY") {
+         printf("Start here\n");
 
-           model.fTypeFunc.push_back(ComboBoxItem("1", "User Func"));
-           model.fTypeFunc.push_back(ComboBoxItem("2", "Predef-1D"));
-           model.fSelectTypeId = "1";
+         fConnId = connid;
+         //printf("connection established %u\n", fConnId);
+         fWindow->Send(fConnId, "INITDONE");
 
-           model.fTypeXY.push_back(ComboBoxItem("1", "gauson"));
-           model.fTypeXY.push_back(ComboBoxItem("2", "expo"));
-           model.fTypeXY.push_back(ComboBoxItem("3", "landau"));
-           model.fTypeXY.push_back(ComboBoxItem("4", "pol1"));
-           model.fSelectXYId = "1";
+         FitPanelModel model;
+         model.fDataSet.push_back(ComboBoxItem("1", "No Selection"));
+         model.fDataSet.push_back(ComboBoxItem("2", "TH1F::hpx"));
+         model.fDataSet.push_back(ComboBoxItem("3", "TH2F::hpxhpy"));
+         model.fDataSet.push_back(ComboBoxItem("4", "TProfile::hprof"));
+         model.fDataSet.push_back(ComboBoxItem("5", "TNtuple::ntuple"));
+         model.fSelectDataId = "2";
 
-           model.fMethod.push_back(ComboBoxItem("1", "Chi-square"));
-           model.fMethod.push_back(ComboBoxItem("2", "Binned Likelihood"));
-           model.fSelectMethodId = "1";
+         model.fTypeFunc.push_back(ComboBoxItem("1", "User Func"));
+         model.fTypeFunc.push_back(ComboBoxItem("2", "Predef-1D"));
+         model.fSelectTypeId = "1";
 
-          
-           model.fMethodMin.push_back(ComboBoxItem("1", "MIGRAD"));
-           model.fMethodMin.push_back(ComboBoxItem("2", "SIMPLEX"));
-           model.fMethodMin.push_back(ComboBoxItem("3", "SCAN"));
-           model.fMethodMin.push_back(ComboBoxItem("4", "Combination"));
+         model.fTypeXY.push_back(ComboBoxItem("1", "gauson"));
+         model.fTypeXY.push_back(ComboBoxItem("2", "expo"));
+         model.fTypeXY.push_back(ComboBoxItem("3", "landau"));
+         model.fTypeXY.push_back(ComboBoxItem("4", "pol1"));
+         model.fSelectXYId = "1";
 
-           model.fMinRange = -4;
-           model.fMaxRange = 4;
-           model.fStep = 0.01;
-           model.fRange[0]  = -4;
-           model.fRange[1] = 4;
-           model.fOperation = 0;
-           model.fFitOptions1 = 3;
-           model.fLinear = false;
-           model.fRobust = false;
-           model.fWeights = false;
-           model.fBins = false;
-           model.fLibrary = 0;
+         model.fMethod.push_back(ComboBoxItem("1", "Chi-square"));
+         model.fMethod.push_back(ComboBoxItem("2", "Binned Likelihood"));
+         model.fSelectMethodId = "1";
 
-	         TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("SimpleFitPanel"));
-	         fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
 
-	         return;
+         model.fMethodMin.push_back(ComboBoxItem("1", "MIGRAD"));
+         model.fMethodMin.push_back(ComboBoxItem("2", "SIMPLEX"));
+         model.fMethodMin.push_back(ComboBoxItem("3", "SCAN"));
+         model.fMethodMin.push_back(ComboBoxItem("4", "Combination"));
+
+
+         if(model.fLibrary == 0){
+            model.fSelectMethodMinId = "1";}
+
+         else if(model.fLibrary == 1){
+
+            model.fSelectMethodMinId = "2";
          }
-         if (arg.find("MODEL:") == 0) {
-             std::string arg1 = arg;
-             arg1.erase(0,6);
-             printf("model %s\n", arg1.c_str());
-             SimpleFitPanel *obj = nullptr;
-             TBufferJSON::FromJSON(obj, arg1.c_str());
-             if (obj) {
-                 printf("fSelectDataId = %s\n", obj->fSelectDataId.c_str());
-                 delete obj;
-             }
 
+         else{
+
+            model.fSelectMethodMinId = "3";
          }
-	     
-    	
-    }
 
-    void popupWindow(const std::string &where = "")
+         model.fMinRange = -4;
+         model.fMaxRange = 4;
+         if (fHist) {
+            model.fMinRange = fHist->GetXaxis()->GetXmin();
+            model.fMaxRange = fHist->GetXaxis()->GetXmax();
+         }
+
+         model.fStep = (model.fMaxRange - model.fMinRange) / 100;
+         model.fRange[0]  = model.fMinRange;
+         model.fRange[1] = model.fMaxRange;
+         model.fOperation = 0;
+         model.fFitOptions1 = 3;
+         model.fLinear = false;
+         model.fRobust = false;
+         model.fWeights = false;
+         model.fBins = false;
+         model.fLibrary = 0;
+
+         TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("FitPanelModel"));
+         fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
+
+         return;
+      }
+      if (arg.find("DOFIT:") == 0) {
+         std::string arg1 = arg;
+         arg1.erase(0,6);
+         // printf("model %s\n", arg1.c_str());
+         FitPanelModel *obj = nullptr;
+         TBufferJSON::FromJSON(obj, arg1.c_str());
+         if (obj) {
+            printf("DOFIT: range %f %f select %s\n", obj->fRange[0], obj->fRange[1], obj->fSelectDataId.c_str());
+            if (fHist)
+               fHist->Fit("gaus", "", "", obj->fRange[0], obj->fRange[1]);
+            delete obj;
+         }
+
+      }
+
+
+   }
+
+   void Show(const std::string &where = "")
    {
 
       fWindow = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow(false);
@@ -149,12 +177,16 @@ public:
 };
 
 
-WHandler* handler = nullptr;
 void simpleFitPanel()
 {
-   handler = new WHandler();
-   handler->popupWindow();
+   auto panel = new FitPanel();
+
+   TH1F *hpx = new TH1F("hpx","This is the px distribution",100,-4,4);
+   hpx->FillRandom("gaus", 10000);
+   hpx->Draw("hist");
+
+   panel->AssignHistogram(hpx);
+
+   panel->Show();
 }
-
-
 
