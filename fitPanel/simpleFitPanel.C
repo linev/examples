@@ -25,6 +25,7 @@ struct SimpleFitPanel {
    std::string fSelectMethodId;
    std::vector<ComboBoxItem> fMethodMin;
    std::string fSelectMethodMinId;
+
    float fMinRange;
    float fMaxRange;
    float fStep;
@@ -88,20 +89,6 @@ public:
            model.fMethodMin.push_back(ComboBoxItem("2", "SIMPLEX"));
            model.fMethodMin.push_back(ComboBoxItem("3", "SCAN"));
            model.fMethodMin.push_back(ComboBoxItem("4", "Combination"));
-
-
-            if(model.fLibrary == 0){
-           model.fSelectMethodMinId = "1";}
-
-            else if(model.fLibrary == 1){
-            
-           model.fSelectMethodMinId = "2";
-           }
-
-           else{
-           
-           model.fSelectMethodMinId = "3";
-           }
 
            model.fMinRange = -4;
            model.fMaxRange = 4;
