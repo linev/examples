@@ -44,8 +44,8 @@ sap.ui.define([
       },
 
       doFit: function() {
-         console.log("model=", this.getView().getModel().getProperty("/fSelectDataId"), 
-               this.getView().getModel().getData().fSelectTypeId);
+         // console.log("model=", this.getView().getModel().getProperty("/fSelectDataId"), 
+         //       this.getView().getModel().getData().fSelectTypeId);
          var v1 = this.getView().byId("TypeFunc");
          var v2 = this.getView().byId("Slider");
 
@@ -72,14 +72,18 @@ sap.ui.define([
       },
 
       selectRB: function(){
+
         var lib = this.getView().getModel().getData().fLibrary;
+
+        if (this.websocket)
+            this.websocket.Send(this.getView().getModel().getData().lib);
 
         if(lib == 0){
               console.log("1");
             }
             else if(lib == 1){
               console.log("2");
-              this.getView().getModel().fMethodMin1 = this.getView().getModel().fMethodMin; 
+
             }
             else{
               console.log("3");
