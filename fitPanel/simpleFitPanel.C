@@ -26,6 +26,10 @@ struct FitPanelModel {
    std::string fSelectXYId;
    std::vector<ComboBoxItem> fMethod;
    std::string fSelectMethodId;
+
+   // all combo items for all methods
+   std::vector<std::vector<ComboBoxItem>> fMethodMinAll;
+
    std::vector<ComboBoxItem> fMethodMin;
    std::string fSelectMethodMinId;
 
@@ -39,7 +43,7 @@ struct FitPanelModel {
    bool fRobust{false};
    bool fWeights{false};
    bool fBins{false};
-   float fLibrary{0};
+   int fLibrary{0};
 };
 
 
@@ -91,24 +95,45 @@ public:
          model.fMethod.push_back(ComboBoxItem("2", "Binned Likelihood"));
          model.fSelectMethodId = "1";
 
+         model.fSelectMethodMinId = "1";
 
-         if(model.fLibrary == 0){
-          model.fMethodMin.push_back(ComboBoxItem("1", "MIGRAD"));
-          model.fMethodMin.push_back(ComboBoxItem("2", "SIMPLEX"));
-          model.fMethodMin.push_back(ComboBoxItem("3", "SCAN"));
-          model.fMethodMin.push_back(ComboBoxItem("4", "Combination"));
-          model.fSelectMethodMinId = "1";}
+         // corresponds to library == 0
+         model.fMethodMinAll.emplace_back();
+         std::vector<ComboBoxItem> &vect0 = model.fMethodMinAll.back();
+         vect0.push_back(ComboBoxItem("1", "MIGRAD"));
+         vect0.push_back(ComboBoxItem("2", "SIMPLEX"));
+         vect0.push_back(ComboBoxItem("3", "SCAN"));
+         vect0.push_back(ComboBoxItem("4", "Combination"));
 
-         else if(model.fLibrary == 1){
-            model.fMethodMin.push_back(ComboBoxItem("1", "Test"));
-            model.fMethodMin.push_back(ComboBoxItem("2", "Test1"));
-            model.fSelectMethodMinId = "2";
-         }
 
-         else{
+         // corresponds to library == 1
+         model.fMethodMinAll.emplace_back();
+         std::vector<ComboBoxItem> &vect1 = model.fMethodMinAll.back();
+         vect1.push_back(ComboBoxItem("1", "Lib1_1"));
+         vect1.push_back(ComboBoxItem("2", "Lib1_2"));
 
-            model.fSelectMethodMinId = "3";
-         }
+         // corresponds to library == 2
+         model.fMethodMinAll.emplace_back();
+         std::vector<ComboBoxItem> &vect2 = model.fMethodMinAll.back();
+         vect2.push_back(ComboBoxItem("1", "Lib2_1"));
+         vect2.push_back(ComboBoxItem("2", "Lib2_2"));
+
+         // corresponds to library == 3
+         model.fMethodMinAll.emplace_back();
+         std::vector<ComboBoxItem> &vect3 = model.fMethodMinAll.back();
+         vect3.push_back(ComboBoxItem("1", "Lib3_1"));
+         vect3.push_back(ComboBoxItem("2", "Lib3_2"));
+
+         // corresponds to library == 4
+         model.fMethodMinAll.emplace_back();
+         std::vector<ComboBoxItem> &vect4 = model.fMethodMinAll.back();
+         vect4.push_back(ComboBoxItem("1", "Lib4_1"));
+         vect4.push_back(ComboBoxItem("2", "Lib4_2"));
+
+         // select items list for initial display
+         model.fMethodMin = model.fMethodMinAll[model.fLibrary];
+
+
 
          model.fMinRange = -4;
          model.fMaxRange = 4;
@@ -118,7 +143,7 @@ public:
          }
 
          model.fStep = (model.fMaxRange - model.fMinRange) / 100;
-         model.fRange[0]  = model.fMinRange;
+         model.fRange[0] = model.fMinRange;
          model.fRange[1] = model.fMaxRange;
          model.fOperation = 0;
          model.fFitOptions1 = 3;
@@ -127,11 +152,12 @@ public:
          model.fWeights = false;
          model.fBins = false;
          model.fLibrary = 0;
-         
+
 
          TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("FitPanelModel"));
          fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
-                   printf("fLibrary is (%f)\n", model.fLibrary);
+
+         printf("fLibrary is (%d)\n", model.fLibrary);
 
          return;
       }

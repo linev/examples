@@ -67,27 +67,25 @@ sap.ui.define([
       },
 
       fOpTextleLiveChange: function(oEvent) {
-         var sfOpText = oEvent.getParameter("value");
-         this.byId("selectedOpText").setText(sfOpText);
+          var sfOpText = oEvent.getParameter("value");
+          this.byId("selectedOpText").setText(sfOpText);
       },
 
       selectRB: function(){
+         
+         var data = this.getView().getModel().getData();
 
-        var lib = this.getView().getModel().getData().fLibrary;
+         var lib = this.getView().getModel().getData().fLibrary;
 
-        if (this.websocket)
-            this.websocket.Send(this.getView().getModel().getData().lib);
-
-        if(lib == 0){
-              console.log("1");
-            }
-            else if(lib == 1){
-              console.log("2");
-
-            }
-            else{
-              console.log("3");
-            }
+         console.log('lib = ', lib);
+         
+         // same code as initialization
+         data.fMethodMin = data.fMethodMinAll[parseInt(lib)];
+         
+         // refresh all UI elements
+         this.getView().getModel().refresh();
+         
+         
     },
 
    });
