@@ -81,7 +81,7 @@ public:
          model.fTypeFunc.push_back(ComboBoxItem("2", "Predef-1D"));
          model.fSelectTypeId = "1";
 
-         model.fTypeXY.push_back(ComboBoxItem("1", "gauson"));
+         model.fTypeXY.push_back(ComboBoxItem("1", "gaus"));
          model.fTypeXY.push_back(ComboBoxItem("2", "expo"));
          model.fTypeXY.push_back(ComboBoxItem("3", "landau"));
          model.fTypeXY.push_back(ComboBoxItem("4", "pol1"));
@@ -92,17 +92,16 @@ public:
          model.fSelectMethodId = "1";
 
 
-         model.fMethodMin.push_back(ComboBoxItem("1", "MIGRAD"));
-         model.fMethodMin.push_back(ComboBoxItem("2", "SIMPLEX"));
-         model.fMethodMin.push_back(ComboBoxItem("3", "SCAN"));
-         model.fMethodMin.push_back(ComboBoxItem("4", "Combination"));
-
-
          if(model.fLibrary == 0){
-            model.fSelectMethodMinId = "1";}
+          model.fMethodMin.push_back(ComboBoxItem("1", "MIGRAD"));
+          model.fMethodMin.push_back(ComboBoxItem("2", "SIMPLEX"));
+          model.fMethodMin.push_back(ComboBoxItem("3", "SCAN"));
+          model.fMethodMin.push_back(ComboBoxItem("4", "Combination"));
+          model.fSelectMethodMinId = "1";}
 
          else if(model.fLibrary == 1){
-
+            model.fMethodMin.push_back(ComboBoxItem("1", "Test"));
+            model.fMethodMin.push_back(ComboBoxItem("2", "Test1"));
             model.fSelectMethodMinId = "2";
          }
 
@@ -128,9 +127,11 @@ public:
          model.fWeights = false;
          model.fBins = false;
          model.fLibrary = 0;
+         
 
          TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("FitPanelModel"));
          fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
+                   printf("fLibrary is (%f)\n", model.fLibrary);
 
          return;
       }
@@ -183,7 +184,7 @@ void simpleFitPanel()
 
    TH1F *hpx = new TH1F("hpx","This is the px distribution",100,-4,4);
    hpx->FillRandom("gaus", 10000);
-   hpx->Draw("hist");
+   hpx->Draw();
 
    panel->AssignHistogram(hpx);
 
