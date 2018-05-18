@@ -69,14 +69,12 @@ sap.ui.define([
           this.byId("selectedOpText").setText(sfOpText);
       },
 
-       onChange: function(oEvent){
+       onFuncChange: function(oEvent){
          var data = this.getView().getModel().getData();
          var func = oEvent.getParameter("selectedItem").getText();
-         console.log("func " + func);
-         data.func1 = func;
-
+         console.log("select func " + func);
+         data.realfunc = func;
          this.getView().getModel().refresh();
-         console.log(data.func1);
        },
 
       selectRB: function(){
@@ -93,7 +91,7 @@ sap.ui.define([
          
          // refresh all UI elements
          this.getView().getModel().refresh();
-         console.log(data.fMethodMinAll[parseInt(lib)]);
+         console.log("Method = ", data.fMethodMinAll[parseInt(lib)]);
          
     },
 

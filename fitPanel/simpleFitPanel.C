@@ -133,8 +133,8 @@ public:
          // select items list for initial display
          model.fMethodMin = model.fMethodMinAll[model.fLibrary];
 
-         
 
+         model.fMinRange = -4;
          model.fMaxRange = 4;
          if (fHist) {
             model.fMinRange = fHist->GetXaxis()->GetXmin();
@@ -151,7 +151,7 @@ public:
          model.fWeights = false;
          model.fBins = false;
          model.fLibrary = 0;
-        
+
 
 
          TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("FitPanelModel"));
@@ -170,7 +170,9 @@ public:
          if (obj) {
             printf("DOFIT: range %f %f select %s function %s\n ", obj->fRange[0], obj->fRange[1], obj->fSelectDataId.c_str(), obj->fSelectXYId.c_str());
 
-            if(obj->fSelectXYId == "1"){
+            if (!obj->realfunc.empty()) {
+               printf("GOT realfunc: %s\n", obj->realfunc.c_str());
+            } else if(obj->fSelectXYId == "1"){
                obj->realfunc = "gaus";
                printf("%s\n", obj->realfunc.c_str());
             }
@@ -190,7 +192,7 @@ public:
                obj->realfunc = "gaus";
                printf("%s\n", obj->realfunc.c_str());
             }
-            
+
             if (fHist)
                fHist->Fit(obj->realfunc.c_str(), "", "", obj->fRange[0], obj->fRange[1]);
             delete obj;

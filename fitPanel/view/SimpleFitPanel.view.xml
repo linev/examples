@@ -58,7 +58,7 @@
 				<ComboBox id="TypeFunc" selectedKey="{/fSelectTypeId}" items="{ path: '/fTypeFunc', sorter: { path: 'fFunc' } }">
 		               <core:Item key="{fId}" text="{fSet}" />
 		        </ComboBox>
-		        <ComboBox id="TypeXY" selectedKey="{/fSelectXYId}" items="{ path: '/fTypeXY', sorter: { path: 'fXY' } }" selectionChange="onChange"
+		        <ComboBox id="TypeXY" selectedKey="{/fSelectXYId}" items="{ path: '/fTypeXY', sorter: { path: 'fXY' } }" selectionChange="onFuncChange"
 		        	>
 		               <core:Item key="{fId}" text="{fSet}" />
 		        </ComboBox>
