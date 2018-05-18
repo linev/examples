@@ -26,6 +26,9 @@ struct FitPanelModel {
    std::string fSelectXYId;
    std::vector<ComboBoxItem> fMethod;
    std::string fSelectMethodId;
+   std::string realfunc;
+   std::string _slider;
+
 
    // all combo items for all methods
    std::vector<std::vector<ComboBoxItem>> fMethodMinAll;
@@ -44,6 +47,7 @@ struct FitPanelModel {
    bool fWeights{false};
    bool fBins{false};
    int fLibrary{0};
+
 };
 
 
@@ -96,7 +100,6 @@ public:
          model.fSelectMethodId = "1";
 
          model.fSelectMethodMinId = "1";
-
          // corresponds to library == 0
          model.fMethodMinAll.emplace_back();
          std::vector<ComboBoxItem> &vect0 = model.fMethodMinAll.back();
@@ -104,7 +107,6 @@ public:
          vect0.push_back(ComboBoxItem("2", "SIMPLEX"));
          vect0.push_back(ComboBoxItem("3", "SCAN"));
          vect0.push_back(ComboBoxItem("4", "Combination"));
-
 
          // corresponds to library == 1
          model.fMethodMinAll.emplace_back();
@@ -115,27 +117,24 @@ public:
          // corresponds to library == 2
          model.fMethodMinAll.emplace_back();
          std::vector<ComboBoxItem> &vect2 = model.fMethodMinAll.back();
-         vect2.push_back(ComboBoxItem("1", "Lib2_1"));
-         vect2.push_back(ComboBoxItem("2", "Lib2_2"));
+         vect2.push_back(ComboBoxItem("1", "FUMILI"));
 
          // corresponds to library == 3
          model.fMethodMinAll.emplace_back();
          std::vector<ComboBoxItem> &vect3 = model.fMethodMinAll.back();
-         vect3.push_back(ComboBoxItem("1", "Lib3_1"));
-         vect3.push_back(ComboBoxItem("2", "Lib3_2"));
+         // vect3.push_back(ComboBoxItem("1", "Lib3_1"));
+         // vect3.push_back(ComboBoxItem("2", "Lib3_2"));
 
          // corresponds to library == 4
          model.fMethodMinAll.emplace_back();
          std::vector<ComboBoxItem> &vect4 = model.fMethodMinAll.back();
-         vect4.push_back(ComboBoxItem("1", "Lib4_1"));
-         vect4.push_back(ComboBoxItem("2", "Lib4_2"));
+         vect4.push_back(ComboBoxItem("1", "TMVA Genetic Algorithm"));
 
          // select items list for initial display
          model.fMethodMin = model.fMethodMinAll[model.fLibrary];
 
+         
 
-
-         model.fMinRange = -4;
          model.fMaxRange = 4;
          if (fHist) {
             model.fMinRange = fHist->GetXaxis()->GetXmin();
@@ -152,25 +151,48 @@ public:
          model.fWeights = false;
          model.fBins = false;
          model.fLibrary = 0;
+        
 
 
          TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("FitPanelModel"));
          fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
 
-         printf("fLibrary is (%d)\n", model.fLibrary);
+         //printf("fLibrary is (%d)\n", model.fLibrary);
+         printf("Slider %s\n", model._slider.c_str() );
 
          return;
       }
       if (arg.find("DOFIT:") == 0) {
          std::string arg1 = arg;
          arg1.erase(0,6);
-         // printf("model %s\n", arg1.c_str());
          FitPanelModel *obj = nullptr;
          TBufferJSON::FromJSON(obj, arg1.c_str());
          if (obj) {
-            printf("DOFIT: range %f %f select %s\n", obj->fRange[0], obj->fRange[1], obj->fSelectDataId.c_str());
+            printf("DOFIT: range %f %f select %s function %s\n ", obj->fRange[0], obj->fRange[1], obj->fSelectDataId.c_str(), obj->fSelectXYId.c_str());
+
+            if(obj->fSelectXYId == "1"){
+               obj->realfunc = "gaus";
+               printf("%s\n", obj->realfunc.c_str());
+            }
+            else if (obj->fSelectXYId == "2"){
+               obj->realfunc = "expo";
+               printf("%s\n", obj->realfunc.c_str());
+            }
+            else if (obj->fSelectXYId == "3"){
+               obj->realfunc = "landau";
+               printf("%s\n", obj->realfunc.c_str());
+            }
+            else if (obj->fSelectXYId == "4"){
+               obj->realfunc = "pol1";
+               printf("%s\n", obj->realfunc.c_str());
+            }
+            else {
+               obj->realfunc = "gaus";
+               printf("%s\n", obj->realfunc.c_str());
+            }
+            
             if (fHist)
-               fHist->Fit("gaus", "", "", obj->fRange[0], obj->fRange[1]);
+               fHist->Fit(obj->realfunc.c_str(), "", "", obj->fRange[0], obj->fRange[1]);
             delete obj;
          }
 

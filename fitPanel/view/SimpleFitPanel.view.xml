@@ -58,7 +58,8 @@
 				<ComboBox id="TypeFunc" selectedKey="{/fSelectTypeId}" items="{ path: '/fTypeFunc', sorter: { path: 'fFunc' } }">
 		               <core:Item key="{fId}" text="{fSet}" />
 		        </ComboBox>
-		        <ComboBox id="TypeXY" selectedKey="{/fSelectXYId}" items="{ path: '/fTypeXY', sorter: { path: 'fXY' } }">
+		        <ComboBox id="TypeXY" selectedKey="{/fSelectXYId}" items="{ path: '/fTypeXY', sorter: { path: 'fXY' } }" selectionChange="onChange"
+		        	>
 		               <core:Item key="{fId}" text="{fSet}" />
 		        </ComboBox>
 			</form:SimpleForm>
@@ -201,7 +202,6 @@
 						</l:BlockLayoutCell>
 						<l:BlockLayoutCell title="Method">
 							<ComboBox id="MethodMin" selectedKey="{/fSelectMethodMinId}" items="{ path: '/fMethodMin', sorter: { path: 'fMethodMin' } }">
-							<!-- <ComboBox id="MethodMin" selectedKey="{/fSelectMethodMinId}" items="{ path: '/fMethodMin[{/fLibrary}]', sorter: { path: 'fMethodMin' } }"> -->
 		               			<core:Item key="{fId}" text="{fSet}" />
 		        			</ComboBox>
 						</l:BlockLayoutCell>
@@ -262,6 +262,8 @@
 	    	<Button text="Fit" press="doFit"/>
 	    	<Button text="Reset"/>
 	    	<Button text="Close" press="closePanel"/>
+	    	<Button text="Take Var" press="takeVar"/>
+
 	    </Toolbar>
 	</Page>
 </mvc:View>
