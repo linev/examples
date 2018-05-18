@@ -19,7 +19,8 @@ sap.ui.define([
                fMinRange: -4,
                fMaxRange: 4,
                fStep: 0.01,
-               fRange: [-4,4]
+               fRange: [-4,4],
+               func: "gaus"
          };
          this.getView().setModel(new JSONModel(data));
          this._data = data;
@@ -44,17 +45,14 @@ sap.ui.define([
       },
 
       doFit: function() {
-         // console.log("model=", this.getView().getModel().getProperty("/fSelectDataId"), 
-         //       this.getView().getModel().getData().fSelectTypeId);
+         // console.log("model=", this.getView().getModel().getProperty("/fSelectXYId"), 
+         //       this.getView().getModel().getProperty("/fSet"));
          var v1 = this.getView().byId("TypeFunc");
-         var v2 = this.getView().byId("Slider");
+         
 
-         // console.log("v2 " + v2);
-         // console.log("v1 value " + v1.getValue());
-         // console.log("v1 first " + v1.getFirstItem());
-         // console.log("v1 last " + v1.getLastItem());
-         // console.log("Slider Range " + v2.getRange());
+         
 
+ 
          if (this.websocket)
             this.websocket.Send('DOFIT:'+this.getView().getModel().getJSON());
          
@@ -71,6 +69,16 @@ sap.ui.define([
           this.byId("selectedOpText").setText(sfOpText);
       },
 
+       onChange: function(oEvent){
+         var data = this.getView().getModel().getData();
+         var func = oEvent.getParameter("selectedItem").getText();
+         console.log("func " + func);
+         data.func1 = func;
+
+         this.getView().getModel().refresh();
+         console.log(data.func1);
+       },
+
       selectRB: function(){
          
          var data = this.getView().getModel().getData();
@@ -82,11 +90,28 @@ sap.ui.define([
          // same code as initialization
          data.fMethodMin = data.fMethodMinAll[parseInt(lib)];
          
+         
          // refresh all UI elements
          this.getView().getModel().refresh();
-         
+         console.log(data.fMethodMinAll[parseInt(lib)]);
          
     },
+
+      takeVar: function(){
+
+         var data = this.getView().getModel().getData();
+
+         var v2 = this.getView().byId("Slider");
+
+         var slider = v2.getRange();
+         console.log('Slider Range ' + slider);
+
+         data._slider = slider;
+
+         this.getView().getModel().refresh();
+
+         console.log(data._slider);
+       },
 
    });
 });
