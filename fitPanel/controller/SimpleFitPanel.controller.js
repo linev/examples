@@ -12,7 +12,8 @@ sap.ui.define([
          console.log("I am A");
          var id = this.getView().getId();
          var opText = this.getView().byId("OperationText");
-         var fOpText = opText.getValue();
+         //var fOpText = opText.getValue();
+         //console.log("FopText ", fOpText);
          var data = {
                fDataSet:[ { fId:"1", fSet: "----" } ],
                fSelectDataId: "0",
@@ -20,7 +21,8 @@ sap.ui.define([
                fMaxRange: 4,
                fStep: 0.01,
                fRange: [-4,4],
-               func: "gaus"
+               func: "gaus",
+               fOpText: "test"
          };
          this.getView().setModel(new JSONModel(data));
          this._data = data;
@@ -38,6 +40,7 @@ sap.ui.define([
             }
             console.log("Robust" + this.getView().getModel().getData().fRobust);
             console.log("Library " + this.getView().getModel().getData().fLibrary);
+            console.log("fSelectXYId " + this.getView().getModel().getData().fSelectXYId);
          }
          else {
             //this.getView().byId("SampleText").setText("Get message:\n" + msg);
@@ -48,9 +51,12 @@ sap.ui.define([
          // console.log("model=", this.getView().getModel().getProperty("/fSelectXYId"), 
          //       this.getView().getModel().getProperty("/fSet"));
          var v1 = this.getView().byId("TypeFunc");
-         
 
-         
+         var data = this.getView().getModel().getData();
+         var func = this.getView().byId("TypeXY").getValue();
+         console.log("select func " + func);
+         data.realfunc = func;
+         this.getView().getModel().refresh();         
 
  
          if (this.websocket)
@@ -64,19 +70,32 @@ sap.ui.define([
 
       },
 
-      fOpTextleLiveChange: function(oEvent) {
+      fOpTextLiveChange: function(oEvent) {
           var sfOpText = oEvent.getParameter("value");
           this.byId("selectedOpText").setText(sfOpText);
       },
 
-       onFuncChange: function(oEvent){
-         var data = this.getView().getModel().getData();
-         var func = oEvent.getParameter("selectedItem").getText();
-         console.log("select func " + func);
-         data.realfunc = func;
-         this.getView().getModel().refresh();
-       },
+      fOpTextChange: function(Controller, JSONModel){
+         "use strict";
+         var oData = {
+            fOpText: "test"
+         };
+         var fOpTextModel = new JSONModel(oData);
+         this.getView().setModel(fOpTextModel);
+         this._oData = oData;
+         console.log()
 
+      },
+
+       // onFuncChange: function(oEvent){
+       //   var data = this.getView().getModel().getData();
+       //   var func = oEvent.getParameter("selectedItem").getText();
+       //   console.log("select func " + func);
+       //   data.realfunc = func;
+       //   this.getView().getModel().refresh();
+       // },
+
+      //change the combo box in Minimization Tab --- Method
       selectRB: function(){
          
          var data = this.getView().getModel().getData();
@@ -94,22 +113,22 @@ sap.ui.define([
          console.log("Method = ", data.fMethodMinAll[parseInt(lib)]);
          
     },
-
-      takeVar: function(){
+      //change the combobox in Type Function
+      selectTypeFunc: function(){
 
          var data = this.getView().getModel().getData();
 
-         var v2 = this.getView().byId("Slider");
+         var typeXY = this.getView().getModel().getData().fSelectTypeId;
+         console.log("typeXY = " + typeXY);
 
-         var slider = v2.getRange();
-         console.log('Slider Range ' + slider);
-
-         data._slider = slider;
+         data.fTypeXY = data.fTypeXYAll[parseInt(typeXY)];
 
          this.getView().getModel().refresh();
+         console.log("Type = ", data.fTypeXYAll[parseInt(typeXY)]);
+      },
 
-         console.log(data._slider);
-       },
 
    });
+
+   return 
 });

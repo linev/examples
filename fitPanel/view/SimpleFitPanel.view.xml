@@ -93,7 +93,7 @@
 							<RadioButton id="RB1-4" text="Conv"/>
 						</buttons>
 					</RadioButtonGroup>	
-					<TextArea id="OperationText" value="{/fOpText}" valueLiveUpdate="{/fOpTextUpdate}" liveChange="fOpTextleLiveChange"/>
+					<TextArea id="OperationText" value="{/fOpText}" valueLiveUpdate="{/fOpTextUpdate}" liveChange="fOpTextLiveChange"/>
 					<Label text="Selected " labelFor="OperationText"/>		
 			<form:SimpleForm 
 				layout="ResponsiveGridLayout"
