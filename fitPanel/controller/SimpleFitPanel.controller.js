@@ -2,8 +2,8 @@ sap.ui.define([
    'sap/ui/jsroot/GuiPanelController',
    'sap/ui/model/json/JSONModel'
 ], function (GuiPanelController, JSONModel) {
+   
    "use strict";
-
 
    return GuiPanelController.extend("localapp.controller.SimpleFitPanel",{
 
@@ -76,7 +76,7 @@ sap.ui.define([
       },
 
       fOpTextChange: function(Controller, JSONModel){
-         "use strict";
+         
          var oData = {
             fOpText: "test"
          };
