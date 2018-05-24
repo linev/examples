@@ -9,11 +9,8 @@ sap.ui.define([
 
          //function called from GuiPanelController
       onPanelInit : function() {
-         console.log("I am A");
          var id = this.getView().getId();
          var opText = this.getView().byId("OperationText");
-         //var fOpText = opText.getValue();
-         //console.log("FopText ", fOpText);
          var data = {
                fDataSet:[ { fId:"1", fSet: "----" } ],
                fSelectDataId: "0",
@@ -25,7 +22,7 @@ sap.ui.define([
                fOpText: "test"
          };
          this.getView().setModel(new JSONModel(data));
-         this._data = data;
+         this._data = data;         
       },
 
       OnWebsocketMsg: function(handle, msg){
@@ -38,9 +35,9 @@ sap.ui.define([
                this.getView().setModel(new JSONModel(data));
                this._data = data;
             }
-            console.log("Robust" + this.getView().getModel().getData().fRobust);
-            console.log("Library " + this.getView().getModel().getData().fLibrary);
-            console.log("fSelectXYId " + this.getView().getModel().getData().fSelectXYId);
+            // console.log("Robust" + this.getView().getModel().getData().fRobust);
+            // console.log("Library " + this.getView().getModel().getData().fLibrary);
+            // console.log("fSelectXYId " + this.getView().getModel().getData().fSelectXYId);
          }
          else {
             //this.getView().byId("SampleText").setText("Get message:\n" + msg);
@@ -50,12 +47,12 @@ sap.ui.define([
       doFit: function() {
          // console.log("model=", this.getView().getModel().getProperty("/fSelectXYId"), 
          //       this.getView().getModel().getProperty("/fSet"));
-         var v1 = this.getView().byId("TypeFunc");
+         //var v1 = this.getView().byId("TypeFunc");
 
          var data = this.getView().getModel().getData();
          var func = this.getView().byId("TypeXY").getValue();
          console.log("select func " + func);
-         data.realfunc = func;
+         data.fRealFunc = func;
          this.getView().getModel().refresh();         
 
  
@@ -86,14 +83,14 @@ sap.ui.define([
          console.log()
 
       },
-
-       // onFuncChange: function(oEvent){
-       //   var data = this.getView().getModel().getData();
-       //   var func = oEvent.getParameter("selectedItem").getText();
-       //   console.log("select func " + func);
-       //   data.realfunc = func;
-       //   this.getView().getModel().refresh();
-       // },
+      /***STILL WORKING
+       onFuncChange: function(){
+         var data = this.getView().getModel().getData();
+         var linear = this.getView().getModel().getData().fSelectXYId;
+         console.log("Linear = ", linear);
+         data.fFuncChange = linear;
+         this.getView().getModel().refresh();
+       },***/
 
       //change the combo box in Minimization Tab --- Method
       selectRB: function(){

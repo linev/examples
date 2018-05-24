@@ -55,11 +55,10 @@
 				columnsS="1">
 
 				<Label text="Type " labelFor="TypeFunc"/>
-				<ComboBox id="TypeFunc" selectedKey="{/fSelectTypeId}" items="{ path: '/fTypeFunc', sorter: { path: 'fFunc' } }">
+				<ComboBox id="TypeFunc" selectedKey="{/fSelectTypeId}" items="{ path: '/fTypeFunc', sorter: { path: 'fFunc' } }" change="selectTypeFunc">
 		               <core:Item key="{fId}" text="{fSet}" />
 		        </ComboBox>
-		        <ComboBox id="TypeXY" selectedKey="{/fSelectXYId}" items="{ path: '/fTypeXY', sorter: { path: 'fXY' } }" selectionChange="onFuncChange"
-		        	>
+		        <ComboBox id="TypeXY" selectedKey="{/fSelectXYId}" items="{ path: '/fTypeXY', sorter: { path: 'fXY' } }" change="onFuncChange">
 		               <core:Item key="{fId}" text="{fSet}" />
 		        </ComboBox>
 			</form:SimpleForm>
@@ -145,7 +144,7 @@
 		               			<core:Item key="{fId}" text="{fSet}" />
 		        			</ComboBox>
 							<l:HorizontalLayout class="sapUiContentPadding">
-		    					<CheckBox id="linearFit" text="Linear Fit" selected="{/fLinear}"/>
+		    					<CheckBox id="linearFit" text="Linear Fit" selected="{/fLinear}" />
 		    					<CheckBox id="robust" text="Robust" enabled="{= ${/fLinear} === true}" selected="{/fRobust}"/>
 			    				<StepInput
 									value="0.95"
@@ -159,24 +158,24 @@
 							<Title level="H3" text="Fit Options"/>
 							<l:HorizontalLayout class="sapUiSmallMargin">
 								<VBox>
-									<CheckBox id="Integral" text="Integral"/>
-									<CheckBox text="Best Errors" enabled="{= ${/fLinear} !== true}"/>
+									<CheckBox id="Integral" text="Integral" selected="{/fIntegral}"/>
+									<CheckBox text="Best Errors" enabled="{= ${/fLinear} !== true}" selected="{/fBestErrors}"/>
 									<CheckBox text="All weights = 1" selected="{/fWeights}" enabled="{= ${/fBins} === false}" />
-									<CheckBox text="Empty bins, weights=1" selected="{/fBins}" enabled="{= ${/fWeights} === false}"/>
+									<CheckBox text="Empty bins, weights=1" selected="{/fBins}"/>
 								</VBox>
 								<VBox>
-									<CheckBox text="Use range"/>
-									<CheckBox text="Improve fit results" enabled="{= ${/fLinear} !== true}"/>
-									<CheckBox text="Add to list"/>
-									<CheckBox text="Use gradient"/>
+									<CheckBox text="Use range" selected="{/fUseRange}"/>
+									<CheckBox text="Improve fit results" enabled="{= ${/fLinear} !== true}" selected="{/fImproveFit}"/>
+									<CheckBox text="Add to list" selected="{/fAddList}"/>
+									<CheckBox text="Use gradient" selected="{/fUseGradient}"/>
 								</VBox>
 							</l:HorizontalLayout>
 							<Title level="H3" text="Draw Options"/>
 		    				<l:HorizontalLayout class="sapUiContentPadding">
 			    				<VBox>
-									<CheckBox text="SAME"/>
-									<CheckBox text="No Drawing" />
-									<CheckBox text="Do not store/draw" />
+									<CheckBox text="SAME" selected="{/fSame}"/>
+									<CheckBox text="No Drawing" selected="{/fNoDrawing}"/>
+									<CheckBox text="Do not store/draw" selected="{/fNoStore}"/>
 								</VBox>
 							</l:HorizontalLayout>
 						</l:VerticalLayout>
@@ -262,7 +261,7 @@
 	    	<Button text="Fit" press="doFit"/>
 	    	<Button text="Reset"/>
 	    	<Button text="Close" press="closePanel"/>
-	    	<Button text="Take Var" press="takeVar"/>
+	    	<Button text="Take Var" press="onFuncChange"/>
 
 	    </Toolbar>
 	</Page>
