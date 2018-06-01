@@ -9,15 +9,53 @@ sap.ui.define([
       // function called from GuiPanelController
       onPanelInit : function() {
          var id = this.getView().getId();
-         // console.log("Initialization TestPanel id = " + id);
-         // such data will be produced on server from TFitPanelModel
-         var model = new JSONModel({
-            fDataNames:[ { fId:"1", fName: "----" } ],
-            fSelectDataId: "0",
-            fModelNames: [ { fId:"1", fName: "----" } ],
-            fSelectModelId: "0"
-         });
-         this.getView().setModel(model);
+         console.log("Initialization TestPanel id = " + id);
+         
+
+         var oData = [{
+               width: "auto",
+               header: "Product Name",
+               demandPopin: false,
+               minScreenWidth: "",
+               styleClass: "cellBorderLeft cellBorderRight"
+            }, {
+               width: "20%",
+               header: "Supplier Name",
+               demandPopin: false,
+               minScreenWidth: "",
+               styleClass: "cellBorderRight"
+            }, {
+               width: "50%",
+               header: "Description",
+               demandPopin: true,
+               minScreenWidth: "Tablet",
+               styleClass: "cellBorderRight"
+            }
+         ];
+         
+         var oData2 = [ {
+               Name: "abc1",
+               SupplierName: "abc1 title",
+               Description: "abc1 description"
+            }, {
+               Name: "abc1",
+               SupplierName: "abc1 title",
+               Description: "abc1 description"
+            }, {
+               Name: "abc2",
+               SupplierName: "abc2 title",
+               Description: "abc2 description"
+            }
+         ];
+         
+         this.oColumnModel = new JSONModel();
+         this.oColumnModel.setData(oData);
+         this.getView().setModel(this.oColumnModel, "columns");
+
+         this.oProductsModel = new JSONModel();
+         this.oProductsModel.setData(oData2);
+         this.getView().setModel(this.oProductsModel, "products");
+
       },
 
       // function called from GuiPanelController
@@ -29,13 +67,6 @@ sap.ui.define([
          if (typeof msg != "string") {
             // console.log('TestPanel ArrayBuffer size ' +  msg.byteLength + ' offset ' + offset);
             var arr = new Float32Array(msg, offset);
-            
-            this.getView().byId("SampleText").setText("Got binary as float array\n" + 
-                                                      'array length ' + arr.length + '\n' +
-                                                      ' [0] = ' + arr[0] + '\n' +
-                                                      ' [7] = ' + arr[7] + '\n' + 
-                                                      ' [last] = ' + arr[arr.length-1]);
-            
             return;
         }
 
@@ -43,14 +74,12 @@ sap.ui.define([
             var json = msg.substr(6);
             var data = JSROOT.parse(json);
 
-           this.getView().byId("SampleText").setText("Get model:\n" + json);
-            
-         if (data) {
+            if (data) {
                this.getView().setModel(new JSONModel(data));
             }
 
         } else {
-            this.getView().byId("SampleText").setText("Get message:\n" + msg);
+            // this.getView().byId("SampleText").setText("Get message:\n" + msg);
          }
       },
       

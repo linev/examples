@@ -3,6 +3,29 @@
    <Page id="testpanel_page" title="Tables testing" showHeader="true">
        <content>
          <VBox class="sapUiSmallMargin">
+         <Table mode="MultiSelect"
+               items="{ path: 'products>/' }"
+               columns="{ path: 'columns>/'}">
+            <headerToolbar>
+              <Toolbar>
+                 <Title text="Products" level="H2"/>
+              </Toolbar>
+            </headerToolbar>
+            <columns>
+              <Column width="{columns>width}" styleClass="{columns>styleClass}" demandPopin="{columns>demandPopin}" minScreenWidth="{columns>minScreenWidth}" popinDisplay="WithoutHeader">
+                 <Input value="{columns>width}" description="{columns>header}"/>
+              </Column>
+            </columns>
+            <items>
+               <ColumnListItem vAlign="Middle" type="Navigation">
+                  <cells>
+                     <Text text="{products>Name}" wrapping="false" />
+                     <Text text="{products>SupplierName}" wrapping="false"/>
+                     <Text text="{products>Description}" wrapping="false" />
+                  </cells>
+               </ColumnListItem>
+            </items>
+         </Table>
          </VBox>
       </content>
       <footer>

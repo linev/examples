@@ -106,7 +106,7 @@ public:
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
 
-      fWindow->SetGeometry(300, 300); // configure predefined geometry
+      fWindow->SetGeometry(900, 500); // configure predefined geometry
 
       fWindow->Show(where);
 
