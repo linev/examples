@@ -1,0 +1,17 @@
+<mvc:View class="sapUiSizeCompact" height="100%" controllerName="localapp.controller.TestTables"
+   xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"  xmlns="sap.m">
+   <Page id="testpanel_page" title="Tables testing" showHeader="true">
+       <content>
+         <VBox class="sapUiSmallMargin">
+         </VBox>
+      </content>
+      <footer>
+         <Bar>
+            <contentRight>
+               <Button id="panel_Fit" text="Fit"/>
+               <Button id="panel_Close" text="Close" press="closePanel" />
+            </contentRight>
+         </Bar>
+      </footer>
+   </Page>
+</mvc:View>
