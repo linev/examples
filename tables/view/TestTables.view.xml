@@ -2,8 +2,9 @@
    xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"  xmlns="sap.m">
    <Page id="testpanel_page" title="Tables testing" showHeader="true">
        <content>
-         <VBox class="sapUiSmallMargin">
-         <Table mode="MultiSelect"
+         <VBox class="sapUiTinyMargin">
+         <Table id="Table1"
+                mode="MultiSelect"
                items="{ path: 'products>/' }"
                columns="{ path: 'columns>/'}">
             <headerToolbar>
@@ -17,7 +18,7 @@
               </Column>
             </columns>
             <items>
-               <ColumnListItem vAlign="Middle" type="Navigation">
+               <ColumnListItem vAlign="Middle" type="Navigation" highlight="{products>highlight}">
                   <cells>
                      <Text text="{products>Name}" wrapping="false" />
                      <Text text="{products>SupplierName}" wrapping="false"/>

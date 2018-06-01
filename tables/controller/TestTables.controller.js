@@ -40,7 +40,8 @@ sap.ui.define([
             }, {
                Name: "abc1",
                SupplierName: "abc1 title",
-               Description: "abc1 description"
+               Description: "abc1 description",
+               highlight: "Information"
             }, {
                Name: "abc2",
                SupplierName: "abc2 title",
@@ -55,8 +56,20 @@ sap.ui.define([
          this.oProductsModel = new JSONModel();
          this.oProductsModel.setData(oData2);
          this.getView().setModel(this.oProductsModel, "products");
-
+         
+         
+         var t = this.getView().byId("Table1"), pthis = this;
+         
+         t.getItems().forEach(function(elem, indx) {
+            elem.attachBrowserEvent('mouseenter', pthis.itemEnter.bind(pthis, indx, elem));
+         });
+         
       },
+      
+      itemEnter: function(indx, elem, evnt) {
+         if (this.websocket)
+            this.websocket.Send('LOG:table item enter ' + indx);
+      }, 
 
       // function called from GuiPanelController
       onPanelExit : function() {

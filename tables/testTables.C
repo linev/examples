@@ -83,8 +83,8 @@ public:
          return;
       }
 
-      if (arg.find("DOFIT:") == 0) {
-         fWindow->Send(fConnId, "Did fitting");
+      if (arg.find("LOG:") == 0) {
+         printf("Msg: %s\n", arg.c_str()+4);
          return;
       }
 
