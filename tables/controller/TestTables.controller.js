@@ -57,24 +57,41 @@ sap.ui.define([
          this.oProductsModel.setData(oData2);
          this.getView().setModel(this.oProductsModel, "products");
          
+         var t = this.getView().byId("TableT"), pthis = this;
+         t.onAfterRendering0 = t.onAfterRendering;
+         t.onAfterRendering = function() {
+            this.onAfterRendering0();
+            pthis.onAfterTRendering();
+         }
          
-         var t = this.getView().byId("TableM"), pthis = this;
+      },
+      
+      onAfterTRendering: function() {
          
-         t.getItems().forEach(function(elem, indx) {
-            elem.attachBrowserEvent('mouseenter', pthis.itemEnter.bind(pthis, indx, elem));
-         });
-         
-         t = this.getView().byId("TableT");
+         var t = this.getView().byId("TableT"), pthis = this;
          t.getRows().forEach(function(elem, indx) {
-            elem.getCells().forEach(function(cell) {
-               cell.attachBrowserEvent('mouseenter', pthis.itemEnter.bind(pthis, indx, elem));
-            });
+            elem.$().mouseenter(pthis.itemEnter.bind(pthis, indx, elem));
          });
+         
+      }, 
+      
+      onAfterRendering: function() {
+         console.log("ON AFTER RENDERING"); 
+
+         var t = this.getView().byId("TableM"), pthis = this;
+         t.getItems().forEach(function(elem, indx) {
+            elem.$().mouseenter(pthis.itemEnter.bind(pthis, indx, elem));
+         });
+
       },
       
       itemEnter: function(indx, elem, evnt) {
          if (this.websocket)
             this.websocket.Send('LOG:table item enter ' + indx);
+//         if (elem && elem.$)
+//            elem.$().css('background-color', 'red')
+//                    .css('textcolor', 'green')
+//                    .css('font-size', '25px');
       }, 
 
       // function called from GuiPanelController

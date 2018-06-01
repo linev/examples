@@ -124,3 +124,23 @@ void testTables()
    handler = new WHandler();
    handler->popupWindow();
 }
+
+/*
+
+[
+ {
+    "globalId": 1,
+    "parentId": 0,
+    "name": "Global Scene"
+ }, {
+    "globalId": 2,
+    "parentId": 1,
+    "name": "Geomerty",
+    "renderdata" : 0,
+    "renderdatasize" : 1024
+
+ }
+
+]
+
+*/
