@@ -65,6 +65,11 @@ sap.ui.define([
          });
          
          t = this.getView().byId("TableT");
+         t.getRows().forEach(function(elem, indx) {
+            elem.getCells().forEach(function(cell) {
+               cell.attachBrowserEvent('mouseenter', pthis.itemEnter.bind(pthis, indx, elem));
+            });
+         });
       },
       
       itemEnter: function(indx, elem, evnt) {
