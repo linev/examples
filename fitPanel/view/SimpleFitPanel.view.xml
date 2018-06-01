@@ -1,5 +1,5 @@
 <mvc:View
- 	class="sapUiSizeCompact"
+ 	class="sapUiSizeCondensed"
 	height="100%"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
@@ -58,7 +58,7 @@
 				<ComboBox id="TypeFunc" selectedKey="{/fSelectTypeId}" items="{ path: '/fTypeFunc', sorter: { path: 'fFunc' } }" change="selectTypeFunc">
 		               <core:Item key="{fId}" text="{fSet}" />
 		        </ComboBox>
-		        <ComboBox id="TypeXY" selectedKey="{/fSelectXYId}" items="{ path: '/fTypeXY', sorter: { path: 'fXY' } }" change="onFuncChange">
+		        <ComboBox id="TypeXY" selectedKey="{/fSelectXYId}" items="{ path: '/fTypeXY', sorter: { path: 'fXY' } }" change="onTypeXYChange">
 		               <core:Item key="{fId}" text="{fSet}" />
 		        </ComboBox>
 			</form:SimpleForm>
@@ -92,7 +92,7 @@
 							<RadioButton id="RB1-4" text="Conv"/>
 						</buttons>
 					</RadioButtonGroup>	
-					<TextArea id="OperationText" value="{/fOpText}" valueLiveUpdate="{/fOpTextUpdate}" liveChange="fOpTextLiveChange"/>
+					<TextArea id="OperationText" value=" " valueLiveUpdate="{/fOpTextUpdate}" />
 					<Label text="Selected " labelFor="OperationText"/>		
 			<form:SimpleForm 
 				layout="ResponsiveGridLayout"
@@ -161,7 +161,7 @@
 									<CheckBox id="Integral" text="Integral" selected="{/fIntegral}"/>
 									<CheckBox text="Best Errors" enabled="{= ${/fLinear} !== true}" selected="{/fBestErrors}"/>
 									<CheckBox text="All weights = 1" selected="{/fWeights}" enabled="{= ${/fBins} === false}" />
-									<CheckBox text="Empty bins, weights=1" selected="{/fBins}"/>
+									<CheckBox text="Empty bins, weights=1" selected="{/fBins}" enabled = "{= ${/fWeights} === false}"/>
 								</VBox>
 								<VBox>
 									<CheckBox text="Use range" selected="{/fUseRange}"/>
@@ -174,8 +174,8 @@
 		    				<l:HorizontalLayout class="sapUiContentPadding">
 			    				<VBox>
 									<CheckBox text="SAME" selected="{/fSame}"/>
-									<CheckBox text="No Drawing" selected="{/fNoDrawing}"/>
-									<CheckBox text="Do not store/draw" selected="{/fNoStore}"/>
+									<CheckBox text="No Drawing" selected ="{/fNoDrawing}"/>
+									<CheckBox id = "noStore" text="Do not store/draw" selected="{/fNoStore}" select="storeChange"/>
 								</VBox>
 							</l:HorizontalLayout>
 						</l:VerticalLayout>
@@ -261,8 +261,6 @@
 	    	<Button text="Fit" press="doFit"/>
 	    	<Button text="Reset"/>
 	    	<Button text="Close" press="closePanel"/>
-	    	<Button text="Take Var" press="onFuncChange"/>
-
 	    </Toolbar>
 	</Page>
 </mvc:View>
