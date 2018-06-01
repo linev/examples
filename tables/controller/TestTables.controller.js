@@ -58,12 +58,13 @@ sap.ui.define([
          this.getView().setModel(this.oProductsModel, "products");
          
          
-         var t = this.getView().byId("Table1"), pthis = this;
+         var t = this.getView().byId("TableM"), pthis = this;
          
          t.getItems().forEach(function(elem, indx) {
             elem.attachBrowserEvent('mouseenter', pthis.itemEnter.bind(pthis, indx, elem));
          });
          
+         t = this.getView().byId("TableT");
       },
       
       itemEnter: function(indx, elem, evnt) {
