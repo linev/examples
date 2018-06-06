@@ -28,6 +28,8 @@
            OnWebsocketMsg: function(handle, msg, offset) {
               if (typeof msg != "string") {
                   console.log('Get message ' + msg.byteLength + ' handle ' + !!handle);
+                  var arr = new Float32Array(msg, offset);
+                  d3.select("#debug").append("p").text("bin: " + msg.byteLength + " [0]=" +arr[0]);
               } else { 
                  console.log('Get string ' + msg);
                  d3.select("#debug").append("p").text("txt: " + msg);

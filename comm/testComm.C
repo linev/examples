@@ -26,8 +26,7 @@ public:
       if (arg == "CONN_READY") {
          fConnId = connid;
          printf("connection established %u\n", fConnId);
-         fWindow->Send(fConnId, "INITDONE");
-
+         //fWindow->Send(fConnId, "INITDONE");
          return;
       }
 
@@ -39,9 +38,15 @@ public:
 
       printf("Get msg %s \n", arg.c_str());
 
-      for (int n=0;n<10;n++)
-         fWindow->Send(fConnId, Form("Message%d",n));
+      float arr[100000];
+      for (int n=0;n<100000;++n)
+         arr[n] = n;
 
+      for (int n=0;n<8;n++) {
+         fWindow->Send(fConnId, Form("Message%d",n));
+         arr[0] = n;
+         fWindow->SendBinary(fConnId, arr, (n%2 == 0) ? sizeof(arr) : 40);
+      }
    }
 
    void popupTest(const std::string &where = "")
