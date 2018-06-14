@@ -26,7 +26,7 @@ struct FitPanelModel {
    std::string fSelectMethodId;
    std::string fRealFunc;
    std::string fOption;
-   //std::string fFuncChange;
+   std::string fFuncChange;
 
 
    // all combo items for all methods
@@ -54,7 +54,7 @@ struct FitPanelModel {
 
    //convert fSelectTypeID from string to int
    int fTypeId = atoi(fSelectTypeId.c_str());
-   //int fFuncChange1 = atoi(fFuncChange.c_str());
+   int fFuncChangeInt = atoi(fFuncChange.c_str());
 
    //Checkboxes Options
    bool fIntegral{false};
@@ -66,7 +66,7 @@ struct FitPanelModel {
    bool fAddList {false};
    bool fUseGradient {false};
    bool fSame {false};
-   bool fNoDrawing {false};
+   bool fNoDrawing {};
    bool fNoStore {false};
 
 };
@@ -229,28 +229,26 @@ public:
          model.fAddList = false;
          model.fUseGradient = false;
          model.fSame = false;
-         model.fNoDrawing = false;
          model.fNoStore = false;
-         //model.fLinear = false;
-         // model.fBestErrors = false;
-         // model.fImproveFit = false;
+         model.fBestErrors = false;
+         model.fImproveFit = false;
 
-         /***STILL WORKING***/
-         //printf("%d\n", model.fFuncChange );
-         // if(model.fFuncChange1 == 0){
-         //    model.fLinear = true;
-         //    model.fBestErrors = false;
-         //    model.fImproveFit = false;
-         //    printf("I am A\n");
+         if(model.fNoStore){
+            model.fNoDrawing = true; 
+         }
+         else{
+            model.fNoDrawing = false;
+         }
 
-         // }
-         // else {
-         //    model.fLinear = false;
-         //    model.fBestErrors = true;
-         //    model.fImproveFit = true;
-         //    printf("I am B\n");
+         if((model.fFuncChangeInt >= 6) && (model.fFuncChangeInt <= 15)){
+            model.fLinear = true;
 
-         // }
+         }
+         else {
+            model.fLinear = false;
+
+         }
+
 
          TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("FitPanelModel"));
          fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
@@ -308,12 +306,20 @@ public:
             else if(obj->fUseGradient){
                obj->fOption = "G";
             }
+            else if(obj->fSelectMethodId == "1"){
+               obj->fOption = "P";
+            }
+            else if(obj->fSelectMethodId == "2"){
+               obj->fOption = "L";
+            }
             else {
                obj->fOption = "";
             }
 
+            printf("fOption is %s\n", obj->fOption.c_str() );
+            printf("Range %f %f\n", obj->fRange[0], obj->fRange[1] );
             if (fHist) {
-               fHist->Fit(obj->fRealFunc.c_str(), obj->fOption.c_str(), "", obj->fRange[0], obj->fRange[1]);
+               fHist->Fit(obj->fRealFunc.c_str(), obj->fOption.c_str(), "*", obj->fRange[0], obj->fRange[1]);
                gPad->Update();
             }
             delete obj;
@@ -333,7 +339,7 @@ public:
       // will run on the client side
       fWindow->SetPanelName("localapp.view.SimpleFitPanel");
 
-      // fWindow->SetDefaultPage("file:fclWithRouting.html");
+      //fWindow->SetDefaultPage("file:fclWithRouting.html");
 
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
