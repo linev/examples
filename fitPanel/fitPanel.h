@@ -339,7 +339,7 @@ public:
       // will run on the client side
       fWindow->SetPanelName("localapp.view.SimpleFitPanel");
 
-      // fWindow->SetDefaultPage("file:fclWithRouting.html");
+      //fWindow->SetDefaultPage("file:fclWithRouting.html");
 
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
