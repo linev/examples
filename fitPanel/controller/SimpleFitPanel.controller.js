@@ -2,8 +2,8 @@ sap.ui.define([
    'sap/ui/jsroot/GuiPanelController',
    'sap/ui/model/json/JSONModel'
 ], function (GuiPanelController, JSONModel) {
+   
    "use strict";
-
 
    return GuiPanelController.extend("localapp.controller.SimpleFitPanel",{
 
@@ -70,8 +70,8 @@ sap.ui.define([
       onPanelExit: function(){
 
       },
-
-      //Change the selected checkboxes depending on Type of Function (TypeXY)
+     
+     //Change the selected checkboxes depending on Type of Function (TypeXY)
        onTypeXYChange: function(){
          var data = this.getView().getModel().getData();
          var linear = this.getView().getModel().getData().fSelectXYId;
@@ -86,6 +86,7 @@ sap.ui.define([
          this.byId("OperationText").setValue(func);
          this.byId("selectedOpText").setText(func);
        },
+
 
       //change the combo box in Minimization Tab --- Method depending on Radio Buttons values
       selectRB: function(){
