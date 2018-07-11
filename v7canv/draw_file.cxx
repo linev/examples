@@ -1,6 +1,10 @@
 /// \file
 /// \ingroup tutorial_v7
 ///
+/// This macro generates a small V7 TH1D, fills it and draw it in a V7 canvas.
+/// The canvas is display in the web browser and the corresponding png picture
+/// is generated.
+///
 /// \macro_code
 ///
 /// \date 2015-03-22
@@ -16,37 +20,39 @@
  *************************************************************************/
 
 R__LOAD_LIBRARY(libROOTGpadv7);
+R__LOAD_LIBRARY(libROOTGraphicsPrimitives);
+R__LOAD_LIBRARY(libROOTHistDraw);
 
 #include "ROOT/THist.hxx"
-#include "ROOT/TCanvas.hxx"
+#include "ROOT/RCanvas.hxx"
+
+#include "TRandom3.h"
 
 void draw_file() {
-  using namespace ROOT;
+   using namespace ROOT::Experimental;
 
-  // Create the histogram.
-  Experimental::TAxisConfig xaxis(10, 0., 10.);
-  auto pHist = std::make_shared<Experimental::TH1D>(xaxis);
-  auto pHist2 = std::make_shared<Experimental::TH1D>(xaxis);
+   // Create histograms
+   TAxisConfig xaxis(100, -10., 10.);
+   auto pHist = std::make_shared<ROOT::Experimental::TH1D>(xaxis);
+   auto pHist2 = std::make_shared<ROOT::Experimental::TH1D>(xaxis);
 
-  // Fill a few points.
-  pHist->Fill(1);
-  pHist->Fill(2);
-  pHist->Fill(2);
-  pHist->Fill(3);
+   TRandom3 random;
+   Float_t px, py;
 
-  pHist2->Fill(5);
-  pHist2->Fill(6);
-  pHist2->Fill(6);
-  pHist2->Fill(7);
+   for(int n=0;n<10000;++n) {
+      random.Rannor(px,py);
+      pHist->Fill(px-2);
+      pHist2->Fill(py+2);
+   }
 
-  // Create a canvas to be displayed.
-  auto canvas = Experimental::TCanvas::Create("Canvas Title");
-  canvas->Draw(pHist)->SetLineColor(Experimental::TColor::kRed);
-  canvas->Draw(pHist2)->SetLineColor(Experimental::TColor::kBlue);
+   // Create a canvas to be displayed.
+   auto canvas = RCanvas::Create("Canvas Title");
+   canvas->Draw(pHist)->SetLineColor(RColor::kRed);
+   canvas->Draw(pHist2)->SetLineColor(RColor::kBlue);
 
-//  canvas->Show();
-  
-  canvas->SaveAs("th1.jpg");
-  canvas->SaveAs("th1.json");
-  canvas->SaveAs("th1.png");
+//   canvas->Show();
+
+   canvas->SaveAs("th1.jpg");
+   canvas->SaveAs("th1.svg");
+   canvas->SaveAs("th1.png");
 }
