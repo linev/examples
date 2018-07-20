@@ -16,6 +16,13 @@ struct ComboBoxItem {
    ComboBoxItem(const std::string &id, const std::string &set) : fId(id), fSet(set) {}
 };
 
+struct TreeListItem {
+   std::string text;
+   std::vector<TreeListItem> treelist;
+   std::vector<std::vector<TreeListItem>> treelisti2;
+   TreeListItem() = default;
+   TreeListItem(const std::string &text) : text(text) {}  
+};
 
 struct FitPanelModel {
    std::vector<ComboBoxItem> fDataSet;
@@ -27,6 +34,9 @@ struct FitPanelModel {
    std::string fRealFunc;
    std::string fOption;
    std::string fFuncChange;
+  
+  
+   std::vector<TreeListItem> ftree;
 
 
    // all combo items for all methods
@@ -99,6 +109,16 @@ public:
          fWindow->Send(fConnId, "INITDONE");
 
          FitPanelModel model;
+
+         //Tree Data
+         model.ftree.push_back(TreeListItem("Node 1"));
+         model.ftree.push_back(TreeListItem("Node 2"));
+         model.ftree.back().treelist.push_back(TreeListItem("Node 2-1"));
+         model.ftree.back().treelist.push_back(TreeListItem("Node 2-2"));
+         model.ftree.push_back(TreeListItem("Node3"));
+
+
+
          //ComboBox for Data Set
          model.fDataSet.push_back(ComboBoxItem("1", "No Selection"));
          model.fDataSet.push_back(ComboBoxItem("2", "TH1F::hpx"));
