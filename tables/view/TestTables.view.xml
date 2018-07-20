@@ -1,0 +1,72 @@
+<mvc:View class="sapUiSizeCompact" height="100%" controllerName="localapp.controller.TestTables"
+   xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"  xmlns="sap.m" xmlns:table="sap.ui.table">
+   <Page id="testpanel_page" title="Tables testing" showHeader="true">
+       <content>
+         <VBox class="sapUiTinyMargin">
+         <Table id="TableM"
+                mode="MultiSelect"
+               items="{ path: 'products>/' }"
+               columns="{ path: 'columns>/'}">
+            <headerToolbar>
+              <Toolbar>
+                 <Title text="Products" level="H2"/>
+              </Toolbar>
+            </headerToolbar>
+            <columns>
+              <Column width="{columns>width}" styleClass="{columns>styleClass}" demandPopin="{columns>demandPopin}" minScreenWidth="{columns>minScreenWidth}" popinDisplay="WithoutHeader">
+                 <Input value="{columns>width}" description="{columns>header}"/>
+              </Column>
+            </columns>
+            <items>
+               <ColumnListItem vAlign="Middle" type="Navigation" highlight="{products>highlight}">
+                  <cells>
+                     <Text text="{products>Name}" wrapping="false" />
+                     <Text text="{products>SupplierName}" wrapping="false"/>
+                     <Text text="{products>Description}" wrapping="false" />
+                  </cells>
+               </ColumnListItem>
+            </items>
+         </Table>
+         </VBox>
+         
+         <VBox class="sapUiTinyMargin">
+         <table:Table
+            id="TableT"
+            rows="{ path: 'products>/' }"
+            title="Products"
+            selectionMode="MultiToggle"
+            visibleRowCount="3">
+            <table:columns>
+               <table:Column width="11rem">
+                  <Label text="Product Name" />
+                  <table:template>
+                     <Text text="{products>Name}" wrapping="false" />
+                  </table:template>
+               </table:Column>
+               <table:Column width="11rem">
+                  <Label text="Supplier" />
+                  <table:template>
+                     <Input value="{products>SupplierName}"/>
+                  </table:template>
+               </table:Column>
+               <table:Column width="6rem" hAlign="End">
+                  <Label text="Description" />
+                  <table:template>
+                     <Label text="{products>Description}" />
+                  </table:template>
+               </table:Column>
+            </table:columns>
+         </table:Table>
+         </VBox>
+         
+      </content>
+      <footer>
+         <Bar>
+            <contentRight>
+               <Button id="panel_Fit" text="Fit"/>
+               <Button id="panel_Close" text="Close" press="closePanel" />
+            </contentRight>
+         </Bar>
+      </footer>
+   </Page>
+</mvc:View>
