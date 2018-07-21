@@ -19,7 +19,7 @@ struct ComboBoxItem {
 struct TreeListItem {
    std::string text;
    std::vector<TreeListItem> treelist;
-   std::vector<std::vector<TreeListItem>> treelisti2;
+   // std::vector<std::vector<TreeListItem>> treelisti2;
    TreeListItem() = default;
    TreeListItem(const std::string &text) : text(text) {}  
 };
