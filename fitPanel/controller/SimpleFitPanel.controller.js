@@ -20,7 +20,20 @@ sap.ui.define([
                fRange: [-4,4]
          };
          this.getView().setModel(new JSONModel(data));
-         this._data = data;         
+         this._data = data;  
+
+         // var newdat = {text : "name",
+                        // nodes: [
+                        // {
+                        //    text: "Node1",
+                        //    nodes: [
+                        //    {text: "Node1-1",
+                        //     nodes: [
+                        //     { text: "Node1-1-1"},
+                        //     {text: "Node1-1-2"}]}]
+                        // }]};
+         //var oModel = new JSONModel("/home/ibetsou/git/treeIcon/Tree.json");
+         // this.getView().setModel(new JSONModel(newdat));       
       },
 
       OnWebsocketMsg: function(handle, msg){
@@ -32,6 +45,7 @@ sap.ui.define([
             if(data) {
                this.getView().setModel(new JSONModel(data));
                this._data = data;
+
             }
             // console.log("Robust" + this.getView().getModel().getData().fRobust);
             // console.log("Library " + this.getView().getModel().getData().fLibrary);
@@ -132,6 +146,18 @@ sap.ui.define([
          this.getView().getModel().refresh();
          console.log("fNoDrawing ", data.fNoStore);
       },
+
+      // onToggleContextMenu: function(oEvent) {
+      //    if (oEvent.getParameter("pressed")) {
+      //       this.byId("Tree").setContextMenu(new Menu({
+      //          items: [
+      //             new MenuItem({text: "{text}"})
+      //          ]
+      //       }));
+      //    } else {
+      //       this.byId("Tree").destroyContextMenu();
+      //    }
+      // },
 
 
    });

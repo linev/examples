@@ -94,7 +94,7 @@
 										<l:GridData span="XL2 L1 M2 S12" />
 									</layoutData> 
 								</RadioButtonGroup>	
-								<TextArea id="OperationText" value=" " valueLiveUpdate="{/fOpTextUpdate}">
+								<TextArea id="OperationText" height="30px" value=" " valueLiveUpdate="{/fOpTextUpdate}">
 									<layoutData>
 										<l:GridData span="XL2 L1 M2 S12" />
 									</layoutData>
@@ -234,10 +234,20 @@
 
 			    			</form:fields>
 		    			</form:FormElement>
-		    		</form:FormContainer>
-						
+		    		</form:FormContainer>		
 				</form:formContainers>
 			</form:Form>
+
+
+			<!--- Tree -->
+			<Tree 
+				id="Tree"
+				items="{path: '/ftree'}">
+				<StandardTreeItem 
+					title="{text}"/>
+					
+			</Tree>
+
 		</VBox>
 		<!-- Buttons in Footer -->
 	    <Toolbar>
