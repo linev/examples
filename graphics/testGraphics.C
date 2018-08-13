@@ -62,6 +62,23 @@ public:
          return;
       }
 
+      // example of reading canvas from other file
+
+      /*
+      TFile *f = TFile::Open("canvas_h1.root");
+      if (!f) return;
+
+      TCanvas *c1 = (TCanvas *) f->Get("c1");
+
+      TString json = TBufferJSON::ToJSON(c1);
+
+      // TCanvas *c1 = new TCanvas("c1","title", 3);
+      c1->Draw();
+
+      fWindow->Send(fConnId, json.Data()); // send graph object
+      */
+
+
 
       TFile *f = TFile::Open("cosmic-rays.root");
       if (!f) return;
@@ -71,20 +88,18 @@ public:
       TCanvas *c1 = new TCanvas("c1","title", 3);
       gr->Draw();
 
-
       TString json = TBufferJSON::ToJSON(gr);
       fWindow->Send(fConnId, json.Data()); // send graph object
       TGraphAsymmErrors *gr2 = nullptr;
       TBufferJSON::FromJSON(gr2, json.Data());
       if (gr2) printf("Graph class %s\n", gr2->ClassName());
 
-      json = TBufferJSON::ToJSON(c1);
+      json = TBufferJSON::ToJSON(c1,3);
       // fWindow->Send(fConnId, json.Data());  // send complete canvas
       TCanvas *c2 = nullptr;
       TBufferJSON::FromJSON(c2, json.Data());
-      if (c2) { printf("Graph canvas %s\n", c2->ClassName()); c2->SetName("c2"); c2->Draw(); }
-      printf("Canvas: %s\n", json.Data());
-
+      if (c2) { printf("Graph canvas %s\n", c2->ClassName()); c2->SetName("c2"); }
+      printf("Canvas:\n%s\n", json.Data());
    }
 
    void popupTest(const std::string &where = "")
