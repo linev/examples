@@ -9,6 +9,8 @@
 #include "TAxis.h"
 #include "TCanvas.h"
 
+// Structure for the ComboBox and Tree models
+
 struct ComboBoxItem {
    std::string fId;
    std::string fSet;
@@ -19,11 +21,12 @@ struct ComboBoxItem {
 struct TreeListItem {
    std::string text;
    std::vector<TreeListItem> treelist;
-   std::vector<std::vector<TreeListItem>> treelisti2;
+   //std::vector<std::vector<TreeListItem>> treelisti2;
    TreeListItem() = default;
    TreeListItem(const std::string &text) : text(text) {}  
 };
 
+//Structure for the main fit panel model
 struct FitPanelModel {
    std::vector<ComboBoxItem> fDataSet;
    std::string fSelectDataId;
@@ -35,7 +38,7 @@ struct FitPanelModel {
    std::string fOption;
    std::string fFuncChange;
   
-  
+   
    std::vector<TreeListItem> ftree;
 
 
@@ -269,13 +272,9 @@ public:
 
          }
 
-
+         //Communication with the JSONModel in JS
          TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("FitPanelModel"));
          fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
-
-         //printf("fLibrary is (%d)\n", model.fLibrary);
-         //printf("fTypeId is %d\n", model.fTypeId );
-
 
          return;
       }
@@ -285,6 +284,7 @@ public:
          arg1.erase(0,6);
          FitPanelModel *obj = nullptr;
          TBufferJSON::FromJSON(obj, arg1.c_str());
+         //Fitting Options
          if (obj) {
             printf("DOFIT: range %f %f select %s function %s\n ", obj->fRange[0], obj->fRange[1], obj->fSelectDataId.c_str(), obj->fSelectXYId.c_str());
 
@@ -336,8 +336,7 @@ public:
                obj->fOption = "";
             }
 
-            printf("fOption is %s\n", obj->fOption.c_str() );
-            printf("Range %f %f\n", obj->fRange[0], obj->fRange[1] );
+            //Assign the options to Fitting function           
             if (fHist) {
                fHist->Fit(obj->fRealFunc.c_str(), obj->fOption.c_str(), "*", obj->fRange[0], obj->fRange[1]);
                gPad->Update();
@@ -350,6 +349,7 @@ public:
 
    }
 
+   //Create the window
    void Show(const std::string &where = "")
    {
 

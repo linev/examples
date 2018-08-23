@@ -8,34 +8,22 @@ sap.ui.define([
    return GuiPanelController.extend("localapp.controller.SimpleFitPanel",{
 
          //function called from GuiPanelController
-      onPanelInit : function() {
-         var id = this.getView().getId();
-         var opText = this.getView().byId("OperationText");
-         var data = {
-               fDataSet:[ { fId:"1", fSet: "----" } ],
-               fSelectDataId: "0",
-               fMinRange: -4,
-               fMaxRange: 4,
-               fStep: 0.01,
-               fRange: [-4,4]
-         };
-         this.getView().setModel(new JSONModel(data));
-         this._data = data;  
+      // onPanelInit : function() {
+      //    var id = this.getView().getId();
+      //    var opText = this.getView().byId("OperationText");
+      //    var data = {
+      //          //fDataSet:[ { fId:"1", fSet: "----" } ],
+      //          fSelectDataId: "0",
+      //          fMinRange: -4,
+      //          fMaxRange: 4,
+      //          fStep: 0.01,
+      //          fRange: [-4,4]
+      //    };
+      //    this.getView().setModel(new JSONModel(data));
+      //    this._data = data;  
+      // },
 
-         // var newdat = {text : "name",
-                        // nodes: [
-                        // {
-                        //    text: "Node1",
-                        //    nodes: [
-                        //    {text: "Node1-1",
-                        //     nodes: [
-                        //     { text: "Node1-1-1"},
-                        //     {text: "Node1-1-2"}]}]
-                        // }]};
-         //var oModel = new JSONModel("/home/ibetsou/git/treeIcon/Tree.json");
-         // this.getView().setModel(new JSONModel(newdat));       
-      },
-
+      // Assign the new JSONModel to data      
       OnWebsocketMsg: function(handle, msg){
 
          if(msg.indexOf("MODEL:")==0){
@@ -47,33 +35,32 @@ sap.ui.define([
                this._data = data;
 
             }
-            // console.log("Robust" + this.getView().getModel().getData().fRobust);
-            // console.log("Library " + this.getView().getModel().getData().fLibrary);
-            // console.log("fSelectXYId " + this.getView().getModel().getData().fSelectXYId);
          }
          else {
-            //this.getView().byId("SampleText").setText("Get message:\n" + msg);
          }
       },
 
+      //Fitting Button
       doFit: function() {
-         // console.log("model=", this.getView().getModel().getProperty("/fSelectXYId"), 
-         //       this.getView().getModel().getProperty("/fSet"));
-         //var v1 = this.getView().byId("TypeFunc");
-
+         
+         //Data is a new model. With getValue() we select the value of the parameter specified from id
          var data = this.getView().getModel().getData();
          var func = this.getView().byId("TypeXY").getValue();
-         console.log("select func " + func);
+         //We pass the value from func to C++ fRealFunc
          data.fRealFunc = func;
 
          var range = this.getView().byId("Slider").getRange();
          console.log("Slider " + range);
 
+         //We pass the values from range array in JS to C++ fRange array
          data.fRange[0] = range[0];
          data.fRange[1] = range[1];
+
+         //Refresh the model
          this.getView().getModel().refresh();         
 
  
+         
          if (this.websocket)
             this.websocket.Send('DOFIT:'+this.getView().getModel().getJSON());
          
@@ -89,9 +76,7 @@ sap.ui.define([
        onTypeXYChange: function(){
          var data = this.getView().getModel().getData();
          var linear = this.getView().getModel().getData().fSelectXYId;
-         console.log("Linear = ", linear);
          data.fFuncChange = linear;
-         console.log("New Linear = ", data.fFuncChange);
          this.getView().getModel().refresh();
 
          //updates the text area and text in selected tab, depending on the choice in TypeXY ComboBox
@@ -106,10 +91,7 @@ sap.ui.define([
       selectRB: function(){
          
          var data = this.getView().getModel().getData();
-
          var lib = this.getView().getModel().getData().fLibrary;
-
-         console.log('lib = ', lib);
          
          // same code as initialization
          data.fMethodMin = data.fMethodMinAll[parseInt(lib)];
@@ -146,19 +128,6 @@ sap.ui.define([
          this.getView().getModel().refresh();
          console.log("fNoDrawing ", data.fNoStore);
       },
-
-      // onToggleContextMenu: function(oEvent) {
-      //    if (oEvent.getParameter("pressed")) {
-      //       this.byId("Tree").setContextMenu(new Menu({
-      //          items: [
-      //             new MenuItem({text: "{text}"})
-      //          ]
-      //       }));
-      //    } else {
-      //       this.byId("Tree").destroyContextMenu();
-      //    }
-      // },
-
 
    });
 
