@@ -1,0 +1,22 @@
+<mvc:View
+ 	class="sapUiSizeCompact"
+	height="100%"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m"
+	controllerName="localapp.controller.SimpleBrowser">
+	<Page id="simplebrowser_page" title="Simple Browser" showHeader="true">
+		<VBox class="sapUiSizeCompact">
+			<!--- Tree -->
+			<Tree 
+				id="Tree"
+				items="{path: '/ftree'}">
+				<StandardTreeItem 
+					title="{text}"/>		
+			</Tree>
+		</VBox>
+		 <Toolbar>
+	    	<Button text="Close" press="closePanel"/>
+	    </Toolbar>
+	</Page>
+</mvc:View>
