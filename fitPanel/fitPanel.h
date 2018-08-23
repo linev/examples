@@ -18,14 +18,6 @@ struct ComboBoxItem {
    ComboBoxItem(const std::string &id, const std::string &set) : fId(id), fSet(set) {}
 };
 
-struct TreeListItem {
-   std::string text;
-   std::vector<TreeListItem> treelist;
-   //std::vector<std::vector<TreeListItem>> treelisti2;
-   TreeListItem() = default;
-   TreeListItem(const std::string &text) : text(text) {}  
-};
-
 //Structure for the main fit panel model
 struct FitPanelModel {
    std::vector<ComboBoxItem> fDataSet;
@@ -37,10 +29,6 @@ struct FitPanelModel {
    std::string fRealFunc;
    std::string fOption;
    std::string fFuncChange;
-  
-   
-   std::vector<TreeListItem> ftree;
-
 
    // all combo items for all methods
 
