@@ -10,6 +10,7 @@
 	controllerName="localapp.controller.SimpleFitPanel">
 	<Page id="simplefitpanel_page" title="Simple Fit Panel" showHeader="true">
 	<VBox class="sapUiSizeCompact">
+		<!-- What kind of form? -->
 			<form:Form id="FormToolbar"
 				editable="true"
 				ariaLabelledBy="Title1">
@@ -31,6 +32,7 @@
 						singleContainerFullSize="false" />
 				</form:layout>
 				<form:formContainers>
+					<!-- ComboBox for Data Set -->
 					<form:FormContainer ariaLabelledBy="dataset">						
 						<form:FormElement>
 							<Label text="Data Set:" labelFor="DataSet">
@@ -46,11 +48,13 @@
 									</layoutData>
 		        				</ComboBox>	
 							</form:fields>
+							<!-- Fit Function Title -->
 							<Title level="H3" text="Fit Function">
 								<layoutData>
 									<l:GridData span="XL1 L4 M3 S12" />
 								</layoutData>
 							</Title>
+							<!-- ComboBox for Type -->
 							<form:fields>
 								<Label text="Type:" labelFor="TypeFunc">
 									<layoutData>
@@ -74,6 +78,7 @@
 							</form:fields>
 						</form:FormElement>
 					</form:FormContainer>
+					<!-- Title for Operation -->
 					<form:FormContainer ariaLabelledBy="Operation">
 						<form:toolbar>
 							<Toolbar>
@@ -81,6 +86,7 @@
 								<ToolbarSpacer />
 							</Toolbar>
 						</form:toolbar>
+						<!-- RadioButtons for Operation -->
 						<form:FormElement>
 							<form:fields>
 								<RadioButtonGroup columns="4" width="100%" selectedIndex="{/fOperation}">
@@ -93,12 +99,14 @@
 									<layoutData>
 										<l:GridData span="XL2 L1 M2 S12" />
 									</layoutData> 
-								</RadioButtonGroup>	
+								</RadioButtonGroup>
+								<!-- Text Area for selected Type of Function -->
 								<TextArea id="OperationText" height="30px" value=" " valueLiveUpdate="{/fOpTextUpdate}">
 									<layoutData>
 										<l:GridData span="XL2 L1 M2 S12" />
 									</layoutData>
 								</TextArea>
+								<!-- Label and Text for Selected Function --> 
 								<Label text="Selected " labelFor="OperationText">
 									<layoutData>
 										<l:GridData span="XL2 L1 M2 S12" />
@@ -109,18 +117,22 @@
 							</form:fields>
 						</form:FormElement>
 					</form:FormContainer>
+					<!-- Tabs -->
 					<form:FormContainer>
 						<form:FormElement>
 							<form:fields>
 								<IconTabBar id="Gen-Min">
-							    <!-- General Item -->
+							    <!-- General Item (Compact)-->
 							    	<items>
 							    		<IconTabFilter text="General">
-							    			<l:VerticalLayout class="sapUiNoMargin" >
+							    			<l:VerticalLayout class="sapUiNoMargin">
+							    				<!-- Title for Method -->
 												<Title level="H3" text="Method"/>
+												<!-- ComboBox for Method -->
 												<ComboBox id="Method" selectedKey="{/fSelectMethodId}" items="{ path: '/fMethod', sorter: { path: 'fMethod' } }">
 							               			<core:Item key="{fId}" text="{fSet}" />
 							        			</ComboBox>
+							        			<!-- Check Box for Linear Fit, Robust and Range depending on that -->
 												<l:HorizontalLayout class="sapUiSizeCozy">
 							    					<CheckBox id="linearFit" text="Linear Fit" selected="{/fLinear}" />
 							    					<CheckBox id="robust" text="Robust" enabled="{= ${/fLinear} === true}" selected="{/fRobust}"/>
@@ -133,7 +145,9 @@
 														displayValuePrecision = "2"
 														enabled="{= ${/fRobust} === true}"/>
 												</l:HorizontalLayout>
+												<!-- Title for Fit Options -->
 												<Title level="H3" text="Fit Options"/>
+												<!-- Check Boxes for Fit Options -->
 												<l:HorizontalLayout class="sapUiSizeCompact">
 													<VBox>
 														<CheckBox id="Integral" text="Integral" selected="{/fIntegral}"/>
@@ -148,7 +162,9 @@
 														<CheckBox text="Use gradient" selected="{/fUseGradient}"/>
 													</VBox>
 												</l:HorizontalLayout>
+												<!-- Title for Draw Options -->
 												<Title level="H3" text="Draw Options"/>
+												<!-- Check Boxes for Draw Options -->
 							    				<l:HorizontalLayout class="sapUiSizeCompact">
 								    				<VBox>
 														<CheckBox text="SAME" selected="{/fSame}"/>
@@ -157,6 +173,7 @@
 													</VBox>
 												</l:HorizontalLayout>
 											</l:VerticalLayout>
+											<!-- Range Slider -->
 											<l:VerticalLayout width="100%" >
 						    					<RangeSlider id="Slider" enableTickmarks="true" range="{/fRange}" min="{/fMinRange}" max="{/fMaxRange}" step="{/fStep}" width="80%"   />
 						    				</l:VerticalLayout>
@@ -164,7 +181,9 @@
 							    		<IconTabFilter text="Minimization">
 							    		<!-- Minimization Item -->
 							    			<l:VerticalLayout id="libraryContainer" class="sapUiSizeCompact">
+							    				<!-- Title for Library -->
 												<l:BlockLayoutCell title="Library">
+													<!-- RadioButtons for Library -->
 													<RadioButtonGroup id="libraryRB" columns="3" width="100%"  selectedIndex="{/fLibrary}" select="selectRB">
 														<buttons>
 															<RadioButton id="RB2-1" text="Minuit"/>
@@ -175,14 +194,17 @@
 														</buttons>
 													</RadioButtonGroup>	
 												</l:BlockLayoutCell>
+												<!-- Title and ComboBox for Method -->
 												<l:BlockLayoutCell title="Method" class="sapUiSizeCompact">
 													<ComboBox id="MethodMin" selectedKey="{/fSelectMethodMinId}" items="{ path: '/fMethodMin', sorter: { path: 'fMethodMin' } }">
 								               			<core:Item key="{fId}" text="{fSet}" />
 								        			</ComboBox>
 												</l:BlockLayoutCell>
+												<!-- Title for Settings -->
 												<l:BlockLayoutCell title="Settings">
 													<Text text="Use ENTER key to validate a new value or click on Reset button to set the defaults."/>
 												</l:BlockLayoutCell>
+												<!-- Labels and TextAreas for Settings -->
 												<form:SimpleForm 
 													layout="ResponsiveGridLayout"
 													editable="true"
@@ -217,7 +239,8 @@
 														type="Text"
 														placeholder="0">
 													</Input>
-											    </form:SimpleForm>	
+											    </form:SimpleForm>
+											    <!-- Title and RadioButtons for Print Options -->
 												<l:BlockLayoutCell title="Print Options">
 													<RadioButtonGroup columns="3" width="100%"  selectedIndex="0">
 														<buttons>
@@ -237,17 +260,6 @@
 		    		</form:FormContainer>		
 				</form:formContainers>
 			</form:Form>
-
-
-			<!--- Tree -->
-			<Tree 
-				id="Tree"
-				items="{path: '/ftree'}">
-				<StandardTreeItem 
-					title="{text}"/>
-					
-			</Tree>
-
 		</VBox>
 		<!-- Buttons in Footer -->
 	    <Toolbar>
