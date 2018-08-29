@@ -13,6 +13,9 @@
 #include "TH2.h"
 
 #include "TBufferJSON.h"
+#include "TBase64.h"
+
+#include <fstream>
 
 class WHandler {
 private:
@@ -39,32 +42,32 @@ public:
          return;
       }
 
-      if (arg != "Init") {
-         printf("Get msg:\n%s\n", arg.c_str());
-         // printf("Get msg %s\n", arg.substr(0,200).c_str());
+      if (arg == "Init") {
+         TFile *f = TFile::Open("https://root.cern/js/files/hsimple.root");
+         if (!f) return;
 
-         /* TGraphAsymmErrors *gr3 = nullptr;
-         TBufferJSON::FromJSON(gr3, arg.c_str());
-         if (gr3) {
-            printf("Graph class %s\n", gr3->ClassName());
-            TCanvas *c3 = new TCanvas("c3","title3", 3);
-            gr3->Draw();
-         }
-         */
+         TH2 *h = (TH2 *) f->Get("hpxpy");
+
+         TString json = TBufferJSON::ToJSON(h);
+
+         fWindow->Send(fConnId, json.Data()); // send histogram object
 
          return;
       }
 
-      // example of reading canvas from other file
+      if (arg.substr(0,3) == "IMG") {
+         printf("GET IMAGE len = %lu\n", arg.length()-3);
 
-      TFile *f = TFile::Open("https://root.cern/js/files/hsimple.root");
-      if (!f) return;
+         TString binary = TBase64::Decode(arg.c_str()+3);
 
-      TH2 *h = (TH2 *) f->Get("hpxpy");
+         std::ofstream ofs("file.png", std::ios::binary);
+         ofs.write(binary.Data(), binary.Length());
+         ofs.close();
 
-      TString json = TBufferJSON::ToJSON(h);
+         return;
+      }
 
-      fWindow->Send(fConnId, json.Data()); // send histogram object
+      printf("Get msg:\n%s\n", arg.c_str());
    }
 
    void popupTest(const std::string &where = "")
@@ -81,7 +84,7 @@ public:
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
 
-      fWindow->SetGeometry(800, 500); // configure predefined geometry
+      fWindow->SetGeometry(600, 400); // configure predefined geometry  900x700
 
       fWindow->Show(where);
    }

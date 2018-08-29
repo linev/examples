@@ -13,7 +13,7 @@
 
     <!-- UI Content -->
     <body>
-       <div id="debug" style="position:absolute;top:0;bottom:0;left:0;right:0"></div>
+       <div id="debug" style="width:500px;height:300px"></div>
     </body>
 
     <script>
@@ -33,7 +33,30 @@
                  
                  var obj = JSROOT.parse(msg);
                  
+                 JSROOT.extra_debug = [];
+                 
                  JSROOT.draw("debug", obj, "lego2", function(painter) {
+                    
+                    var can = painter.pad_painter();
+                    
+                    var fp = painter.frame_painter();
+                    
+                    console.log('Frame painter webgl', fp.webgl, JSROOT.gStyle.ImageSVG);
+                    
+                    JSROOT.extra_debug.push("After drawing painter webgl=" + fp.webgl + " use svgimg=" + JSROOT.gStyle.ImageSVG);
+                    
+                    can.CreateImage("png", function(img) {
+                       
+                       JSROOT.extra_debug.push("Create image " + (img ? img.length : "--"));
+                       
+                       for (var n=0;n<JSROOT.extra_debug.length;++n)
+                          handle.Send("DBG:" + JSROOT.extra_debug[n]);
+                       
+                       console.log('Create png image', img.length, img.substr(0,100));
+                       if (img)
+                          handle.Send("IMG" + img);
+                    });
+                    
                     // this store TCanvas with all relevant primitives
                     // var res = JSROOT.StoreJSON("debug");
                     
