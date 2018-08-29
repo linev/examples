@@ -6,7 +6,7 @@ GPUCache
 *.pem
 *.jpg
 *.json
-
+.rootrc
 
 # Prerequisites
 *.d
