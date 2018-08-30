@@ -13,7 +13,7 @@
 
     <!-- UI Content -->
     <body>
-       <div id="debug" style="width:500px;height:300px"></div>
+       <div id="debug" style="width:1000px;height:800px"></div>
     </body>
 
     <script>
@@ -54,7 +54,7 @@
                        
                        console.log('Create png image', img.length, img.substr(0,100));
                        if (img)
-                          handle.Send("IMG" + img);
+                          handle.Send("IMG:" + img);
                     });
                     
                     // this store TCanvas with all relevant primitives

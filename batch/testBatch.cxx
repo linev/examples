@@ -55,10 +55,10 @@ public:
          return;
       }
 
-      if (arg.substr(0,3) == "IMG") {
-         printf("GET IMAGE len = %lu\n", arg.length()-3);
+      if (arg.substr(0,4) == "IMG:") {
+         printf("GET IMAGE len = %lu\n", arg.length()-4);
 
-         TString binary = TBase64::Decode(arg.c_str()+3);
+         TString binary = TBase64::Decode(arg.c_str()+4);
 
          std::ofstream ofs("file.png", std::ios::binary);
          ofs.write(binary.Data(), binary.Length());
@@ -67,7 +67,7 @@ public:
          return;
       }
 
-      printf("Get msg:\n%s\n", arg.c_str());
+      printf("msg -> %s\n", arg.c_str());
    }
 
    void popupTest(const std::string &where = "")
@@ -84,7 +84,7 @@ public:
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
 
-      fWindow->SetGeometry(600, 400); // configure predefined geometry  900x700
+      fWindow->SetGeometry(1600, 1400); // configure predefined geometry  900x700
 
       fWindow->Show(where);
    }
