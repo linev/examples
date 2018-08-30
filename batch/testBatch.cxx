@@ -55,8 +55,8 @@ public:
          return;
       }
 
-      if (arg.substr(0,4) == "IMG:") {
-         printf("GET IMAGE len = %lu\n", arg.length()-4);
+      if (arg.substr(0,4) == "PNG:") {
+         printf("GET PNG IMAGE len = %lu\n", arg.length()-4);
 
          TString binary = TBase64::Decode(arg.c_str()+4);
 
@@ -66,6 +66,17 @@ public:
 
          return;
       }
+
+      if (arg.substr(0,4) == "SVG:") {
+         printf("GET SVG IMAGE len = %lu\n", arg.length()-4);
+
+         std::ofstream ofs("file.svg", std::ios::binary);
+         ofs.write(arg.c_str()+4, arg.length()-4);
+         ofs.close();
+
+         return;
+      }
+
 
       printf("msg -> %s\n", arg.c_str());
    }

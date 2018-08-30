@@ -45,16 +45,15 @@
                     
                     JSROOT.extra_debug.push("After drawing painter webgl=" + fp.webgl + " use svgimg=" + JSROOT.gStyle.ImageSVG);
                     
-                    can.CreateImage("png", function(img) {
+                    can.CreateImage("svg", function(img) {
                        
                        JSROOT.extra_debug.push("Create image " + (img ? img.length : "--"));
                        
                        for (var n=0;n<JSROOT.extra_debug.length;++n)
                           handle.Send("DBG:" + JSROOT.extra_debug[n]);
                        
-                       console.log('Create png image', img.length, img.substr(0,100));
                        if (img)
-                          handle.Send("IMG:" + img);
+                          handle.Send("SVG:" + img);
                     });
                     
                     // this store TCanvas with all relevant primitives
@@ -79,6 +78,8 @@
         
         // d3.select("#debug").append("p").text("reading done");
     }
+    
+    JSROOT.BatchMode = true; // force batch mode
     
     JSROOT.ConnectWebWindow({
        prereq: "2d",
