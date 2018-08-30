@@ -11,6 +11,7 @@
 
 #include "TFile.h"
 #include "TH2.h"
+#include "TEnv.h"
 
 #include "TBufferJSON.h"
 #include "TBase64.h"
@@ -106,6 +107,8 @@ WHandler* handler = nullptr;
 
 void testBatch()
 {
+   gEnv->SetValue("WebGui.ChromeBatch", "fork: --headless --remote-debugging-pipe $url");
+
    handler = new WHandler();
 
    handler->popupTest();
