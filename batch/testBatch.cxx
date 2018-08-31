@@ -75,6 +75,8 @@ public:
          ofs.write(arg.c_str()+4, arg.length()-4);
          ofs.close();
 
+         fWindow->CloseConnection(connid);
+
          return;
       }
 
@@ -98,6 +100,8 @@ public:
 
       fWindow->SetGeometry(1600, 1400); // configure predefined geometry  900x700
 
+      // printf("Win URL = %s\n", fWindow->GetUrl(true).c_str());
+
       fWindow->Show(where);
    }
 
@@ -107,7 +111,7 @@ WHandler* handler = nullptr;
 
 void testBatch()
 {
-   gEnv->SetValue("WebGui.ChromeBatch", "fork: --headless --remote-debugging-pipe $url");
+   // gEnv->SetValue("WebGui.ChromeBatch", "fork: --headless --remote-debugging-pipe $url");
 
    handler = new WHandler();
 
