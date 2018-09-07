@@ -19,38 +19,35 @@
     <script>
 
     function InitHandle(handle) {
-        handle.SetReceiver({
-           OnWebsocketOpened: function(handle) {
-              console.log('Connected');
-              handle.Send("Init msg from client");
-           },
-       
-           OnWebsocketMsg: function(handle, msg, offset) {
-              if (typeof msg != "string") {
-                  console.log('Get message ' + msg.byteLength + ' handle ' + !!handle);
-                  var arr = new Float32Array(msg, offset);
-                  d3.select("#debug").append("p").text("bin: " + msg.byteLength + " [0]=" +arr[0]);
-              } else { 
-                 console.log('Get string ' + msg);
-                 d3.select("#debug").append("p").text("txt: " + msg);
-              }
-           },
-       
-           OnWebsocketClosed: function(handle) {
-               // when connection closed, close panel as well s
-               if (window) window.close();
-           }
-        });
-        
-        handle.Connect(); // only here connection is established
-        
-        d3.select("#debug").append("p").text("reading done");
+        d3.select("#debug").append("p").text("init done");
     }
     
     JSROOT.ConnectWebWindow({
        prereq: "2d",
        prereq_logdiv: "debug",
-       callback: InitHandle
+       callback: InitHandle,
+       receiver: {
+          OnWebsocketOpened: function(handle) {
+             console.log('Connected');
+             handle.Send("Init msg from client");
+          },
+      
+          OnWebsocketMsg: function(handle, msg, offset) {
+             if (typeof msg != "string") {
+                 console.log('Get message ' + msg.byteLength + ' handle ' + !!handle);
+                 var arr = new Float32Array(msg, offset);
+                 d3.select("#debug").append("p").text("bin: " + msg.byteLength + " [0]=" +arr[0]);
+             } else { 
+                console.log('Get string ' + msg);
+                d3.select("#debug").append("p").text("txt: " + msg);
+             }
+          },
+      
+          OnWebsocketClosed: function(handle) {
+              // when connection closed, close panel as well s
+              if (window) window.close();
+          }
+       }
     });
     
     
