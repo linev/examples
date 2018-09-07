@@ -17,75 +17,65 @@
 
   <script>
     
-    console.log('start reading');
-
-    function InitHandle(handle) {
-        handle.SetReceiver({
-           OnWebsocketOpened: function(handle) {
-              console.log('Connected');
-              handle.Send("Init");
-           },
-       
-           OnWebsocketMsg: function(handle, msg, offset) {
-              if (typeof msg != "string") {
-                  console.log('Get message ' + msg.byteLength + ' handle ' + !!handle);
-              } else { 
-                 console.log('Get string ' + msg.length);
-                 
-                 var obj = JSROOT.parse(msg);
-                 
-                 JSROOT.extra_debug = [];
-                 
-                 JSROOT.draw("debug", obj, "lego2", function(painter) {
-                    
-                    var can = painter.pad_painter();
-                    
-                    var fp = painter.frame_painter();
-                    
-                    console.log('Frame painter webgl', fp.webgl, JSROOT.gStyle.ImageSVG);
-                    
-                    JSROOT.extra_debug.push("After drawing painter webgl=" + fp.webgl + " use svgimg=" + JSROOT.gStyle.ImageSVG);
-                    
-                    can.CreateImage("svg", function(img) {
-                       
-                       JSROOT.extra_debug.push("Create image " + (img ? img.length : "--"));
-                       
-                       for (var n=0;n<JSROOT.extra_debug.length;++n)
-                          handle.Send("DBG:" + JSROOT.extra_debug[n]);
-                       
-                       if (img)
-                          handle.Send("SVG:" + img);
-                    });
-                    
-                    // this store TCanvas with all relevant primitives
-                    // var res = JSROOT.StoreJSON("debug");
-                    
-                    // this store only object itself
-                    // var res = JSROOT.toJSON(painter.GetObject());
-                    // handle.Send(res);
-                 });
-                 
-                 // d3.select("#debug").append("p").text("txt: " + msg.length);
-              }
-           },
-       
-           OnWebsocketClosed: function(handle) {
-               // when connection closed, close panel as well s
-               if (window) window.close();
-           }
-        });
-        
-        handle.Connect(); // only here connection is established
-        
-        // d3.select("#debug").append("p").text("reading done");
-    }
-    
     JSROOT.BatchMode = true; // force batch mode
     
     JSROOT.ConnectWebWindow({
        prereq: "2d",
        prereq_logdiv: "debug",
-       callback: InitHandle
+       receiver: {
+          OnWebsocketOpened: function(handle) {
+             console.log('Connected');
+             handle.Send("Init");
+          },
+      
+          OnWebsocketMsg: function(handle, msg, offset) {
+             if (typeof msg != "string") {
+                 console.log('Get message ' + msg.byteLength + ' handle ' + !!handle);
+             } else { 
+                console.log('Get string ' + msg.length);
+                
+                var obj = JSROOT.parse(msg);
+                
+                JSROOT.extra_debug = [];
+                
+                JSROOT.draw("debug", obj, "lego2", function(painter) {
+                   
+                   var can = painter.pad_painter();
+                   
+                   var fp = painter.frame_painter();
+                   
+                   console.log('Frame painter webgl', fp.webgl, JSROOT.gStyle.ImageSVG);
+                   
+                   JSROOT.extra_debug.push("After drawing painter webgl=" + fp.webgl + " use svgimg=" + JSROOT.gStyle.ImageSVG);
+                   
+                   can.CreateImage("svg", function(img) {
+                      
+                      JSROOT.extra_debug.push("Create image " + (img ? img.length : "--"));
+                      
+                      for (var n=0;n<JSROOT.extra_debug.length;++n)
+                         handle.Send("DBG:" + JSROOT.extra_debug[n]);
+                      
+                      if (img)
+                         handle.Send("SVG:" + img);
+                   });
+                   
+                   // this store TCanvas with all relevant primitives
+                   // var res = JSROOT.StoreJSON("debug");
+                   
+                   // this store only object itself
+                   // var res = JSROOT.toJSON(painter.GetObject());
+                   // handle.Send(res);
+                });
+                
+                // d3.select("#debug").append("p").text("txt: " + msg.length);
+             }
+          },
+      
+          OnWebsocketClosed: function(handle) {
+              // when connection closed, close panel as well s
+              if (window) window.close();
+          }
+       }
     });
 
    </script>

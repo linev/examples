@@ -84,7 +84,7 @@ public:
       printf("msg -> %s\n", arg.c_str());
    }
 
-   void popupTest(const std::string &where = "")
+   void popupTest()
    {
 
       fWindow =  ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow();
@@ -102,7 +102,7 @@ public:
 
       // printf("Win URL = %s\n", fWindow->GetUrl(true).c_str());
 
-      fWindow->Show(where);
+      fWindow->MakeBatch();
    }
 
 };
