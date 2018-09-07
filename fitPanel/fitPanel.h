@@ -59,7 +59,7 @@ struct FitPanelModel {
 
    //Checkboxes Options
    bool fIntegral{false};
-   bool fBestErrors {false};   
+   bool fBestErrors {false};
    bool fWeights{false};
    bool fBins{false};
    bool fUseRange {false};
@@ -122,10 +122,10 @@ public:
          model.fTypeFunc.push_back(ComboBoxItem("0", "Predef-1D"));
          model.fTypeFunc.push_back(ComboBoxItem("1", "User Func"));
          model.fSelectTypeId = "0";
-         
+
          //Sub ComboBox for Type Function
          model.fSelectXYId = "1";
-         
+
 
          //corresponds when Type == Predef-1D (fSelectedTypeID == 0)
          model.fTypeXYAll.emplace_back();
@@ -245,7 +245,7 @@ public:
          model.fImproveFit = false;
 
          if(model.fNoStore){
-            model.fNoDrawing = true; 
+            model.fNoDrawing = true;
          }
          else{
             model.fNoDrawing = false;
@@ -278,7 +278,7 @@ public:
 
             if (!obj->fRealFunc.empty()) {
                printf("GOT fRealFunc: %s\n", obj->fRealFunc.c_str());
-            } 
+            }
             else {
                obj->fRealFunc = "gaus";
                printf("%s\n", obj->fRealFunc.c_str());
@@ -324,7 +324,7 @@ public:
                obj->fOption = "";
             }
 
-            //Assign the options to Fitting function           
+            //Assign the options to Fitting function
             if (fHist) {
                fHist->Fit(obj->fRealFunc.c_str(), obj->fOption.c_str(), "*", obj->fRange[0], obj->fRange[1]);
                gPad->Update();
@@ -341,7 +341,7 @@ public:
    void Show(const std::string &where = "")
    {
 
-      fWindow = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow(false);
+      fWindow = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow();
 
       // this is very important, it defines name of openui5 widget, which
       // will run on the client side

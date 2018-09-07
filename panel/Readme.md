@@ -7,7 +7,7 @@ This class provides number of methods, which should simplify handling of communi
 
 First of all, when creating TWebWindow, one should configure panel name. Like:
 
-     auto win = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow(false);
+     auto win = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow();
 
      // this is very important, it defines name of openui5 widget, which
      // will run on the client side
