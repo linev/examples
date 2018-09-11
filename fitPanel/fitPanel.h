@@ -261,7 +261,9 @@ public:
          }
 
          //Communication with the JSONModel in JS
-         TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("FitPanelModel"));
+         // TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("FitPanelModel"));
+         TString json = TBufferJSON::ToJSON(&model);
+
          fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
 
          return;
