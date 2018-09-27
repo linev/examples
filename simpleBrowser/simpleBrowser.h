@@ -13,7 +13,7 @@ struct TreeListItem {
    std::string text;
    std::vector<TreeListItem> treelist;
    TreeListItem() = default;
-   TreeListItem(const std::string &text) : text(text) {}  
+   TreeListItem(const std::string &text) : text(text) {}
 };
 
 
@@ -58,7 +58,7 @@ public:
 	}
 
 	void Show(const std::string	&where = ""){
-		fWindow = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow(false);
+		fWindow = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow();
 
 		fWindow->SetPanelName("localapp.view.SimpleBrowser");
 

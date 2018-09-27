@@ -6,6 +6,8 @@ GPUCache
 *.pem
 *.jpg
 *.json
+.rootrc
+*.svg
 
 
 # Prerequisites

@@ -95,7 +95,7 @@ public:
    void popupWindow(const std::string &where = "")
    {
 
-      fWindow = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow(false);
+      fWindow = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow();
 
       // this is very important, it defines name of openui5 widget, which
       // will run on the client side
