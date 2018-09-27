@@ -35,7 +35,7 @@ struct FitPanelModel {
    //Minimization Tab
    std::vector<std::vector<ComboBoxItem>> fMethodMinAll;
    //Fit Function --- Type
-   std::vector<std::vector<ComboBoxItem>> fTypeXYAll;;
+   std::vector<std::vector<ComboBoxItem>> fTypeXYAll;
 
    std::vector<ComboBoxItem> fMethodMin;
    std::vector<ComboBoxItem> fTypeXY;
@@ -52,6 +52,7 @@ struct FitPanelModel {
    bool fLinear{false};
    bool fRobust{false};
    int fLibrary{0};
+   int fPrint{0};
 
    //convert fSelectTypeID from string to int
    int fTypeId = atoi(fSelectTypeId.c_str());
@@ -100,14 +101,6 @@ public:
          fWindow->Send(fConnId, "INITDONE");
 
          FitPanelModel model;
-
-         //Tree Data
-         model.ftree.push_back(TreeListItem("Node 1"));
-         model.ftree.push_back(TreeListItem("Node 2"));
-         model.ftree.back().treelist.push_back(TreeListItem("Node 2-1"));
-         model.ftree.back().treelist.push_back(TreeListItem("Node 2-2"));
-         model.ftree.push_back(TreeListItem("Node3"));
-
 
 
          //ComboBox for Data Set
@@ -231,6 +224,7 @@ public:
          model.fFitOptions = 3;
          model.fRobust = false;
          model.fLibrary = 0;
+         model.fPrint = 0;
 
          //Checkboxes Values
          model.fIntegral = false;
