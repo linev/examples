@@ -1,4 +1,4 @@
-#include <ROOT/TWebWindowsManager.hxx>
+#include <ROOT/RWebWindowsManager.hxx>
 
 #include <vector>
 #include <string>
@@ -75,7 +75,7 @@ struct FitPanelModel {
 
 class FitPanel {
 private:
-   std::shared_ptr<ROOT::Experimental::TWebWindow> fWindow;
+   std::shared_ptr<ROOT::Experimental::RWebWindow> fWindow;
    unsigned fConnId{0};
    TH1 *fHist{nullptr};
 
@@ -343,7 +343,7 @@ public:
    void Show(const std::string &where = "")
    {
 
-      fWindow = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow();
+      fWindow = ROOT::Experimental::RWebWindowsManager::Instance()->CreateWindow();
 
       // this is very important, it defines name of openui5 widget, which
       // will run on the client side
