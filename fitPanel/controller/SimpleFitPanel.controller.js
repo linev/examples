@@ -2,16 +2,7 @@ sap.ui.define([
    'sap/ui/jsroot/GuiPanelController',
    'sap/ui/model/json/JSONModel'
 ], function (GuiPanelController, JSONModel) {
-   var dataId; 
-   var typeId;
-   var funcId;
-   var operationId;
-   var methodId;
-   var linearId;
-   var robustId;
-   var libraryId;
-   var printId;
-   var methodMinId;
+   var copyModel;
    "use strict";
 
    return GuiPanelController.extend("localapp.controller.SimpleFitPanel",{
@@ -22,7 +13,7 @@ sap.ui.define([
          var opText = this.getView().byId("OperationText");
          var data = {
                //fDataSet:[ { fId:"1", fSet: "----" } ],
-               fSelectDataId: "0",
+               fSelectDataId: "2",
                fMinRange: -4,
                fMaxRange: 4,
                fStep: 0.01,
@@ -30,6 +21,7 @@ sap.ui.define([
          };
          this.getView().setModel(new JSONModel(data));
          this._data = data;  
+         
       },
 
       // Assign the new JSONModel to data      
@@ -38,25 +30,21 @@ sap.ui.define([
          if(msg.startsWith("MODEL:")){
             var json = msg.substr(6);
             var data = JSROOT.parse(json);
-            dataSetId = data.fSelectDataId;
-            typeFuncId = data.fSelectTypeId;
-            typeXYId = data.fSelectXYId;
-            operationId = data.fOperation;
-            methodId = data.fSelectMethodId;
-            linearId = data.fLinear;
-            robustId = data.fRobust;
-            libraryId = data.fLibrary;
-            printId = data.fPrint;
-            methodMinId = data.fSelectMethodMinId;
 
             if(data) {
                this.getView().setModel(new JSONModel(data));
                this._data = data;
+               copyModel = JSROOT.extend({},data);           
+            }     
 
-            }
          }
+
          else {
          }
+
+            
+
+         
       },
 
       //Fitting Button
@@ -90,17 +78,21 @@ sap.ui.define([
 
       resetPanel: function(oEvent){
 
-         var comboDataSet = this.byId("DataSet").setSelectedKey(dataSetId);
-         var comboTypeFunc = this.byId("TypeFunc").setSelectedKey(typeFuncId);
-         var comboTypeXY = this.byId("TypeXY").setSelectedKey(typeXYId);
-         var comboMethod = this.byId("MethodCombo").setSelectedKey(methodId);
-         var comboMethodMin = this.byId("MethodMin").setSelectedKey(methodMinId);
-
+         this.getView().getModel().updateBindings();
+        
          
 
-         var radioOperation = this.byId("RBOperation").setSelectedIndex(operationId);
-         var radioLibraryRB = this.byId("LibraryRB").setSelectedIndex(libraryId);
-         var radioPrint = this.byId("Print").setSelectedIndex(printId);
+         var comboDataSet = this.byId("DataSet").setSelectedKey(copyModel.fSelectDataId);
+         var comboTypeFunc = this.byId("TypeFunc").setSelectedKey(copyModel.fSelectTypeId);
+         var comboTypeXY = this.byId("TypeXY").setSelectedKey(copyModel.fSelectXYId);
+         var comboMethod = this.byId("MethodCombo").setSelectedKey(copyModel.fSelectMethodId);
+         var comboMethodMin = this.byId("MethodMin").setSelectedKey(copyModel.fSelectMethodMinId);
+
+
+
+         var radioOperation = this.byId("RBOperation").setSelectedIndex(copyModel.fOperation);
+         var radioLibraryRB = this.byId("LibraryRB").setSelectedIndex(copyModel.fLibrary);
+         var radioPrint = this.byId("Print").setSelectedIndex(copyModel.fPrint);
 
          var textAreaOperationText = this.byId("OperationText").setValue();
          var textSelectedOpText = this.byId("selectedOpText").setText();
@@ -109,8 +101,8 @@ sap.ui.define([
          var inputMaxInterations = this.byId("maxInterations").setValue(); 
    
 
-         var checkLinearFit = this.byId("linearFit").setSelected(linearId);
-         var checkRobust = this.byId("robust").setSelected(robustId);
+         var checkLinearFit = this.byId("linearFit").setSelected(copyModel.fLinear);
+         var checkRobust = this.byId("robust").setSelected(copyModel.fRobust);
 
          
          var otab = this.byId("Fit_Options");
@@ -136,6 +128,7 @@ sap.ui.define([
          var stepInputRobustStep = this.byId("RobustStep").setValue(0.95);
          var rangeSlider = this.byId("Slider").setRange(sRange);
 
+         
 
 
 
