@@ -29,27 +29,26 @@ sap.ui.define([
          if (typeof msg != "string") {
             // console.log('TestPanel ArrayBuffer size ' +  msg.byteLength + ' offset ' + offset);
             var arr = new Float32Array(msg, offset);
-            
-            this.getView().byId("SampleText").setText("Got binary as float array\n" + 
-                                                      'array length ' + arr.length + '\n' +
-                                                      ' [0] = ' + arr[0] + '\n' +
-                                                      ' [7] = ' + arr[7] + '\n' + 
-                                                      ' [last] = ' + arr[arr.length-1]);
-            
-            return;
-        }
 
-          if (msg.indexOf("MODEL:")==0) {
+            this.getView().byId("SampleText").setText("Got binary as float array\n" + 
+                  'array length ' + arr.length + '\n' +
+                  ' [0] = ' + arr[0] + '\n' +
+                  ' [7] = ' + arr[7] + '\n' + 
+                  ' [last] = ' + arr[arr.length-1]);
+
+            return;
+         }
+
+         if (msg.indexOf("MODEL:")==0) {
             var json = msg.substr(6);
             var data = JSROOT.parse(json);
 
-           this.getView().byId("SampleText").setText("Get model:\n" + json);
-            
-         if (data) {
-               this.getView().setModel(new JSONModel(data));
-            }
+            this.getView().byId("SampleText").setText("Model size:" + json.length);
 
-        } else {
+            if (data)
+               this.getView().setModel(new JSONModel(data));
+
+         } else {
             this.getView().byId("SampleText").setText("Get message:\n" + msg);
          }
       },
