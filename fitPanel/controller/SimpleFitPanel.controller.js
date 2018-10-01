@@ -34,17 +34,9 @@ sap.ui.define([
             if(data) {
                this.getView().setModel(new JSONModel(data));
                this._data = data;
-               this.copyModel = JSROOT.extend({},data);           
+               this.copyModel = JSROOT.extend({},data);
             }     
-
          }
-
-         else {
-         }
-
-            
-
-         
       },
 
       //Fitting Button
@@ -64,10 +56,8 @@ sap.ui.define([
          data.fRange[1] = range[1];
 
          //Refresh the model
-         this.getView().getModel().refresh();         
+         this.getView().getModel().refresh();
 
- 
-         
          if (this.websocket)
             this.websocket.Send('DOFIT:'+this.getView().getModel().getJSON());
       },
@@ -78,18 +68,22 @@ sap.ui.define([
 
       resetPanel: function(oEvent){
 
+         if (!this.copyModel) return;
+
+         // copy back data into the model
+         JSROOT.extend(this._data, this.copyModel);
+
          this.getView().getModel().updateBindings();
         
-         if (!this.copyModel) return;
+         return;
          
+         // this code is not necessary
 
          var comboDataSet = this.byId("DataSet").setSelectedKey(this.copyModel.fSelectDataId);
          var comboTypeFunc = this.byId("TypeFunc").setSelectedKey(this.copyModel.fSelectTypeId);
          var comboTypeXY = this.byId("TypeXY").setSelectedKey(this.copyModel.fSelectXYId);
          var comboMethod = this.byId("MethodCombo").setSelectedKey(this.copyModel.fSelectMethodId);
          var comboMethodMin = this.byId("MethodMin").setSelectedKey(this.copyModel.fSelectMethodMinId);
-
-
 
          var radioOperation = this.byId("RBOperation").setSelectedIndex(this.copyModel.fOperation);
          var radioLibraryRB = this.byId("LibraryRB").setSelectedIndex(this.copyModel.fLibrary);
@@ -120,9 +114,7 @@ sap.ui.define([
          var fcheck = oEvent.getParameter("selected");
          ftab.getItems().forEach(function(item){
             var col1 = item.getCells()[0];
-
             col1.setSelected(fcheck);
-            
          });
 
          var sRange = [-4,4];
