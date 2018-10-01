@@ -11,7 +11,7 @@
 	<Page id="simplefitpanel_page" title="Simple Fit Panel" showHeader="true">
 	<VBox class="sapUiSizeCompact">
 		<!-- What kind of form? -->
-			<form:Form id="FormToolbar"
+			<form:Form id="MainForm"
 				editable="true"
 				ariaLabelledBy="Title1">
 				<form:layout>
@@ -31,9 +31,9 @@
 						columnsS="3"
 						singleContainerFullSize="false" />
 				</form:layout>
-				<form:formContainers>
+				<form:formContainers id="CompleteForm">
 					<!-- ComboBox for Data Set -->
-					<form:FormContainer ariaLabelledBy="dataset">						
+					<form:FormContainer ariaLabelledBy="dataset" id="TestForm">						
 						<form:FormElement>
 							<Label text="Data Set:" labelFor="DataSet">
 								<layoutData>
@@ -89,7 +89,7 @@
 						<!-- RadioButtons for Operation -->
 						<form:FormElement>
 							<form:fields>
-								<RadioButtonGroup columns="4" width="100%" selectedIndex="{/fOperation}">
+								<RadioButtonGroup id = "RBOperation" columns="4" width="100%" selectedIndex="{/fOperation}">
 									<buttons>
 										<RadioButton id="RB1-1" text="Nop"/>
 										<RadioButton id="RB1-2" text="Add"/>
@@ -125,57 +125,97 @@
 							    <!-- General Item (Compact)-->
 							    	<items>
 							    		<IconTabFilter text="General">
-							    			<l:VerticalLayout class="sapUiNoMargin">
-							    				<!-- Title for Method -->
-												<Title level="H3" text="Method"/>
-												<!-- ComboBox for Method -->
-												<ComboBox id="Method" selectedKey="{/fSelectMethodId}" items="{ path: '/fMethod', sorter: { path: 'fMethod' } }">
-							               			<core:Item key="{fId}" text="{fSet}" />
-							        			</ComboBox>
-							        			<!-- Check Box for Linear Fit, Robust and Range depending on that -->
-												<l:HorizontalLayout class="sapUiSizeCozy">
-							    					<CheckBox id="linearFit" text="Linear Fit" selected="{/fLinear}" />
-							    					<CheckBox id="robust" text="Robust" enabled="{= ${/fLinear} === true}" selected="{/fRobust}"/>
-								    				<StepInput
-														value="0.95"
-														min="0.01"
-														max="1"
-														step="0.01"
-														width="95px"
-														displayValuePrecision = "2"
-														enabled="{= ${/fRobust} === true}"/>
-												</l:HorizontalLayout>
-												<!-- Title for Fit Options -->
-												<Title level="H3" text="Fit Options"/>
-												<!-- Check Boxes for Fit Options -->
-												<l:HorizontalLayout class="sapUiSizeCompact">
-													<VBox>
-														<CheckBox id="Integral" text="Integral" selected="{/fIntegral}"/>
-														<CheckBox text="Best Errors" enabled="{= ${/fLinear} !== true}" selected="{/fBestErrors}"/>
-														<CheckBox text="All weights = 1" selected="{/fWeights}" enabled="{= ${/fBins} === false}" />
+											<!-- ComboBox for Method -->
+											<Table id="Method">   
+												<columns>
+											    	<Column><Title level="H4" text="Method" /></Column>
+											    	<Column></Column>
+											    	<Column></Column>
+											  	</columns>  
+											  	<items>
+											    	<ColumnListItem>
+											    		<cells>
+											    			<ComboBox id="MethodCombo" selectedKey="{/fSelectMethodId}" items="{ path: '/fMethod', sorter: { path: 'fMethod' } }">
+											       				<core:Item key="{fId}" text="{fSet}" />
+															</ComboBox>
+											    		</cells>
+											    	</ColumnListItem>
+											    	<ColumnListItem>
+											    		<cells>
+															<CheckBox id="linearFit" text="Linear Fit" selected="{/fLinear}" />
+															<CheckBox id="robust" text="Robust" enabled="{= ${/fLinear} === true}" selected="{/fRobust}"/>
+															<StepInput
+																id="RobustStep"
+																value="0.95"
+																min="0.01"
+																max="1"
+																step="0.01"
+																width="95px"
+																displayValuePrecision = "2"
+																enabled="{= ${/fRobust} === true}"/>
+											    		</cells>
+											    	</ColumnListItem>
+											    </items>
+											</Table>
+											<!-- Check Boxes for Fit Options -->
+											<Table id="Fit_Options">   
+											  <columns>
+											    <Column><Title level="H4" text="Fit Options"/></Column>
+											    <Column></Column>  
+											  </columns>  
+											  <items>
+											    <ColumnListItem>
+											      <cells>
+													<CheckBox id="Integral" text="Integral" selected="{/fIntegral}"/>
+														<CheckBox text="Use range" selected="{/fUseRange}"/>	
+													</cells>
+											    </ColumnListItem>
+											    <ColumnListItem>
+											    	<cells>
+											    		<CheckBox text="Best Errors" enabled="{= ${/fLinear} !== true}" selected="{/fBestErrors}"/>	
+														<CheckBox text="Improve fit results" enabled="{= ${/fLinear} !== true}" selected="{/fImproveFit}"/>	
+													</cells>
+												</ColumnListItem>
+												<ColumnListItem>
+											    	<cells>
+											    		<CheckBox text="All weights = 1" selected="{/fWeights}" enabled="{= ${/fBins} === false}" />
+											    		<CheckBox text="Add to list" selected="{/fAddList}"/>	
+													</cells>
+												</ColumnListItem>
+												<ColumnListItem>
+													<cells>
 														<CheckBox text="Empty bins, weights=1" selected="{/fBins}" enabled = "{= ${/fWeights} === false}"/>
-													</VBox>
-													<VBox>
-														<CheckBox text="Use range" selected="{/fUseRange}"/>
-														<CheckBox text="Improve fit results" enabled="{= ${/fLinear} !== true}" selected="{/fImproveFit}"/>
-														<CheckBox text="Add to list" selected="{/fAddList}"/>
 														<CheckBox text="Use gradient" selected="{/fUseGradient}"/>
-													</VBox>
-												</l:HorizontalLayout>
-												<!-- Title for Draw Options -->
-												<Title level="H3" text="Draw Options"/>
-												<!-- Check Boxes for Draw Options -->
-							    				<l:HorizontalLayout class="sapUiSizeCompact">
-								    				<VBox>
-														<CheckBox text="SAME" selected="{/fSame}"/>
-														<CheckBox text="No Drawing" selected ="{/fNoDrawing}"/>
-														<CheckBox id = "noStore" text="Do not store/draw" selected="{/fNoStore}" select="storeChange"/>
-													</VBox>
-												</l:HorizontalLayout>
-											</l:VerticalLayout>
+													</cells>
+												</ColumnListItem>
+											  </items>  
+											</Table>
+											<!-- Check Boxes for Draw Options -->
+						    				<Table id="Draw">   
+												<columns>
+											    	<Column><Title level="H4" text="Draw Options"/></Column>
+											  	</columns>  
+											  	<items>
+											    	<ColumnListItem>
+											    		<cells>
+															<CheckBox text="SAME" selected="{/fSame}"/>
+											    		</cells>
+											    	</ColumnListItem>
+											    	<ColumnListItem>
+											    		<cells>
+															<CheckBox text="No Drawing" selected ="{/fNoDrawing}"/>
+											    		</cells>
+											    	</ColumnListItem>
+											    	<ColumnListItem>
+											    		<cells>
+											    			<CheckBox id = "noStore" text="Do not store/draw" selected="{/fNoStore}" select="storeChange"/>
+											    		</cells>
+											    	</ColumnListItem>
+											  </items>  
+											</Table>
 											<!-- Range Slider -->
 											<l:VerticalLayout width="100%" >
-						    					<RangeSlider id="Slider" enableTickmarks="true" range="{/fRange}" min="{/fMinRange}" max="{/fMaxRange}" step="{/fStep}" width="80%"   />
+						    					<RangeSlider id="Slider" showAdvancedTooltip="true" range="{/fRange}" min="{/fMinRange}" max="{/fMaxRange}" step="{/fStep}" width="80%" showHandleTooltip="false" inputAsTooltips="true" />
 						    				</l:VerticalLayout>
 							    		</IconTabFilter>
 							    		<IconTabFilter text="Minimization">
@@ -184,7 +224,7 @@
 							    				<!-- Title for Library -->
 												<l:BlockLayoutCell title="Library">
 													<!-- RadioButtons for Library -->
-													<RadioButtonGroup id="libraryRB" columns="3" width="100%"  selectedIndex="{/fLibrary}" select="selectRB">
+													<RadioButtonGroup id="LibraryRB" columns="3" width="100%"  selectedIndex="{/fLibrary}" select="selectRB">
 														<buttons>
 															<RadioButton id="RB2-1" text="Minuit"/>
 															<RadioButton id="RB2-2" text="Minuit2"/>
@@ -242,7 +282,7 @@
 											    </form:SimpleForm>
 											    <!-- Title and RadioButtons for Print Options -->
 												<l:BlockLayoutCell title="Print Options">
-													<RadioButtonGroup columns="3" width="100%"  selectedIndex="0">
+													<RadioButtonGroup id="Print" columns="3" width="100%"  selectedIndex="{/fPrint}">
 														<buttons>
 															<RadioButton id="Print-1" text="Default"/>
 															<RadioButton id="Print-2" text="Verbose"/>
@@ -254,7 +294,6 @@
 							    		</IconTabFilter>
 							    	</items>
 							    </IconTabBar>
-
 			    			</form:fields>
 		    			</form:FormElement>
 		    		</form:FormContainer>		
@@ -265,7 +304,7 @@
 	    <Toolbar>
 	    	<Button text="Update" />
 	    	<Button text="Fit" press="doFit"/>
-	    	<Button text="Reset"/>
+	    	<Button text="Reset" press="resetPanel"/>
 	    	<Button text="Close" press="closePanel"/>
 	    </Toolbar>
 	</Page>

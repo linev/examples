@@ -2,42 +2,49 @@ sap.ui.define([
    'sap/ui/jsroot/GuiPanelController',
    'sap/ui/model/json/JSONModel'
 ], function (GuiPanelController, JSONModel) {
-   
+   var copyModel;
    "use strict";
 
    return GuiPanelController.extend("localapp.controller.SimpleFitPanel",{
 
          //function called from GuiPanelController
-      // onPanelInit : function() {
-      //    var id = this.getView().getId();
-      //    var opText = this.getView().byId("OperationText");
-      //    var data = {
-      //          //fDataSet:[ { fId:"1", fSet: "----" } ],
-      //          fSelectDataId: "0",
-      //          fMinRange: -4,
-      //          fMaxRange: 4,
-      //          fStep: 0.01,
-      //          fRange: [-4,4]
-      //    };
-      //    this.getView().setModel(new JSONModel(data));
-      //    this._data = data;  
-      // },
+      onPanelInit : function() {
+         var id = this.getView().getId();
+         var opText = this.getView().byId("OperationText");
+         var data = {
+               //fDataSet:[ { fId:"1", fSet: "----" } ],
+               fSelectDataId: "2",
+               fMinRange: -4,
+               fMaxRange: 4,
+               fStep: 0.01,
+               fRange: [-4,4]
+         };
+         this.getView().setModel(new JSONModel(data));
+         this._data = data;  
+         
+      },
 
       // Assign the new JSONModel to data      
       OnWebsocketMsg: function(handle, msg){
 
-         if(msg.indexOf("MODEL:")==0){
+         if(msg.startsWith("MODEL:")){
             var json = msg.substr(6);
             var data = JSROOT.parse(json);
 
             if(data) {
                this.getView().setModel(new JSONModel(data));
                this._data = data;
+               copyModel = JSROOT.extend({},data);           
+            }     
 
-            }
          }
+
          else {
          }
+
+            
+
+         
       },
 
       //Fitting Button
@@ -63,16 +70,72 @@ sap.ui.define([
          
          if (this.websocket)
             this.websocket.Send('DOFIT:'+this.getView().getModel().getJSON());
-         
-         //if (this.websocket)
-         //   this.websocket.Send('Range:'+ v1.getValue());
       },
 
       onPanelExit: function(){
 
       },
+
+      resetPanel: function(oEvent){
+
+         this.getView().getModel().updateBindings();
+        
+         
+
+         var comboDataSet = this.byId("DataSet").setSelectedKey(copyModel.fSelectDataId);
+         var comboTypeFunc = this.byId("TypeFunc").setSelectedKey(copyModel.fSelectTypeId);
+         var comboTypeXY = this.byId("TypeXY").setSelectedKey(copyModel.fSelectXYId);
+         var comboMethod = this.byId("MethodCombo").setSelectedKey(copyModel.fSelectMethodId);
+         var comboMethodMin = this.byId("MethodMin").setSelectedKey(copyModel.fSelectMethodMinId);
+
+
+
+         var radioOperation = this.byId("RBOperation").setSelectedIndex(copyModel.fOperation);
+         var radioLibraryRB = this.byId("LibraryRB").setSelectedIndex(copyModel.fLibrary);
+         var radioPrint = this.byId("Print").setSelectedIndex(copyModel.fPrint);
+
+         var textAreaOperationText = this.byId("OperationText").setValue();
+         var textSelectedOpText = this.byId("selectedOpText").setText();
+         var inputTestError = this.byId("testError").setValue();
+         var inputMaxTolerance = this.byId("maxTolerance").setValue();
+         var inputMaxInterations = this.byId("maxInterations").setValue(); 
+   
+
+         var checkLinearFit = this.byId("linearFit").setSelected(copyModel.fLinear);
+         var checkRobust = this.byId("robust").setSelected(copyModel.fRobust);
+
+         
+         var otab = this.byId("Fit_Options");
+         var bcheck = oEvent.getParameter("selected");
+         otab.getItems().forEach(function(item){
+            var fitCol1 = item.getCells()[0];
+            var fitCol2 = item.getCells()[1];
+
+            fitCol1.setSelected(bcheck);
+            fitCol2.setSelected(bcheck);
+         });
+         
+         var ftab = this.byId("Draw");
+         var fcheck = oEvent.getParameter("selected");
+         ftab.getItems().forEach(function(item){
+            var col1 = item.getCells()[0];
+
+            col1.setSelected(fcheck);
+            
+         });
+
+         var sRange = [-4,4];
+         var stepInputRobustStep = this.byId("RobustStep").setValue(0.95);
+         var rangeSlider = this.byId("Slider").setRange(sRange);
+
+         
+
+
+
+      },
      
-     //Change the selected checkboxes depending on Type of Function (TypeXY)
+     //Change the input text field. When a function is seleced, it appears on the text input field and
+     //on the text area.
        onTypeXYChange: function(){
          var data = this.getView().getModel().getData();
          var linear = this.getView().getModel().getData().fSelectXYId;
