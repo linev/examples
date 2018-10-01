@@ -2,7 +2,7 @@ sap.ui.define([
    'sap/ui/jsroot/GuiPanelController',
    'sap/ui/model/json/JSONModel'
 ], function (GuiPanelController, JSONModel) {
-   var copyModel;
+   
    "use strict";
 
    return GuiPanelController.extend("localapp.controller.SimpleFitPanel",{
@@ -34,7 +34,7 @@ sap.ui.define([
             if(data) {
                this.getView().setModel(new JSONModel(data));
                this._data = data;
-               copyModel = JSROOT.extend({},data);           
+               this.copyModel = JSROOT.extend({},data);           
             }     
 
          }
@@ -80,19 +80,20 @@ sap.ui.define([
 
          this.getView().getModel().updateBindings();
         
+         if (!this.copyModel) return;
          
 
-         var comboDataSet = this.byId("DataSet").setSelectedKey(copyModel.fSelectDataId);
-         var comboTypeFunc = this.byId("TypeFunc").setSelectedKey(copyModel.fSelectTypeId);
-         var comboTypeXY = this.byId("TypeXY").setSelectedKey(copyModel.fSelectXYId);
-         var comboMethod = this.byId("MethodCombo").setSelectedKey(copyModel.fSelectMethodId);
-         var comboMethodMin = this.byId("MethodMin").setSelectedKey(copyModel.fSelectMethodMinId);
+         var comboDataSet = this.byId("DataSet").setSelectedKey(this.copyModel.fSelectDataId);
+         var comboTypeFunc = this.byId("TypeFunc").setSelectedKey(this.copyModel.fSelectTypeId);
+         var comboTypeXY = this.byId("TypeXY").setSelectedKey(this.copyModel.fSelectXYId);
+         var comboMethod = this.byId("MethodCombo").setSelectedKey(this.copyModel.fSelectMethodId);
+         var comboMethodMin = this.byId("MethodMin").setSelectedKey(this.copyModel.fSelectMethodMinId);
 
 
 
-         var radioOperation = this.byId("RBOperation").setSelectedIndex(copyModel.fOperation);
-         var radioLibraryRB = this.byId("LibraryRB").setSelectedIndex(copyModel.fLibrary);
-         var radioPrint = this.byId("Print").setSelectedIndex(copyModel.fPrint);
+         var radioOperation = this.byId("RBOperation").setSelectedIndex(this.copyModel.fOperation);
+         var radioLibraryRB = this.byId("LibraryRB").setSelectedIndex(this.copyModel.fLibrary);
+         var radioPrint = this.byId("Print").setSelectedIndex(this.copyModel.fPrint);
 
          var textAreaOperationText = this.byId("OperationText").setValue();
          var textSelectedOpText = this.byId("selectedOpText").setText();
@@ -101,8 +102,8 @@ sap.ui.define([
          var inputMaxInterations = this.byId("maxInterations").setValue(); 
    
 
-         var checkLinearFit = this.byId("linearFit").setSelected(copyModel.fLinear);
-         var checkRobust = this.byId("robust").setSelected(copyModel.fRobust);
+         var checkLinearFit = this.byId("linearFit").setSelected(this.copyModel.fLinear);
+         var checkRobust = this.byId("robust").setSelected(this.copyModel.fRobust);
 
          
          var otab = this.byId("Fit_Options");
@@ -127,11 +128,6 @@ sap.ui.define([
          var sRange = [-4,4];
          var stepInputRobustStep = this.byId("RobustStep").setValue(0.95);
          var rangeSlider = this.byId("Slider").setRange(sRange);
-
-         
-
-
-
       },
      
      //Change the input text field. When a function is seleced, it appears on the text input field and
