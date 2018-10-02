@@ -6,7 +6,7 @@
 /// \author Sergey Linev
 
 
-#include <ROOT/TWebWindowsManager.hxx>
+#include <ROOT/RWebWindowsManager.hxx>
 
 #include <vector>
 #include <string>
@@ -32,7 +32,7 @@ struct TestPanelModel {
 
 class WHandler {
 private:
-   std::shared_ptr<ROOT::Experimental::TWebWindow> fWindow;
+   std::shared_ptr<ROOT::Experimental::RWebWindow> fWindow;
    unsigned fConnId{0};
 
 public:
@@ -95,7 +95,7 @@ public:
    void popupWindow(const std::string &where = "")
    {
 
-      fWindow = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow();
+      fWindow = ROOT::Experimental::RWebWindowsManager::Instance()->CreateWindow();
 
       // this is very important, it defines name of openui5 widget, which
       // will run on the client side

@@ -3,7 +3,7 @@ sap.ui.define([
    'sap/ui/model/json/JSONModel',
    'sap/ui/core/Fragment'
 ], function (GuiPanelController, JSONModel) {
-   var copyModel;
+   
    "use strict";
 
    return GuiPanelController.extend("localapp.controller.SimpleFitPanel",{
@@ -35,16 +35,22 @@ sap.ui.define([
             if(data) {
                this.getView().setModel(new JSONModel(data));
                this._data = data;
+<<<<<<< HEAD
                copyModel = JSROOT.extend({},data); 
                
 
+=======
+               this.copyModel = JSROOT.extend({},data);
+>>>>>>> 99653ba5ea9bb609793cbeaba45eed1f5a379502
             }     
-
          }
+<<<<<<< HEAD
 
          else {
          }
          
+=======
+>>>>>>> 99653ba5ea9bb609793cbeaba45eed1f5a379502
       },
 
       //Fitting Button
@@ -64,10 +70,8 @@ sap.ui.define([
          data.fRange[1] = range[1];
 
          //Refresh the model
-         this.getView().getModel().refresh();         
+         this.getView().getModel().refresh();
 
- 
-         
          if (this.websocket)
             this.websocket.Send('DOFIT:'+this.getView().getModel().getJSON());
       },
@@ -78,11 +82,11 @@ sap.ui.define([
 
       resetPanel: function(oEvent){
 
+
          if(!copyModel) return;
 
          JSROOT.extend(this._data, copyModel);
          //this.getView().getModel().updateBindings();
-        
 
          var textAreaOperationText = this.byId("OperationText").setValue();
          var textSelectedOpText = this.byId("selectedOpText").setText();
@@ -96,8 +100,6 @@ sap.ui.define([
          var rangeSlider = this.byId("Slider").setRange(sRange);
 
          return;
-
-
       },
      
      //Change the input text field. When a function is seleced, it appears on the text input field and

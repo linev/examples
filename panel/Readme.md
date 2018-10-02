@@ -5,9 +5,9 @@ This is special kind of openui5-based widget.
 It is normal xml::View, but controller should be derived from sap.ui.jsroot.GuiPanelController class.
 This class provides number of methods, which should simplify handling of communication between server and client
 
-First of all, when creating TWebWindow, one should configure panel name. Like:
+First of all, when creating RWebWindow, one should configure panel name. Like:
 
-     auto win = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow();
+     auto win = ROOT::Experimental::RWebWindowsManager::Instance()->CreateWindow();
 
      // this is very important, it defines name of openui5 widget, which
      // will run on the client side

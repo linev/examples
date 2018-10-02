@@ -1,4 +1,4 @@
-#include <ROOT/TWebWindowsManager.hxx>
+#include <ROOT/RWebWindowsManager.hxx>
 
 #include <vector>
 #include <string>
@@ -24,7 +24,7 @@ struct BrowserModel{
 
 class SimpleBrowser {
 private:
-	std::shared_ptr<ROOT::Experimental::TWebWindow> fWindow;
+	std::shared_ptr<ROOT::Experimental::RWebWindow> fWindow;
 	unsigned fConnId{0};
 	//TH1 *fHist{nullptr};
 
@@ -58,7 +58,7 @@ public:
 	}
 
 	void Show(const std::string	&where = ""){
-		fWindow = ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow();
+		fWindow = ROOT::Experimental::RWebWindowsManager::Instance()->CreateWindow();
 
 		fWindow->SetPanelName("localapp.view.SimpleBrowser");
 
