@@ -89,7 +89,7 @@
 						<!-- RadioButtons for Operation -->
 						<form:FormElement>
 							<form:fields>
-								<RadioButtonGroup id = "RBOperation" columns="4" width="100%" selectedIndex="{/fOperation}">
+								<RadioButtonGroup id = "RBOperation" columns="4" width="100%" selectedIndex="{/fOperation}" enabled="{= ${/fSelectTypeId} === '0' &amp;&amp; ${/fSelectDataId} !== '1'}">
 									<buttons>
 										<RadioButton id="RB1-1" text="Nop"/>
 										<RadioButton id="RB1-2" text="Add"/>
@@ -113,7 +113,7 @@
 									</layoutData> 
 								</Label>
 								<Text id="selectedOpText" text=" "/>
-								<Button text="Set Parameters..."/>	
+								<Button id="parametersButton" text="Set Parameters..." enabled="{= ${/fSelectDataId} !== '1'}" press="setParametersDialog"/>	
 							</form:fields>
 						</form:FormElement>
 					</form:FormContainer>

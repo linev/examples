@@ -1,6 +1,7 @@
 sap.ui.define([
    'sap/ui/jsroot/GuiPanelController',
-   'sap/ui/model/json/JSONModel'
+   'sap/ui/model/json/JSONModel',
+   'sap/ui/core/Fragment'
 ], function (GuiPanelController, JSONModel) {
    var copyModel;
    "use strict";
@@ -34,16 +35,15 @@ sap.ui.define([
             if(data) {
                this.getView().setModel(new JSONModel(data));
                this._data = data;
-               copyModel = JSROOT.extend({},data);           
+               copyModel = JSROOT.extend({},data); 
+               
+
             }     
 
          }
 
          else {
          }
-
-            
-
          
       },
 
@@ -78,21 +78,11 @@ sap.ui.define([
 
       resetPanel: function(oEvent){
 
+         if(!copyModel) return;
+
+         JSROOT.extend(this._data, copyModel);
          this.getView().getModel().updateBindings();
         
-         
-
-         var comboDataSet = this.byId("DataSet").setSelectedKey(copyModel.fSelectDataId);
-         var comboTypeFunc = this.byId("TypeFunc").setSelectedKey(copyModel.fSelectTypeId);
-         var comboTypeXY = this.byId("TypeXY").setSelectedKey(copyModel.fSelectXYId);
-         var comboMethod = this.byId("MethodCombo").setSelectedKey(copyModel.fSelectMethodId);
-         var comboMethodMin = this.byId("MethodMin").setSelectedKey(copyModel.fSelectMethodMinId);
-
-
-
-         var radioOperation = this.byId("RBOperation").setSelectedIndex(copyModel.fOperation);
-         var radioLibraryRB = this.byId("LibraryRB").setSelectedIndex(copyModel.fLibrary);
-         var radioPrint = this.byId("Print").setSelectedIndex(copyModel.fPrint);
 
          var textAreaOperationText = this.byId("OperationText").setValue();
          var textSelectedOpText = this.byId("selectedOpText").setText();
@@ -101,35 +91,11 @@ sap.ui.define([
          var inputMaxInterations = this.byId("maxInterations").setValue(); 
    
 
-         var checkLinearFit = this.byId("linearFit").setSelected(copyModel.fLinear);
-         var checkRobust = this.byId("robust").setSelected(copyModel.fRobust);
-
-         
-         var otab = this.byId("Fit_Options");
-         var bcheck = oEvent.getParameter("selected");
-         otab.getItems().forEach(function(item){
-            var fitCol1 = item.getCells()[0];
-            var fitCol2 = item.getCells()[1];
-
-            fitCol1.setSelected(bcheck);
-            fitCol2.setSelected(bcheck);
-         });
-         
-         var ftab = this.byId("Draw");
-         var fcheck = oEvent.getParameter("selected");
-         ftab.getItems().forEach(function(item){
-            var col1 = item.getCells()[0];
-
-            col1.setSelected(fcheck);
-            
-         });
-
          var sRange = [-4,4];
          var stepInputRobustStep = this.byId("RobustStep").setValue(0.95);
          var rangeSlider = this.byId("Slider").setRange(sRange);
 
-         
-
+         return;
 
 
       },
@@ -173,7 +139,8 @@ sap.ui.define([
          var data = this.getView().getModel().getData();
 
          var typeXY = this.getView().getModel().getData().fSelectTypeId;
-         console.log("typeXY = " + typeXY);
+         var dataSet = this.getView().getModel().getData().fSelectDataId;
+         console.log("typeXY = " + dataSet);
 
          data.fTypeXY = data.fTypeXYAll[parseInt(typeXY)];
 
@@ -190,6 +157,18 @@ sap.ui.define([
          data.fNoStore = fDraw;
          this.getView().getModel().refresh();
          console.log("fNoDrawing ", data.fNoStore);
+      },
+
+      setParametersDialog: function(){
+         var oPersonalizationDialog = sap.ui.xmlfragment("localapp.view.SetParameters", this);
+         this.getView().addDependent(oPersonalizationDialog);
+         oPersonalizationDialog.open();
+      },
+
+
+      //Cancel Button on Set Parameters Dialog Box
+      onCancel: function(oEvent){
+         oEvent.getSource().close();
       },
 
    });
