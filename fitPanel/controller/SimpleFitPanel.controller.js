@@ -81,7 +81,7 @@ sap.ui.define([
          if(!copyModel) return;
 
          JSROOT.extend(this._data, copyModel);
-         this.getView().getModel().updateBindings();
+         //this.getView().getModel().updateBindings();
         
 
          var textAreaOperationText = this.byId("OperationText").setValue();
