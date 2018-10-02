@@ -1,6 +1,6 @@
 # Testing JSROOT graphics in batch mode
 
-Idea to check how current JSROOT graphics works in browser headless mode, using TWebWindow.
+Idea to check how current JSROOT graphics works in browser headless mode, using RWebWindow.
 To run example:
 
     root.exe -l -b --web chrome testBatch.cxx+

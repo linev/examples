@@ -1,4 +1,4 @@
-# Testing normal JSROOT graphics in TWebWindow
+# Testing normal JSROOT graphics in RWebWindow
 
 This simple example shows how TGraph object can be read from file,
 converted into JSON and send to the browser.

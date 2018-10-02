@@ -7,7 +7,7 @@
 /// \author Sergey Linev
 
 
-#include <ROOT/TWebWindowsManager.hxx>
+#include <ROOT/RWebWindowsManager.hxx>
 
 #include "TFile.h"
 #include "TGraph.h"
@@ -19,7 +19,7 @@
 
 class WHandler {
 private:
-   std::shared_ptr<ROOT::Experimental::TWebWindow>  fWindow;
+   std::shared_ptr<ROOT::Experimental::RWebWindow>  fWindow;
    unsigned fConnId{0};
    bool fSendCanvas{false};
 
@@ -115,7 +115,7 @@ public:
    void popupTest(const std::string &where = "")
    {
 
-      fWindow =  ROOT::Experimental::TWebWindowsManager::Instance()->CreateWindow();
+      fWindow =  ROOT::Experimental::RWebWindowsManager::Instance()->CreateWindow();
 
       // this is very important, it defines name of openui5 widget, which
       // will run on the client side
