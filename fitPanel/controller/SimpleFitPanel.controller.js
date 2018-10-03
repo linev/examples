@@ -35,22 +35,16 @@ sap.ui.define([
             if(data) {
                this.getView().setModel(new JSONModel(data));
                this._data = data;
-<<<<<<< HEAD
-               copyModel = JSROOT.extend({},data); 
-               
 
-=======
                this.copyModel = JSROOT.extend({},data);
->>>>>>> 99653ba5ea9bb609793cbeaba45eed1f5a379502
             }     
          }
-<<<<<<< HEAD
+
 
          else {
          }
          
-=======
->>>>>>> 99653ba5ea9bb609793cbeaba45eed1f5a379502
+
       },
 
       //Fitting Button
@@ -82,23 +76,11 @@ sap.ui.define([
 
       resetPanel: function(oEvent){
 
-
+        
          if(!copyModel) return;
 
          JSROOT.extend(this._data, copyModel);
-         //this.getView().getModel().updateBindings();
-
-         var textAreaOperationText = this.byId("OperationText").setValue();
-         var textSelectedOpText = this.byId("selectedOpText").setText();
-         var inputTestError = this.byId("testError").setValue();
-         var inputMaxTolerance = this.byId("maxTolerance").setValue();
-         var inputMaxInterations = this.byId("maxInterations").setValue(); 
-   
-
-         var sRange = [-4,4];
-         var stepInputRobustStep = this.byId("RobustStep").setValue(0.95);
-         var rangeSlider = this.byId("Slider").setRange(sRange);
-
+         this.getView().getModel().updateBindings();
          return;
       },
      
