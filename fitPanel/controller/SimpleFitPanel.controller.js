@@ -79,7 +79,7 @@ sap.ui.define([
         
          if(!copyModel) return;
 
-         JSROOT.extend(this._data, copyModel);
+         JSROOT.extend(this._data, this.copyModel);
          this.getView().getModel().updateBindings();
          return;
       },
