@@ -77,7 +77,7 @@ sap.ui.define([
       resetPanel: function(oEvent){
 
         
-         if(!copyModel) return;
+         if(!this.copyModel) return;
 
          JSROOT.extend(this._data, this.copyModel);
          this.getView().getModel().updateBindings();
