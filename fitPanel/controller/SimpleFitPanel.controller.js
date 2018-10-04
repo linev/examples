@@ -1,6 +1,7 @@
 sap.ui.define([
    'sap/ui/jsroot/GuiPanelController',
-   'sap/ui/model/json/JSONModel'
+   'sap/ui/model/json/JSONModel',
+   'sap/ui/core/Fragment'
 ], function (GuiPanelController, JSONModel) {
    
    "use strict";
@@ -34,9 +35,16 @@ sap.ui.define([
             if(data) {
                this.getView().setModel(new JSONModel(data));
                this._data = data;
+
                this.copyModel = JSROOT.extend({},data);
             }     
          }
+
+
+         else {
+         }
+         
+
       },
 
       //Fitting Button
@@ -68,58 +76,12 @@ sap.ui.define([
 
       resetPanel: function(oEvent){
 
-         if (!this.copyModel) return;
-
-         // copy back data into the model
-         JSROOT.extend(this._data, this.copyModel);
-
-         this.getView().getModel().updateBindings();
         
+         if(!this.copyModel) return;
+
+         JSROOT.extend(this._data, this.copyModel);
+         this.getView().getModel().updateBindings();
          return;
-         
-         // this code is not necessary
-
-         var comboDataSet = this.byId("DataSet").setSelectedKey(this.copyModel.fSelectDataId);
-         var comboTypeFunc = this.byId("TypeFunc").setSelectedKey(this.copyModel.fSelectTypeId);
-         var comboTypeXY = this.byId("TypeXY").setSelectedKey(this.copyModel.fSelectXYId);
-         var comboMethod = this.byId("MethodCombo").setSelectedKey(this.copyModel.fSelectMethodId);
-         var comboMethodMin = this.byId("MethodMin").setSelectedKey(this.copyModel.fSelectMethodMinId);
-
-         var radioOperation = this.byId("RBOperation").setSelectedIndex(this.copyModel.fOperation);
-         var radioLibraryRB = this.byId("LibraryRB").setSelectedIndex(this.copyModel.fLibrary);
-         var radioPrint = this.byId("Print").setSelectedIndex(this.copyModel.fPrint);
-
-         var textAreaOperationText = this.byId("OperationText").setValue();
-         var textSelectedOpText = this.byId("selectedOpText").setText();
-         var inputTestError = this.byId("testError").setValue();
-         var inputMaxTolerance = this.byId("maxTolerance").setValue();
-         var inputMaxInterations = this.byId("maxInterations").setValue(); 
-   
-
-         var checkLinearFit = this.byId("linearFit").setSelected(this.copyModel.fLinear);
-         var checkRobust = this.byId("robust").setSelected(this.copyModel.fRobust);
-
-         
-         var otab = this.byId("Fit_Options");
-         var bcheck = oEvent.getParameter("selected");
-         otab.getItems().forEach(function(item){
-            var fitCol1 = item.getCells()[0];
-            var fitCol2 = item.getCells()[1];
-
-            fitCol1.setSelected(bcheck);
-            fitCol2.setSelected(bcheck);
-         });
-         
-         var ftab = this.byId("Draw");
-         var fcheck = oEvent.getParameter("selected");
-         ftab.getItems().forEach(function(item){
-            var col1 = item.getCells()[0];
-            col1.setSelected(fcheck);
-         });
-
-         var sRange = [-4,4];
-         var stepInputRobustStep = this.byId("RobustStep").setValue(0.95);
-         var rangeSlider = this.byId("Slider").setRange(sRange);
       },
      
      //Change the input text field. When a function is seleced, it appears on the text input field and
@@ -161,7 +123,8 @@ sap.ui.define([
          var data = this.getView().getModel().getData();
 
          var typeXY = this.getView().getModel().getData().fSelectTypeId;
-         console.log("typeXY = " + typeXY);
+         var dataSet = this.getView().getModel().getData().fSelectDataId;
+         console.log("typeXY = " + dataSet);
 
          data.fTypeXY = data.fTypeXYAll[parseInt(typeXY)];
 
@@ -178,6 +141,18 @@ sap.ui.define([
          data.fNoStore = fDraw;
          this.getView().getModel().refresh();
          console.log("fNoDrawing ", data.fNoStore);
+      },
+
+      setParametersDialog: function(){
+         var oPersonalizationDialog = sap.ui.xmlfragment("localapp.view.SetParameters", this);
+         this.getView().addDependent(oPersonalizationDialog);
+         oPersonalizationDialog.open();
+      },
+
+
+      //Cancel Button on Set Parameters Dialog Box
+      onCancel: function(oEvent){
+         oEvent.getSource().close();
       },
 
    });
