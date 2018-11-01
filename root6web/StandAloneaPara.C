@@ -1,3 +1,4 @@
+
 {
     //Define constant
     Int_t nbSteps = 1000;
@@ -13,7 +14,7 @@
     for(Int_t i = 0; i < nbSteps; i++)
     {
         Double_t v1 = xMin + i * (xMax-xMin)/nbSteps;
-	Double_t v2 = myFunction->Eval(v1) + gRandom->Gaus(0.0, 0.1);
+        Double_t v2 = myFunction->Eval(v1) + gRandom->Gaus(0.0, 0.1);
         myTree->Fill(v1,v2,(Double_t)(i+1));
     }
 
@@ -22,7 +23,7 @@
     TParallelCoord* para = (TParallelCoord*)gPad->GetListOfPrimitives()->FindObject("ParaCoord");
 
     para->SetCandleChart(false);
-        
+
     TParallelCoordVar* axis = (TParallelCoordVar*)para->GetVarList()->FindObject("y");
     axis->AddRange(new TParallelCoordRange(axis,3.,5.));
     para->AddSelection("blue");
@@ -31,4 +32,9 @@
     gPad->Modified();
 
     gPad->GetListOfPrimitives()->ls();
+
+    int sz = TWebCanvas::StoreCanvasJSON(Can, "StandAloneaPara.json.gz", "23");
+
+    TString res = TWebCanvas::CreateCanvasJSON(Can);
+    printf("JSON plain:%d compressed:%d \n", res.Length(), sz);
 }

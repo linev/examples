@@ -8,6 +8,7 @@ GPUCache
 *.json
 .rootrc
 *.svg
+*.json.gz
 
 
 # Prerequisites
