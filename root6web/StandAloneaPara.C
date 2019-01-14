@@ -34,7 +34,6 @@
     gPad->GetListOfPrimitives()->ls();
 
     int sz = TWebCanvas::StoreCanvasJSON(Can, "StandAloneaPara.json.gz", "3");
-
     TString res = TWebCanvas::CreateCanvasJSON(Can);
     printf("JSON plain:%d compressed:%d \n", res.Length(), sz);
 }
