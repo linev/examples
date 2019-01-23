@@ -143,7 +143,11 @@
 								<CheckBox text="SAME" selected="{/fSame}"/>	
 								<CheckBox text="No Drawing" selected ="{/fNoDrawing}"/>
 								<CheckBox id = "noStore" text="Do not store/draw" selected="{/fNoStore}" select="storeChange"/>
+<<<<<<< HEAD
 								<RangeSlider id="Slider" showAdvancedTooltip="true" range="{/fRange}" min="{/fMinRange}" max="{/fMaxRange}" step="{/fStep}" width="100%" showHandleTooltip="false" inputAsTooltips="true" class="sapUiLargeMarginBottom"/>
+=======
+								<RangeSlider id="Slider" showAdvancedTooltip="true" range="{/fRange}" min="{/fMinRange}" max="{/fMaxRange}" step="{/fStep}" width="100%" showHandleTooltip="false" />
+>>>>>>> upstream/master
 							</l:content>
 						</l:Grid>
 		    		</IconTabFilter>
