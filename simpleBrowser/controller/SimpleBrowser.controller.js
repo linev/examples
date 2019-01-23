@@ -7,16 +7,7 @@ sap.ui.define([
 
    return GuiPanelController.extend("localapp.controller.SimpleBrowser",{
 
-   	// onPanelInit : function() {
-    //      // var id = this.getView().getId();
-    //      // var opText = this.getView().byId("OperationText");
-    //      var data = {
-    //            fDataSet:[ { fId:"1", fSet: "----" } ],
-    //            fTree: "---"
-    //      };
-    //      this.getView().setModel(new JSONModel(data));
-    //      this._data = data;  
-    //   },
+
 
    	OnWebsocketMsg: function(handle, msg){
 
@@ -26,8 +17,11 @@ sap.ui.define([
    			var data = JSROOT.parse(json);
 
    			if(data){
-   				this.getView().setModel(new JSONModel(data));
+   				var oModel = new JSONModel(data);
+               this.getView().setModel(oModel);
+               console.log("OMODEL" + oModel);
    				this._data = data;
+               oModel.setSizeLimit(1000);
    			}
 
    			else {

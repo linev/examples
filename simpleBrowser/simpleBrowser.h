@@ -10,16 +10,17 @@
 #include "TCanvas.h"
 
 struct TreeListItem {
-   std::string text;
+   std::string ftext;
    std::vector<TreeListItem> treelist;
    TreeListItem() = default;
-   TreeListItem(const std::string &text) : text(text) {}
+   TreeListItem(const std::string &text) : ftext(text) {}
 };
 
 
 struct BrowserModel{
 	std::vector<TreeListItem> ftree;
 };
+
 
 
 class SimpleBrowser {
@@ -43,12 +44,24 @@ public:
 			fWindow->Send(fConnId, "INITDONE");
 
 			BrowserModel model;
+			int count = 1;
 
 			//Tree Data
 	         model.ftree.push_back(TreeListItem("Node 1"));
 	         model.ftree.push_back(TreeListItem("Node 2"));
 	         model.ftree.back().treelist.push_back(TreeListItem("Node 2-1"));
-	         model.ftree.back().treelist.push_back(TreeListItem("Node 2-2"));
+	         for (int i = 0; i<500; i++){
+	         	model.ftree.back().treelist.push_back(TreeListItem(Form("Node 2-1-%d", i)));
+	         	for (int j = 0; j<2; j++){
+	         		model.ftree.back().treelist.back().treelist.push_back(TreeListItem(Form("Node 2-1-1-%d",j)));
+
+	         	}
+
+
+	         }
+
+	        
+
 	         model.ftree.push_back(TreeListItem("Node3"));
 
          TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("BrowserModel"));
