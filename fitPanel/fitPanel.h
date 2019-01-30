@@ -26,6 +26,12 @@ struct FitPanelModel {
    std::string fSelectXYId;
    std::vector<ComboBoxItem> fMethod;
    std::string fSelectMethodId;
+   std::vector<ComboBoxItem> fContourPar1;
+   std::string fContourPar1Id;
+   std::vector<ComboBoxItem> fContourPar2;
+   std::string fContourPar2Id;
+   std::vector<ComboBoxItem> fScanPar;
+   std::string fScanParId;
    std::string fRealFunc;
    std::string fOption;
    std::string fFuncChange;
@@ -210,6 +216,24 @@ public:
          model.fMethodMin = model.fMethodMinAll[model.fLibrary];
          model.fTypeXY = model.fTypeXYAll[model.fTypeId];
 
+         //Contour ComboBoxes
+         model.fContourPar1.push_back(ComboBoxItem("1","Coeff0"));
+         model.fContourPar1.push_back(ComboBoxItem("2","Coeff1"));
+         model.fContourPar1.push_back(ComboBoxItem("3","Coeff3"));
+         model.fContourPar1Id = "1";
+
+         model.fContourPar2.push_back(ComboBoxItem("1","Coeff0"));
+         model.fContourPar2.push_back(ComboBoxItem("2","Coeff1"));
+         model.fContourPar2.push_back(ComboBoxItem("3","Coeff3"));
+         model.fContourPar2Id = "2";
+
+         //Scan ComboBox
+         model.fScanPar.push_back(ComboBoxItem("1","Coeff0"));
+         model.fScanPar.push_back(ComboBoxItem("2","Coeff1"));
+         model.fScanPar.push_back(ComboBoxItem("3","Coeff3"));
+         model.fScanParId = "1";
+
+
          model.fMinRange = -4;
          model.fMaxRange = 4;
          if (fHist) {
@@ -349,7 +373,7 @@ public:
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
 
-      fWindow->SetGeometry(450, 550); // configure predefined geometry
+      fWindow->SetGeometry(450, 650); // configure predefined geometry
 
       fWindow->Show(where);
 

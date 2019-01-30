@@ -1,8 +1,9 @@
 sap.ui.define([
    'sap/ui/jsroot/GuiPanelController',
    'sap/ui/model/json/JSONModel',
-   'sap/ui/core/Fragment'
-], function (GuiPanelController, JSONModel) {
+   'sap/ui/core/Fragment',
+   'sap/ui/unified/ColorPickerPopover'
+], function (GuiPanelController, JSONModel, ColorPickerPopover) {
    
    "use strict";
 
@@ -11,6 +12,7 @@ sap.ui.define([
          //function called from GuiPanelController
       onPanelInit : function() {
          var id = this.getView().getId();
+         this.inputId = "";
          var opText = this.getView().byId("OperationText");
          var data = {
                //fDataSet:[ { fId:"1", fSet: "----" } ],
@@ -154,6 +156,27 @@ sap.ui.define([
       onCancel: function(oEvent){
          oEvent.getSource().close();
       },
+
+      colorPicker: function(oEvent){
+         this.inputId = oEvent.getSource().getId();
+         if(!this.oColorPickerPopover){
+            this.oColorPickerPopover = new ColorPickerPopover("oColorPickerPopover", {
+               colorString: "green",
+               mode: sap.ui.unified.ColorPickerMode.HSL,
+               change: this.handleChange.bind(this)
+            });
+         }
+         this.oColorPickerLargePopover.openBy(oEvent.getSource());
+      },
+
+      handleChange: function (oEvent) {
+         var oView = this.getView();
+         oView.byId(this.inputId).setValue(oEvent.getParameter("colorString"));
+         this.inputId = "";
+         console.log(oEvent.getParameter("colorString"));
+         // TODO: fire a "change" event, in case the application needs to react explicitly when the color has changed
+         // but when the color is bound via data binding, it will be updated also without this event
+      }
 
    });
 
