@@ -364,6 +364,7 @@
 		    	<Button text="Reset" press="resetPanel"/>
 		    	<Button text="Back"/>
 		    	<Button text="Close" press="closePanel"/>
+		    	<Button id="color"/>
 	    	</Toolbar>
 		</VBox>
 	</Page>
