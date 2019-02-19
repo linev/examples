@@ -38,6 +38,11 @@ app.use("/resources", proxy({target: "http://localhost:8080/", pathRewrite: {
 	'^/resources/' : '/resources/'
 }, changeOrigin: true}));
 
+
+// simply expose JSROOT location for now
+app.use("/jsroot", express.static(__dirname + '/../node_modules/jsroot/'));
+
+
 // serve the webapp folder locally
 app.use(express.static('webapp', {
 	etag: true,
