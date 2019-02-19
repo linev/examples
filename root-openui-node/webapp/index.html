@@ -59,9 +59,9 @@
 
         JSROOT.ConnectWebWindow({
            openui5src: "https://openui5.hana.ondemand.com/",
+//           openui5src: "/",  // suppose to work, bur doesnot
            socket_kind: "file",
            prereq: "openui5;user:" + evedir + "EveManager.js",
-//           openui5src: "jsroot",    // use JSROOT provided package, experimental
 //           openui5libs: "sap.m, sap.ui.layout, sap.ui.unified", // customize openui5 libs
            prereq_logdiv: "EveDiv",
            callback: InitUI
