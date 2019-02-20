@@ -1,0 +1,4 @@
+<mvc:View
+   controllerName="eve.controller.GL"
+   xmlns:mvc="sap.ui.core.mvc">
+</mvc:View>

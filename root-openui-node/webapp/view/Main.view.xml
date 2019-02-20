@@ -1,11 +1,10 @@
-<mvc:View height="100%" class="sapUiSizeCompact" controllerName="eve.Main"
-          xmlns="sap.m"
+<mvc:View height="100%" class="sapUiSizeCompact" controllerName="eve.controller.Main"
           xmlns:mvc="sap.ui.core.mvc"
-          xmlns:l="sap.ui.layout"
-          xmlns:commons="sap.ui.commons">
+          xmlns="sap.m"
+          xmlns:l="sap.ui.layout">
    <Page title="" showNavButton="false" showFooter="false"
       showSubHeader="false" id="CanvasMainPage">
-      <headerContent>
+      <customHeader>
          <OverflowToolbar id="otb1">
             <!--  Button id="newEvent" icon="sap-icon://step" type="Transparent"
                tooltip="New event" press="newEvent" visible="false "/-->
@@ -76,7 +75,7 @@
             </MenuButton>
 
          </OverflowToolbar>
-      </headerContent>
+      </customHeader>
       <subHeader>
          <OverflowToolbar>
             <Button icon="sap-icon://open-folder" type="Transparent" />
@@ -91,7 +90,7 @@
       <content>
         <l:Splitter orientation="Horizontal" id="MainAreaSplitter">
           <l:contentAreas>
-             <mvc:XMLView id="Summary" viewName="eve.Summary" height="100%">
+             <mvc:XMLView id="Summary" viewName="eve.view.Summary" height="100%">
                 <mvc:layoutData><l:SplitterLayoutData size="25%"/></mvc:layoutData>
              </mvc:XMLView>
           </l:contentAreas>

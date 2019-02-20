@@ -10,7 +10,7 @@ sap.ui.define([
 
    "use strict";
 
-   return Controller.extend("eve.EveTable", {
+   return Controller.extend("eve.controller.EveTable", {
 
       onInit : function() {
 
