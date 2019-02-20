@@ -6,9 +6,8 @@
       <title>Eve7</title>
       <!--script type="text/javascript" src="https://jsroot.gsi.de/dev/scripts/JSRootCore.js"></script-->
       <script type="text/javascript" src="jsroot/scripts/JSRootCore.js"></script>
-      <script type="text/javascript" src="evedir/Colors.js"></script>
+      <script type="text/javascript" src="lib/Colors.js"></script>
       <!-- script type="text/javascript" src="evedir/EveManager.js"></script-->
-      <link rel="stylesheet" type="text/css" href="evedir/eve.css"/>
       <style>
          html { height: 100%; }
          body { min-height: 100%; margin: 0; overflow: hidden }
@@ -31,27 +30,30 @@
 
       <script type='text/javascript'>
 
-        var evedir = "evedir/";
+        var evedir = "./";
 
         function InitUI(handle) {
 
-           jQuery.sap.registerModulePath("eve", evedir);
+            sap.ui.loader.config({
+               paths: {
+                  "eve": evedir
+               }
+            });
 
-           var kind = JSROOT.GetUrlOption('view');
+            sap.ui.require(["sap/ui/core/ComponentContainer"], function(ComponentContainer) {
+               new ComponentContainer({
+                  name: "eve",
+                  manifest: true,
+                  async: true,
+                  settings: {
+                     componentData: {
+                        conn_handle: handle
+                     }
+                  },
+                  height: "100%"
+               }).placeAt("EveDiv")
+            })
 
-           if (!kind) {
-              new JSROOT.sap.ui.xmlview({
-                  id: "TopEveId",
-                  viewName: "eve.Main",
-                  viewData: { conn_handle: handle }
-              }).placeAt("EveDiv");
-           } else {
-              new JSROOT.sap.ui.xmlview({
-                 id: "TopGlId",
-                 viewName: "eve.GL",
-                 viewData: { conn_handle: handle, standalone: kind }
-             }).placeAt("EveDiv");
-           }
         }
    
         if (JSROOT.GetUrlOption('nogl')!==null) JSROOT.gStyle.NoWebGL = true;
@@ -59,10 +61,10 @@
 
         JSROOT.ConnectWebWindow({
            openui5src: "https://openui5.hana.ondemand.com/",
-//           openui5src: "/",  // suppose to work, bur doesnot
+           //openui5src: "/",  // suppose to work, due to document.write!
            socket_kind: "file",
-           prereq: "openui5;user:" + evedir + "EveManager.js",
-//           openui5libs: "sap.m, sap.ui.layout, sap.ui.unified", // customize openui5 libs
+           prereq: "openui5;user:" + evedir + "lib/EveManager.js",
+           openui5libs: "sap.ui.core", // customize openui5 libs
            prereq_logdiv: "EveDiv",
            callback: InitUI
         });

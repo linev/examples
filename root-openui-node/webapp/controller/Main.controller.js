@@ -1,22 +1,26 @@
-sap.ui.define(['sap/ui/core/mvc/Controller',
+sap.ui.define(['sap/ui/core/Component',
+               'sap/ui/core/mvc/Controller',
                'sap/ui/layout/Splitter',
                'sap/ui/layout/SplitterLayoutData'
-],function(Controller, Splitter, SplitterLayoutData) {
+],function(Component, Controller, Splitter, SplitterLayoutData) {
 
    "use strict";
 
-   return Controller.extend("eve.Main", {
+   return Controller.extend("eve.controller.Main", {
       onInit: function () {
 
          console.log('MAIN CONTROLLER INIT');
 
          this.mgr = new JSROOT.EVE.EveManager();
 
-         this.mgr.UseConnection(this.getView().getViewData().conn_handle);
+
+         //this.mgr.UseConnection(this.getView().getViewData().conn_handle);
+         var conn_handle = Component.getOwnerComponentFor(this.getView()).getComponentData().conn_handle;
+         this.mgr.UseConnection(conn_handle);
 
          // method to found summary controller by ID and set manager to it
          var elem = this.byId("Summary");
-         var ctrl = sap.ui.getCore().byId(elem.getId()).getController();
+         var ctrl =elem.getController();
          ctrl.SetMgr(this.mgr);
 
          this.mgr.RegisterUpdate(this, "onManagerUpdate");
@@ -78,14 +82,17 @@ sap.ui.define(['sap/ui/core/mvc/Controller',
             if ((count == 1) && (total_count>1))
                oLd = new SplitterLayoutData({resizable: true, size: "50%"});
 
-            var vtype = "eve.GL";
-            if (elem.fName === "Table") vtype = "eve.EveTable"; // AMT temporary solution
+            var vtype = "eve.view.GL";
+            if (elem.fName === "Table") vtype = "eve.view.EveTable"; // AMT temporary solution
 
-            var view = new JSROOT.sap.ui.xmlview({
-               id: viewid,
-               viewName: vtype,
-               viewData: { mgr: main.mgr, elementid: elem.fElementId, kind: (count==1) ? "3D" : "2D" },
-               layoutData: oLd
+            var oOwnerComponent = Component.getOwnerComponentFor(this.getView());
+            var view = oOwnerComponent.runAsOwner(function() {
+               return new JSROOT.sap.ui.xmlview({
+                  id: viewid,
+                  viewName: vtype,
+                  viewData: { mgr: main.mgr, elementid: elem.fElementId, kind: (count==1) ? "3D" : "2D" },
+                  layoutData: oLd
+               });
             });
 
             if (count == 1) {

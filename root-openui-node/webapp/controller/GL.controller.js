@@ -1,21 +1,60 @@
 sap.ui.define([
+   'sap/ui/core/Component',
+   'sap/ui/core/UIComponent',
    'sap/ui/core/mvc/Controller',
    'sap/ui/model/json/JSONModel',
    "sap/ui/core/ResizeHandler"
-], function (Controller, JSONModel, ResizeHandler) {
+], function (Component, UIComponent, Controller, JSONModel, ResizeHandler) {
 
    "use strict";
 
    var direct_threejs = false;
 
-   return Controller.extend("eve.GL", {
+   return Controller.extend("eve.controller.GL", {
 
       onInit : function()
       {
          var id = this.getView().getId();
          console.log("eve.GL.onInit id = ", id);
 
-         var data = this.getView().getViewData();
+         var viewData = this.getView().getViewData();
+         if (viewData) {
+            this.createXXX(viewData);
+         }
+
+         var oRouter = UIComponent.getRouterFor(this);
+         oRouter.getRoute("View").attachPatternMatched(this._onObjectMatched, this);
+
+         ResizeHandler.register(this.getView(), this.onResize.bind(this));
+         this.fast_event = [];
+
+         this._load_scripts = false;
+         this._render_html = false;
+         this.geo_painter = null;
+         // this.painter_ready = false;
+
+         var aModules = [
+            sap.ui.require.toUrl("eve/lib/EveElements.js"),
+            sap.ui.require.toUrl("eve/lib/EveScene.js")
+         ];
+         JSROOT.AssertPrerequisites("geom;user:" + aModules.join(";"), this.onLoadScripts.bind(this));
+
+      },
+
+      _onObjectMatched: function(oEvent) {
+
+         var args = oEvent.getParameter("arguments");
+         this.createXXX(Component.getOwnerComponentFor(this.getView()).getComponentData(), args.viewName);
+
+      },
+
+      createXXX: function(data, viewName) {
+
+         if (viewName) {
+            data.standalone = viewName;
+            data.kind = viewName;
+         }
+         //var data = this.getView().getViewData();
          // console.log("VIEW DATA", data);
 
          if (data.standalone && data.conn_handle)
@@ -31,16 +70,6 @@ sap.ui.define([
             this.elementid = data.elementid;
             this.kind = data.kind;
          }
-
-         ResizeHandler.register(this.getView(), this.onResize.bind(this));
-         this.fast_event = [];
-
-         this._load_scripts = false;
-         this._render_html = false;
-         this.geo_painter = null;
-         // this.painter_ready = false;
-
-         JSROOT.AssertPrerequisites("geom;user:evedir/EveElements.js;evedir/EveScene.js", this.onLoadScripts.bind(this));
 
       },
 

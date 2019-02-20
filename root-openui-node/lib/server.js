@@ -5,6 +5,8 @@
  */
 'use strict';
 
+const fs = require('fs');
+
 const express = require('express');
 const proxy = require('http-proxy-middleware');
 const compression = require('compression');
@@ -44,10 +46,21 @@ app.use("/jsroot", express.static(__dirname + '/../node_modules/jsroot/'));
 
 
 // serve the webapp folder locally
-app.use(express.static('webapp', {
-	etag: true,
-	//maxAge: 12 * 60 * 60 * 1000
-}));
+
+if (fs.existsSync("dist")) {
+	console.log('Serving resources from dist (to serve from webapp delete the dist folder)...\n');
+	app.use(express.static('dist', {
+		etag: true,
+		//maxAge: 12 * 60 * 60 * 1000
+	}));
+} else {
+	console.log('Serving resources from webapp...\n');
+	app.use(express.static('webapp', {
+		etag: true,
+		//maxAge: 12 * 60 * 60 * 1000
+	}));
+}
+
 
 // listen to port 3000 by default
 let port = process.env.PORT || 3000;
