@@ -12,7 +12,7 @@
 				id="Tree"
 				items="{path: '/ftree'}">
 				<StandardTreeItem 
-					title="{text}"/>		
+					title="{ftext}"/>		
 			</Tree>
 		</VBox>
 		 <Toolbar>

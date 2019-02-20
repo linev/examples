@@ -5,18 +5,19 @@
 	xmlns:m="sap.m"
     xmlns:u="sap.ui.unified"
     xmlns:core="sap.ui.core"
-	xmlns="sap.ui.table">
+	xmlns="sap.ui.table"
+	xmlns:l="sap.ui.codeeditor">
 	<m:SplitApp id="SplitAppDemo" initialDetail="detail" initialMaster="master" orientationChange="onOrientationChange">
 		<m:detailPages>
 			<m:Page id="detail" title="Detail 1" class="sapUiStdPage">
 				<m:content>
-					<m:Label text="Detail page 1" />
-					<m:Button text="Go to Detail page2" press="onPressDetailBack" />
-					
+					<l:CodeEditor value='\{"English": "Hello World!", "French":"Bonjour monde!", "German":"Hallo Welt!", "Italian":"Ciao mondo", "Spanish":"Hola mundo"}' height="500px" type="json"/>
+<!-- 					<m:Label text="Detail page 1" />
+ -->					<m:Button text="Go to Detail page2" press="onPressNavToDetail" />
 				</m:content>
 			</m:Page>
 			<m:Page id="detailDetail" title="Change Tree Style" class="sapUiStdPage" showNavButton="true"
-				navButtonText="Back" navButtonPress="onPressNavToDetail">
+				navButtonText="Back" navButtonPress="onPressDetailBack">
 				<m:content>
 					<m:VBox class="sapUiSmallMargin">
 						<m:Label text="This is Detail Page2" />

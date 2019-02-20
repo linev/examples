@@ -26,6 +26,12 @@ struct FitPanelModel {
    std::string fSelectXYId;
    std::vector<ComboBoxItem> fMethod;
    std::string fSelectMethodId;
+   std::vector<ComboBoxItem> fContourPar1;
+   std::string fContourPar1Id;
+   std::vector<ComboBoxItem> fContourPar2;
+   std::string fContourPar2Id;
+   std::vector<ComboBoxItem> fScanPar;
+   std::string fScanParId;
    std::string fRealFunc;
    std::string fOption;
    std::string fFuncChange;
@@ -47,7 +53,7 @@ struct FitPanelModel {
    float fMaxRange{1};
    float fStep{0.1};
    float fRange[2];
-   float fOperation{0};
+   //float fOperation{0};
    float fFitOptions{0};
    bool fLinear{false};
    bool fRobust{false};
@@ -60,11 +66,11 @@ struct FitPanelModel {
 
    //Checkboxes Options
    bool fIntegral{false};
-   bool fBestErrors {false};
+   bool fMinusErrors {false};
    bool fWeights{false};
    bool fBins{false};
    bool fUseRange {false};
-   bool fImproveFit {false};
+   //bool fImproveFit {false};
    bool fAddList {false};
    bool fUseGradient {false};
    bool fSame {false};
@@ -103,11 +109,11 @@ public:
          FitPanelModel model;
 
          //ComboBox for Data Set
-         model.fDataSet.push_back(ComboBoxItem("1", "No Selection"));
-         model.fDataSet.push_back(ComboBoxItem("2", "TH1F::hpx"));
-         model.fDataSet.push_back(ComboBoxItem("3", "TH2F::hpxhpy"));
-         model.fDataSet.push_back(ComboBoxItem("4", "TProfile::hprof"));
-         model.fDataSet.push_back(ComboBoxItem("5", "TNtuple::ntuple"));
+         //model.fDataSet.push_back(ComboBoxItem("1", "No Selection"));
+         model.fDataSet.push_back(ComboBoxItem("1", "TH1F::hpx"));
+         model.fDataSet.push_back(ComboBoxItem("2", "TH2F::hpxhpy"));
+         model.fDataSet.push_back(ComboBoxItem("3", "TProfile::hprof"));
+         model.fDataSet.push_back(ComboBoxItem("4", "TNtuple::ntuple"));
          model.fSelectDataId = "2";
 
          //ComboBox for Fit Function --- Type
@@ -165,8 +171,10 @@ public:
          vec1.push_back(ComboBoxItem("10", "chebyshev9"));
 
          //ComboBox for General Tab --- Method
-         model.fMethod.push_back(ComboBoxItem("1", "Chi-square"));
-         model.fMethod.push_back(ComboBoxItem("2", "Binned Likelihood"));
+         model.fMethod.push_back(ComboBoxItem("1", "Linear Chi-square"));
+         model.fMethod.push_back(ComboBoxItem("2", "Non-Linear Chi-square"));
+         model.fMethod.push_back(ComboBoxItem("3", "Linear Chi-square with Robust"));
+         model.fMethod.push_back(ComboBoxItem("4", "Binned Likelihood"));
          model.fSelectMethodId = "1";
 
          //Sub ComboBox for Minimization Tab --- Method
@@ -208,6 +216,24 @@ public:
          model.fMethodMin = model.fMethodMinAll[model.fLibrary];
          model.fTypeXY = model.fTypeXYAll[model.fTypeId];
 
+         //Contour ComboBoxes
+         model.fContourPar1.push_back(ComboBoxItem("1","Coeff0"));
+         model.fContourPar1.push_back(ComboBoxItem("2","Coeff1"));
+         model.fContourPar1.push_back(ComboBoxItem("3","Coeff3"));
+         model.fContourPar1Id = "1";
+
+         model.fContourPar2.push_back(ComboBoxItem("1","Coeff0"));
+         model.fContourPar2.push_back(ComboBoxItem("2","Coeff1"));
+         model.fContourPar2.push_back(ComboBoxItem("3","Coeff3"));
+         model.fContourPar2Id = "2";
+
+         //Scan ComboBox
+         model.fScanPar.push_back(ComboBoxItem("1","Coeff0"));
+         model.fScanPar.push_back(ComboBoxItem("2","Coeff1"));
+         model.fScanPar.push_back(ComboBoxItem("3","Coeff3"));
+         model.fScanParId = "1";
+
+
          model.fMinRange = -4;
          model.fMaxRange = 4;
          if (fHist) {
@@ -219,7 +245,7 @@ public:
          model.fStep = (model.fMaxRange - model.fMinRange) / 100;
          model.fRange[0] = model.fMinRange;
          model.fRange[1] = model.fMaxRange;
-         model.fOperation = 0;
+         //model.fOperation = 0;
          model.fFitOptions = 3;
          model.fRobust = false;
          model.fLibrary = 0;
@@ -229,13 +255,13 @@ public:
          model.fIntegral = false;
          model.fWeights = false;
          model.fBins = false;
-         model.fUseRange = false;
+         //model.fUseRange = false;
          model.fAddList = false;
          model.fUseGradient = false;
          model.fSame = false;
          model.fNoStore = false;
-         model.fBestErrors = false;
-         model.fImproveFit = false;
+         model.fMinusErrors = false;
+         //model.fImproveFit = false;
 
          if(model.fNoStore){
             model.fNoDrawing = true;
@@ -282,7 +308,7 @@ public:
             if(obj->fIntegral){
                obj->fOption = "I";
             }
-            else if(obj->fBestErrors){
+            else if(obj->fMinusErrors){
                obj->fOption = "E";
             }
             else if(obj->fWeights){
@@ -291,9 +317,9 @@ public:
             else if(obj->fUseRange){
                obj->fOption = "R";
             }
-            else if(obj->fImproveFit){
-               obj->fOption = "M";
-            }
+            // else if(obj->fImproveFit){
+            //    obj->fOption = "M";
+            // }
             else if(obj->fNoDrawing){
                obj->fOption = "O";
             }
@@ -347,7 +373,7 @@ public:
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
 
-      fWindow->SetGeometry(450, 550); // configure predefined geometry
+      fWindow->SetGeometry(450, 650); // configure predefined geometry
 
       fWindow->Show(where);
 

@@ -35,7 +35,8 @@ void greyscale()
 
    c->SetEditable(kFALSE);
 
-   int sz = TWebCanvas::StoreCanvasJSON(c, "greyscale.json.gz", "3");
-   TString res = TWebCanvas::CreateCanvasJSON(c);
-   printf("JSON plain:%d compressed:%d\n", res.Length(), sz);
+    int sz = TWebCanvas::StoreCanvasJSON(c, "greyscale.json.gz", "3");
+    TString res = TWebCanvas::CreateCanvasJSON(c);
+    printf("JSON plain:%d compressed:%d\n", res.Length(), sz);
+
 }
