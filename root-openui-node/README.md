@@ -24,6 +24,16 @@ To run the sample in the browser use the following URL:
 http://localhost:3000
 ```
 
+To build application:
+ 
+```
+npm run build
+```
+
+After that files from **bld** directory will be served, remove it to use original scripts
+ 
+
+
 ## Insights
 
 It is just serving JSROOT files using node.js server.
