@@ -29,3 +29,9 @@ http://localhost:3000
 It is just serving JSROOT files using node.js server.
 Openui5 used from https://openui5.hana.ondemand.com/
 
+To see normal UI: http://localhost:3000/
+
+To see only central (Default) view: http://localhost:3000/#/view/Default
+
+
+
