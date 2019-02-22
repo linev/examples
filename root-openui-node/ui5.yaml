@@ -1,0 +1,24 @@
+specVersion: '0.1'
+metadata:
+  name: node-openui
+type: application
+builder:
+  bundles:
+  - bundleDefinition:
+      name: eve/Component-preload.js
+      defaultFileTypes:
+      - ".js"
+      - ".json"
+      - ".xml"
+      - ".html"
+      - ".library"
+      sections:
+      - mode: preload
+        filters:
+        - eve/**
+        resolve: false
+        sort: true
+        declareModules: false
+    bundleOptions:
+      optimize: true
+      usePredefineCalls: true
