@@ -7,6 +7,11 @@
 	xmlns="sap.m"
 	xmlns:l="sap.ui.layout"
 	controllerName="localapp.controller.SimpleFitPanel">
+	<!-- <html:style>
+      .mySuperRedButton {
+         color: red;
+      }
+   </html:style> -->
 	<Page id="simplefitpanel_page" title="Simple Fit Panel" showHeader="true">
 		<VBox class="sapUiSizeCompact sapUiBody">
 			<!-- What kind of form? -->
@@ -44,13 +49,16 @@
 							<l:GridData span="L4 M3 S3" />
 						</layoutData> 
 			        </ComboBox>
-					<TextArea id="OperationText" width="100%" height="30px" value=" " valueLiveUpdate="{/fOpTextUpdate}">
+					<TextArea id="OperationText" width="100%" height="30px" value=" " valueLiveUpdate="{/fOpTextUpdate}" liveChange="operationTextChange">
 						<layoutData>
-							<l:GridData span="L4 M6 S9"/>
+							<l:GridData span="L4 M6 S10"/>
 						</layoutData>
 					</TextArea>
 					<!-- Label and Text for Selected Function --> 
 					<Label text="Selected " labelFor="OperationText">
+						<layoutData>
+							<l:GridData span="L4 M6 S3" />
+						</layoutData>
 					</Label>
 					<Text id="selectedOpText" text=" ">
 						<layoutData>
@@ -176,7 +184,7 @@
 							</l:content>
 						</l:Grid>
 						<l:Grid
-							class="sapUiSizeCompact"
+							class="sapUiSizeCompact myAppTest"
 							vSpacing="0"
 							defaultSpan="L3 M4 S10">
 							<l:content>
@@ -188,7 +196,7 @@
 										<l:GridData span="L3 M4 S8"/>
 									</layoutData>
 								</RangeSlider>
-								<Button text="Update">
+								<Button text="Update" class="mySuperRedButton">
 									<layoutData>
 										<l:GridData span="L3 M4 S2"/>
 									</layoutData>
