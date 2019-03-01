@@ -36,9 +36,9 @@ app.use(compression({
 
 
 // forward requests to resources to the UI5 dev server
-app.use("/resources", proxy({target: "http://localhost:8080/", pathRewrite: {
-	'^/resources/' : '/resources/'
-}, changeOrigin: true}));
+//app.use("/resources", proxy({target: "http://localhost:8080/", pathRewrite: {
+//	'^/resources/' : '/resources/'
+//}, changeOrigin: true}));
 
 
 // simply expose JSROOT location for now
@@ -50,13 +50,13 @@ app.use("/jsroot", express.static(__dirname + '/../node_modules/jsroot/'));
 if (fs.existsSync("dist")) {
 	console.log('Serving resources from dist (to serve from webapp delete the dist folder)...\n');
 	app.use(express.static('dist', {
-		etag: true,
+		etag: true
 		//maxAge: 12 * 60 * 60 * 1000
 	}));
 } else {
 	console.log('Serving resources from webapp...\n');
 	app.use(express.static('webapp', {
-		etag: true,
+		etag: true
 		//maxAge: 12 * 60 * 60 * 1000
 	}));
 }

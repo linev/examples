@@ -20,7 +20,7 @@ sap.ui.define(['sap/ui/core/Component',
 
          // method to found summary controller by ID and set manager to it
          var elem = this.byId("Summary");
-         var ctrl =elem.getController();
+         var ctrl = elem.getController();
          ctrl.SetMgr(this.mgr);
 
          this.mgr.RegisterUpdate(this, "onManagerUpdate");
