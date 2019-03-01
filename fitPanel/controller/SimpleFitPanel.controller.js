@@ -9,28 +9,6 @@ sap.ui.define([
    
    "use strict";
 
-//    return sap.ui.core.Control.extend("Button", { // call the new Control type "my.ColorBox" and let it inherit from sap.ui.core.Control
-
-//             // the control API:
-//             metadata : {
-//                properties : {           // setter and getter are created behind the scenes, incl. data binding and type validation
-//                   "color" : {type: "sap.ui.core.CSSColor", defaultValue: "#fff"} // you can give a default value and more
-//                }
-//             },
-
-//             // the part creating the HTML:
-//             renderer : function(oRm, oControl) { // static function, so use the given "oControl" instance instead of "this" in the renderer function
-//                oRm.write("<div"); 
-//                oRm.writeControlData(oControl);  // writes the Control ID and enables event handling - important!
-//                oRm.addStyle("background-color", oControl.getColor());  // write the color property; UI5 has validated it to be a valid CSS color
-//                oRm.writeStyles();
-//                oRm.addClass("myColorBox");      // add a CSS class for styles common to all control instances
-//                oRm.writeClasses();              // this call writes the above class plus enables support for Square.addStyleClass(...)
-//                oRm.write(">"); 
-//                oRm.write("</div>"); // no text content to render; close the tag
-//             },
-//          });
-
    return GuiPanelController.extend("localapp.controller.SimpleFitPanel",{
 
          //function called from GuiPanelController
@@ -100,7 +78,8 @@ sap.ui.define([
          
          //Data is a new model. With getValue() we select the value of the parameter specified from id
          var data = this.getView().getModel().getData();
-         var func = this.getView().byId("TypeXY").getValue();
+         //var func = this.getView().byId("TypeXY").getValue();
+         var func = this.getView().byId("selectedOpText").getText();
          //We pass the value from func to C++ fRealFunc
          data.fRealFunc = func;
 
@@ -145,6 +124,11 @@ sap.ui.define([
          this.byId("OperationText").setValueLiveUpdate();
          this.byId("OperationText").setValue(func);
          this.byId("selectedOpText").setText(func);
+       },
+
+        operationTextChange: function(oEvent) {
+         var newValue = oEvent.getParameter("value");
+         this.byId("selectedOpText").setText(newValue);
        },
 
 
