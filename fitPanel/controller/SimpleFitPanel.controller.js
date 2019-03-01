@@ -8,6 +8,10 @@ sap.ui.define([
 ], function (GuiPanelController, JSONModel, ColorPickerPopover, MessageBox, MessageToast, Button) {
    
    "use strict";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 886ec6c... Taking the function from ComboBox or by User Input
    return GuiPanelController.extend("localapp.controller.SimpleFitPanel",{
 
          //function called from GuiPanelController
