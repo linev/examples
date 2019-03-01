@@ -184,7 +184,7 @@
 							</l:content>
 						</l:Grid>
 						<l:Grid
-							class="sapUiSizeCompact myAppTest"
+							class="sapUiSizeCompact"
 							vSpacing="0"
 							defaultSpan="L3 M4 S10">
 							<l:content>
@@ -196,7 +196,7 @@
 										<l:GridData span="L3 M4 S8"/>
 									</layoutData>
 								</RangeSlider>
-								<Button text="Update" class="mySuperRedButton">
+								<Button text="Update">
 									<layoutData>
 										<l:GridData span="L3 M4 S2"/>
 									</layoutData>
