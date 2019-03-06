@@ -1,14 +1,14 @@
 sap.ui.define([
-   'sap/ui/jsroot/GuiPanelController',
+   'rootui5/panel/Controller',
    'sap/ui/model/json/JSONModel',
    'sap/ui/unified/ColorPickerPopover',
    'sap/m/MessageBox',
    'sap/m/MessageToast',
    'sap/m/Button'
 ], function (GuiPanelController, JSONModel, ColorPickerPopover, MessageBox, MessageToast, Button) {
-   
+
    "use strict";
-   
+
    return GuiPanelController.extend("localapp.controller.SimpleFitPanel",{
 
          //function called from GuiPanelController
@@ -26,7 +26,7 @@ sap.ui.define([
          };
          this.getView().setModel(new JSONModel(data));
          this._data = data; 
-         var myControl = new Button({color:"#f00"});
+         var myControl = new Button({ color: "#f00" });
 
          // var style = document.createElement("style");
          // document.head.appendChild(style);
@@ -45,8 +45,7 @@ sap.ui.define([
          // var oButton = this.getView().byId("test");
          // oButton.changeColor("red"); // change the color of the button
 
- 
-         
+
       },
 
 
@@ -63,19 +62,19 @@ sap.ui.define([
                this._data = data;
 
                this.copyModel = JSROOT.extend({},data);
-            }     
+            }
          }
 
 
          else {
          }
-         
+
 
       },
 
       //Fitting Button
       doFit: function() {
-         
+
          //Data is a new model. With getValue() we select the value of the parameter specified from id
          var data = this.getView().getModel().getData();
          //var func = this.getView().byId("TypeXY").getValue();
@@ -103,14 +102,13 @@ sap.ui.define([
 
       resetPanel: function(oEvent){
 
-        
          if(!this.copyModel) return;
 
          JSROOT.extend(this._data, this.copyModel);
          this.getView().getModel().updateBindings();
          return;
       },
-     
+
      //Change the input text field. When a function is seleced, it appears on the text input field and
      //on the text area.
        onTypeXYChange: function(){
