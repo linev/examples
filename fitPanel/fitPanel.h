@@ -49,10 +49,13 @@ struct FitPanelModel {
    std::string fSelectTypeId;
    std::string fSelectMethodMinId;
 
+   float fUpdateMinRange{0};
+   float fUpdateMaxRange{1};
    float fMinRange{0};
    float fMaxRange{1};
    float fStep{0.1};
    float fRange[2];
+   float fUpdateRange[2];
    //float fOperation{0};
    float fFitOptions{0};
    bool fLinear{false};
@@ -233,23 +236,28 @@ public:
          model.fScanPar.push_back(ComboBoxItem("3","Coeff3"));
          model.fScanParId = "1";
 
-
+         model.fUpdateMinRange = -4;
+         model.fUpdateMaxRange = 4;
          model.fMinRange = -4;
          model.fMaxRange = 4;
          if (fHist) {
-            model.fMinRange = fHist->GetXaxis()->GetXmin();
-            model.fMaxRange = fHist->GetXaxis()->GetXmax();
+            model.fUpdateMinRange = fHist->GetXaxis()->GetXmin();
+            model.fUpdateMaxRange = fHist->GetXaxis()->GetXmax();
          }
 
          //defined values
          model.fStep = (model.fMaxRange - model.fMinRange) / 100;
          model.fRange[0] = model.fMinRange;
          model.fRange[1] = model.fMaxRange;
+
+         model.fUpdateRange[0] = model.fUpdateMinRange;
+         model.fUpdateRange[1] = model.fUpdateMaxRange;
          //model.fOperation = 0;
          model.fFitOptions = 3;
          model.fRobust = false;
          model.fLibrary = 0;
          model.fPrint = 0;
+
 
          //Checkboxes Values
          model.fIntegral = false;
@@ -295,7 +303,7 @@ public:
          TBufferJSON::FromJSON(obj, arg1.c_str());
          //Fitting Options
          if (obj) {
-            printf("DOFIT: range %f %f select %s function %s\n ", obj->fRange[0], obj->fRange[1], obj->fSelectDataId.c_str(), obj->fSelectXYId.c_str());
+            printf("DOFIT: range %f %f select %s function %s\n ", obj->fUpdateRange[0], obj->fUpdateRange[1], obj->fSelectDataId.c_str(), obj->fSelectXYId.c_str());
 
             if (!obj->fRealFunc.empty()) {
                printf("GOT fRealFunc: %s\n", obj->fRealFunc.c_str());
@@ -317,23 +325,14 @@ public:
             else if(obj->fUseRange){
                obj->fOption = "R";
             }
-            // else if(obj->fImproveFit){
-            //    obj->fOption = "M";
-            // }
             else if(obj->fNoDrawing){
                obj->fOption = "O";
-            }
-            else if(obj->fNoStore){
-               obj->fOption = "N";
             }
             else if((obj->fWeights) && (obj->fBins)){
                obj->fOption = "WW";
             }
             else if(obj->fAddList){
                obj->fOption = "+";
-            }
-            else if(obj->fUseGradient){
-               obj->fOption = "G";
             }
             else if(obj->fSelectMethodId == "1"){
                obj->fOption = "P";
@@ -347,7 +346,7 @@ public:
 
             //Assign the options to Fitting function
             if (fHist) {
-               fHist->Fit(obj->fRealFunc.c_str(), obj->fOption.c_str(), "*", obj->fRange[0], obj->fRange[1]);
+               fHist->Fit(obj->fRealFunc.c_str(), obj->fOption.c_str(), "*", obj->fUpdateRange[0], obj->fUpdateRange[1]);
                gPad->Update();
             }
             delete obj;
