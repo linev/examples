@@ -55,17 +55,12 @@
 							<l:GridData span="L4 M6 S3" />
 						</layoutData>
 					</Label>
-					<Text id="selectedOpText" text=" ">
+					<Text id="selectedOpText" text="gaus">
 						<layoutData>
 							<l:GridData span="L4 M6 S6"/>
 						</layoutData>
 					</Text>
-					<!-- <Button id="parametersButton" text="Set Parameters..." enabled="{= ${/fSelectDataId} !== '1'}" press="setParametersDialog">
-						<layoutData>
-							<l:GridData span="L4 M6 S6"/>
-						</layoutData>
-					</Button> -->
-					<Panel expandable="true" expanded="false" headerText="Set Parameters" width="auto" class="sapUiNoMargin">
+					<Panel expandable="true" expanded="false" headerText="Set Parameters" width="auto" class="sapUiNoMargin fitPanelStyle">
 						<content>
 							<l:Grid
 				            class="sapUiSizeCompact"
@@ -145,7 +140,7 @@
 							vSpacing="0"
 							defaultSpan="L3 M4 S3">
 							<l:content>
-								<CheckBox id="robust" text="Robust" enabled="{= ${/fLinear} === true}" selected="{/fRobust}">
+								<CheckBox id="robust" text="Robust" enabled="{= ${/fSelectMethodId} === '3'}" selected="{/fRobust}" tooltip="Perform Linear Robust fitter if selected">
 								</CheckBox>
 								<StepInput
 									id="RobustStep"
@@ -154,7 +149,8 @@
 									max="0.99"
 									step="0.01"
 									displayValuePrecision = "2"
-									enabled="{= ${/fRobust} === true}">
+									enabled="{= ${/fRobust} === true}"
+									tooltip="Available only for graphs">
 									<layoutData>
 										<l:GridData span="L3 M4 S4"/>
 									</layoutData>
@@ -171,27 +167,27 @@
 										<l:GridData span="L3 M4 S10"/>
 									</layoutData>
 								</Title>
-								<CheckBox name="test" id="Integral" text="Integral" selected="{/fIntegral}"/>
-								<CheckBox text="Minus Errors" enabled="{= ${/fLinear} !== true}" selected="{/fMinusErrors}"/>
-								<CheckBox text="All weights = 1" selected="{/fWeights}" enabled="{= ${/fBins} === false}" />
-					    		<CheckBox text="Add to list" selected="{/fAddList}"/>
-					    		<CheckBox text="Empty bins, weights=1" selected="{/fBins}" enabled = "{= ${/fWeights} === false}"/>
+								<CheckBox name="test" id="Integral" text="Integral" selected="{/fIntegral}" tooltip="'I'-use integral of function instead of value in bin center"/>
+								<CheckBox text="Minus Errors" selected="{/fMinusErrors}" tooltip="'E'-better errors estimation using Minos technique"/>
+								<CheckBox text="All weights = 1" selected="{/fWeights}" enabled="{= ${/fBins} === false}" tooltip="'W'-all weights=1 for non-empty bins; eroors bars ignored" />
+					    		<CheckBox text="Add to list" selected="{/fAddList}" tooltip="'+'-add function to the list without deleting the previous"/>
+					    		<CheckBox text="Empty bins, weights=1" selected="{/fBins}" enabled = "{= ${/fWeights} === false}" tooltip="'WW'-all weights=1 including empty bins; errors bars ignored"/>
 							</l:content>
 						</l:Grid>
 						<l:Grid
-							class="sapUiSizeCompact myAppTest"
+							class="sapUiSizeCompact"
 							vSpacing="0"
 							defaultSpan="L3 M4 S10">
 							<l:content>
 								<Title level="H4" text="Draw Options"/>
-								<CheckBox text="SAME" selected="{/fSame}"/>	
-								<CheckBox text="No Drawing" selected ="{/fNoDrawing}"/>
+								<CheckBox text="SAME" selected="{/fSame}" tooltip="Super impose on previous picture in the same pad"/>	
+								<CheckBox text="No Drawing" selected ="{/fNoDrawing}" tooltip="'0'-do not draw function graphics"/>
 								<RangeSlider id="Slider" showAdvancedTooltip="true" range="{/fRange}" min="{/fMinRange}" max="{/fMaxRange}" step="{/fStep}" width="100%" showHandleTooltip="false" inputsAsTooltips="true" class="sapUiSmallMarginBottom">
 									<layoutData>
 										<l:GridData span="L3 M4 S8"/>
 									</layoutData>
 								</RangeSlider>
-								<Button text="Update" class="mySuperRedButton">
+								<Button text="Update" press="updateRange" tooltip="Update the fitting range">
 									<layoutData>
 										<l:GridData span="L3 M4 S2"/>
 									</layoutData>
@@ -359,11 +355,12 @@
 		    	</items>
 		    </IconTabBar>
 		    <Toolbar>
-		    	<Button text="Fit" press="doFit"/>
-		    	<Button text="Reset" press="resetPanel"/>
-		    	<Button text="Back"/>
-		    	<Button text="Close" press="closePanel"/>
+		    	<Button text="Fit" press="doFit" tooltip="Fit the histogram"/>
+		    	<Button text="Reset" press="resetPanel" tooltip="Reset to initial state"/>
+		    	<Button text="Back" press="backPanel" tooltip="Go to the previous fitting"/>
+		    	<Button text="Close" press="closePanel" tooltip="Close the Fit Panel"/>
 	    	</Toolbar>
 		</VBox>
 	</Page>
 </mvc:View>
+

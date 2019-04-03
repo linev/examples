@@ -8,7 +8,7 @@ sap.ui.define([
 ], function (GuiPanelController, JSONModel, ColorPickerPopover, MessageBox, MessageToast, Button) {
 
    "use strict";
-
+   var count = 0;
    return GuiPanelController.extend("localapp.controller.SimpleFitPanel",{
 
          //function called from GuiPanelController
@@ -19,33 +19,14 @@ sap.ui.define([
          var data = {
                //fDataSet:[ { fId:"1", fSet: "----" } ],
                fSelectDataId: "2",
-               fMinRange: -4,
-               fMaxRange: 4,
+               // fMinRange: -4,
+               // fMaxRange: 4,
                fStep: 0.01,
-               fRange: [-4,4]
+               fRange: [-4,4],
+               fUpdateRange: [-4,4]
          };
          this.getView().setModel(new JSONModel(data));
          this._data = data; 
-         var myControl = new Button({ color: "#f00" });
-
-         // var style = document.createElement("style");
-         // document.head.appendChild(style);
-         // style.type = "text/css";
-         // style.innerHTML = "";
-         // var oDUmmy = new sap.ui.core.Control();
-         // sap.ui.core.Control.prototype.changeColor = function(oColor){
-         //    style.innerHTML = style.innerHTML + '.' + oColor + '{background-color:' + oColor + ' !important;}';
-         //    this.addStyleClass(oColor);
-         //  }
-         // sap.ui.core.Control.prototype.addCustomStyle = function(oClassName,oStyle){
-         //    style.innerHTML = style.innerHTML + '.' + oClassName + '{' + oStyle + ' !important;}';
-         //    this.addStyleClass(oClassName);
-         // }
-
-         // var oButton = this.getView().byId("test");
-         // oButton.changeColor("red"); // change the color of the button
-
-
       },
 
 
@@ -64,17 +45,15 @@ sap.ui.define([
                this.copyModel = JSROOT.extend({},data);
             }
          }
-
-
          else {
          }
-
 
       },
 
       //Fitting Button
       doFit: function() {
-
+         //Keep the #times the button is clicked
+         count++;
          //Data is a new model. With getValue() we select the value of the parameter specified from id
          var data = this.getView().getModel().getData();
          //var func = this.getView().byId("TypeXY").getValue();
@@ -82,18 +61,14 @@ sap.ui.define([
          //We pass the value from func to C++ fRealFunc
          data.fRealFunc = func;
 
-         var range = this.getView().byId("Slider").getRange();
-         console.log("Slider " + range);
-
-         //We pass the values from range array in JS to C++ fRange array
-         data.fRange[0] = range[0];
-         data.fRange[1] = range[1];
-
          //Refresh the model
          this.getView().getModel().refresh();
+         //Each time we click the button, we keep the current state of the model
+         this.copyModel[count] = JSROOT.extend({},data);
 
          if (this.websocket)
             this.websocket.Send('DOFIT:'+this.getView().getModel().getJSON());
+
       },
 
       onPanelExit: function(){
@@ -105,6 +80,17 @@ sap.ui.define([
          if(!this.copyModel) return;
 
          JSROOT.extend(this._data, this.copyModel);
+         this.getView().getModel().updateBindings();
+         return;
+      },
+
+      backPanel: function() {
+         //Each time we click the button, we go one step back
+         count--;
+         if(count < 0) return;
+         if(!this.copyModel[count]) return;
+
+         JSROOT.extend(this._data, this.copyModel[count]);
          this.getView().getModel().updateBindings();
          return;
       },
@@ -197,24 +183,24 @@ sap.ui.define([
          this.oColorPickerPopover.openBy(oEvent.getSource());
       },
 
-
       handleChange: function (oEvent) {
          var oView = this.getView();
          //oView.byId(this.inputId).setValue(oEvent.getParameter("colorString"));
          this.inputId = "";
          var color = oEvent.getParameter("colorString");
-         var oButtonContour = this.getView().byId("colorContour");
-         var oButtonInnerContour = oButtonContour.$().find('.sapMBtnInner');
-         oButtonInnerContour.css('background',color);
-         oButtonInnerContour.css('color','#FFFFFF');
-         oButtonInnerContour.css('text-shadow','1px 1px 2px #333333');
-
-         var oButtonConf = this.getView().byId("colorConf");
-         var oButtonInnerConf = oButtonConf.$().find('.sapMBtnInner');
-         oButtonInnerConf.css('background',color);
-         oButtonInnerConf.css('color','#FFFFFF');
-         oButtonInnerConf.css('text-shadow','1px 1px 2px #333333');
+         MessageToast.show("Chosen color string: " + color);
       },
+
+      updateRange: function() {
+         var data = this.getView().getModel().getData();
+         var range = this.getView().byId("Slider").getRange();
+         console.log("Slider " + range);
+
+         //We pass the values from range array in JS to C++ fRange array
+         data.fUpdateRange[0] = range[0];
+         data.fUpdateRange[1] = range[1];
+      },
+  
 
    });
 
