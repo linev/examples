@@ -74,6 +74,16 @@
 					                </Title>
 					                <Title level="H5" text="Sigma">
 					                </Title>
+					                 <Title level="H5" text="Constant">
+					                </Title>
+					                 <Title level="H5" text="Constant">
+					                </Title>
+					                 <Title level="H5" text="Constant">
+					                </Title>
+					                 <Title level="H5" text="Constant">
+					                </Title>
+					                 <Title level="H5" text="Constant">
+					                </Title>
 
 					                <Title level="H5" text="Fix"/>
 					                <CheckBox id="FixC" selected="{/fFixC}"/>
@@ -96,9 +106,9 @@
 					                <Input id="MinS" type="Number" enabled="{= ${/fFixS} !== true}" value="{/fMinS}"/>
 
 					                <Title level="H5" text="Set Range"/>
-					                <!-- <RangeSlider id="setRangeC" showAdvancedTooltip="true" range="{/fRangeC}" min="{/fMinC}" max="{/fMaxC}" step="{/fStep}" width="100%" showHandleTooltip="false" inputsAsTooltips="true" class="sapUiLargeMarginBottom" enabled="{= ${/fFixC} !== true}"/>
-					                <RangeSlider id="setRangeM" showAdvancedTooltip="true" range="{/fRange}" min="{/fMinM}" max="{/fMaxM}" step="{/fStep}" width="100%" showHandleTooltip="false" inputsAsTooltips="true" class="sapUiLargeMarginBottom" enabled="{= ${/fFixM} !== true}"/>
-					                <RangeSlider id="setRangeS" showAdvancedTooltip="true" range="{/fRange}" min="{/fMinS}" max="{/fMaxS}" step="{/fStep}" width="100%" showHandleTooltip="false" inputsAsTooltips="true" class="sapUiLargeMarginBottom" enabled="{= ${/fFixS} !== true}"/> -->
+					                <RangeSlider id="setRangeC" showAdvancedTooltip="true" range="0,1" min="0" max="1" step="0.1" width="100%" showHandleTooltip="false" inputsAsTooltips="true" class="sapUiNoMarginBottom"/>
+					                <RangeSlider id="setRangeM" showAdvancedTooltip="true" range="0,1" min="0" max="1" step="0.1" width="100%" showHandleTooltip="false" inputsAsTooltips="true" class="sapUiLargeNoBottom" enabled="{= ${/fFixM} !== true}"/>
+					                <RangeSlider id="setRangeS" showAdvancedTooltip="true" range="0,1" min="0" max="1" step="0.1" width="100%" showHandleTooltip="false" inputsAsTooltips="true" class="sapUiNoMarginBottom" enabled="{= ${/fFixS} !== true}"/>
 
 
 

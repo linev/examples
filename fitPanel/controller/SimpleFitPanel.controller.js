@@ -81,6 +81,8 @@ sap.ui.define([
 
          JSROOT.extend(this._data, this.copyModel);
          this.getView().getModel().updateBindings();
+         this.byId("selectedOpText").setText("gaus");
+         this.byId("OperationText").setValue("");
          return;
       },
 
