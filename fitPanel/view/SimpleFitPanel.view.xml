@@ -60,7 +60,8 @@
 							<l:GridData span="L4 M6 S6"/>
 						</layoutData>
 					</Text>
-					<Panel expandable="true" expanded="false" headerText="Set Parameters" width="auto" class="sapUiNoMargin fitPanelStyle">
+					<Button text="Set Parameters" press="setParametersDialog" />
+					<!-- <Panel expandable="true" expanded="false" headerText="Set Parameters" width="auto" class="sapUiNoMargin fitPanelStyle">
 						<content>
 							<l:Grid
 				            class="sapUiSizeCompact"
@@ -68,11 +69,19 @@
 				            defaultSpan="XL3 L3 M3 S3">
 					            <l:content>
 					                <Title text=""/>
-					                <Title level="H5" text="Constant">
+					                <Title level="H5" text="p0">
 					                </Title>
-					                <Title level="H5" text="Mean">
+					                <Title level="H5" text="p1">
 					                </Title>
-					                <Title level="H5" text="Sigma">
+					                 <Title level="H5" text="p2">
+					                </Title>
+					                 <Title level="H5" text="Constant">
+					                </Title>
+					                 <Title level="H5" text="Constant">
+					                </Title>
+					                 <Title level="H5" text="Constant">
+					                </Title>
+					                 <Title level="H5" text="Constant">
 					                </Title>
 
 					                <Title level="H5" text="Fix"/>
@@ -96,9 +105,9 @@
 					                <Input id="MinS" type="Number" enabled="{= ${/fFixS} !== true}" value="{/fMinS}"/>
 
 					                <Title level="H5" text="Set Range"/>
-					                <!-- <RangeSlider id="setRangeC" showAdvancedTooltip="true" range="{/fRangeC}" min="{/fMinC}" max="{/fMaxC}" step="{/fStep}" width="100%" showHandleTooltip="false" inputsAsTooltips="true" class="sapUiLargeMarginBottom" enabled="{= ${/fFixC} !== true}"/>
-					                <RangeSlider id="setRangeM" showAdvancedTooltip="true" range="{/fRange}" min="{/fMinM}" max="{/fMaxM}" step="{/fStep}" width="100%" showHandleTooltip="false" inputsAsTooltips="true" class="sapUiLargeMarginBottom" enabled="{= ${/fFixM} !== true}"/>
-					                <RangeSlider id="setRangeS" showAdvancedTooltip="true" range="{/fRange}" min="{/fMinS}" max="{/fMaxS}" step="{/fStep}" width="100%" showHandleTooltip="false" inputsAsTooltips="true" class="sapUiLargeMarginBottom" enabled="{= ${/fFixS} !== true}"/> -->
+					                <RangeSlider id="setRangeC" showAdvancedTooltip="true" range="0,1" min="0" max="1" step="0.1" width="100%" showHandleTooltip="false" inputsAsTooltips="true" class="sapUiNoMarginBottom"/>
+					                <RangeSlider id="setRangeM" showAdvancedTooltip="true" range="0,1" min="0" max="1" step="0.1" width="100%" showHandleTooltip="false" inputsAsTooltips="true" class="sapUiLargeNoBottom" enabled="{= ${/fFixM} !== true}"/>
+					                <RangeSlider id="setRangeS" showAdvancedTooltip="true" range="0,1" min="0" max="1" step="0.1" width="100%" showHandleTooltip="false" inputsAsTooltips="true" class="sapUiNoMarginBottom" enabled="{= ${/fFixS} !== true}"/>
 
 
 
@@ -114,7 +123,7 @@
 					            </l:content>
 				        	</l:Grid>
 				    	</content>
-					</Panel>
+					</Panel> -->
 				</l:content>
 			</l:Grid>
 			<!-- Tabs -->

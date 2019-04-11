@@ -9,12 +9,22 @@
             vSpacing="0"
             defaultSpan="XL3 L3 M3 S3">
             <l:content>
-                <Title text=""/>
-                <Title level="H5" text="Constant">
+               <!--  <Title level="H5" text=""/>
+                <Title level="H5" text="p0">
                 </Title>
-                <Title level="H5" text="Mean">
+                <Title level="H5" text="p1">
                 </Title>
-                <Title level="H5" text="Sigma">
+                <Title level="H5" text="p2">
+                </Title>
+                <Title level="H5" text="Min">
+                </Title>
+                <Title level="H5" text="Range">
+                </Title>
+                <Title level="H5" text="Max">
+                </Title>
+                <Title level="H5" text="Step">
+                </Title>
+                <Title level="H5" text="Errors">
                 </Title>
 
                 <Title level="H5" text="Fix"/>
@@ -52,41 +62,8 @@
                 <Title level="H5" text="Step"/>
                 <StepInput id="stepC" value="10" step="1" enabled="{= ${/fFixC} !== true}"/>
                 <StepInput id="stepM" value="0.1" step="0.1" displayeValuePrecision="1" enabled="{= ${/fFixM} !== true}"/>
-                <StepInput id="stepS" value="0.1" step="0.1" displayeValuePrecision="1" enabled="{= ${/fFixS} !== true}"/>
-
-
-
-
-
-                <!-- <Title level="H5" text="Constant">
-                    <layoutData>
-                        <l:GridData span="XL4 L4 M4 S4" />
-                    </layoutData>
-                </Title>
-                <Title level="H5" text="Mean">
-                    <layoutData>
-                        <l:GridData span="XL4 L4 M4 S4" />
-                    </layoutData>
-                </Title>
-                <Title level="H5" text="Sigma">
-                    <layoutData>
-                        <l:GridData span="XL4 L4 M4 S4" />
-                    </layoutData>
-                </Title> -->
-                
+                <StepInput id="stepS" value="0.1" step="0.1" displayeValuePrecision="1" enabled="{= ${/fFixS} !== true}"/> -->
             </l:content>
         </l:Grid>
-        <!-- <panels>
-            <custom:CustomPanel title="Columns Setting (Custom Panel)" type="custom1">
-                <custom:content>
-                    <RadioButtonGroup columns="2">
-                        <buttons>
-                            <RadioButton text="All Data"/>
-                            <RadioButton text="Evaluated Data"/>
-                        </buttons>
-                    </RadioButtonGroup>
-                </custom:content>
-            </custom:CustomPanel>
-        </panels> -->
     </P13nDialog>
 </core:FragmentDefinition>
