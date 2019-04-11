@@ -96,6 +96,17 @@ sap.ui.define([
          return;
       },
 
+      backPanel: function() {
+         //Each time we click the button, we go one step back
+         count--;
+         if(count < 0) return;
+         if(!this.copyModel[count]) return;
+
+         JSROOT.extend(this._data, this.copyModel[count]);
+         this.getView().getModel().updateBindings();
+         return;
+      },
+
      //Change the input text field. When a function is seleced, it appears on the text input field and
      //on the text area.
        onTypeXYChange: function(){
