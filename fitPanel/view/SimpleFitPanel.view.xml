@@ -60,7 +60,8 @@
 							<l:GridData span="L4 M6 S6"/>
 						</layoutData>
 					</Text>
-					<Panel expandable="true" expanded="false" headerText="Set Parameters" width="auto" class="sapUiNoMargin fitPanelStyle">
+					<Button text="Set Parameters" press="setParametersDialog" />
+					<!-- <Panel expandable="true" expanded="false" headerText="Set Parameters" width="auto" class="sapUiNoMargin fitPanelStyle">
 						<content>
 							<l:Grid
 				            class="sapUiSizeCompact"
@@ -68,13 +69,11 @@
 				            defaultSpan="XL3 L3 M3 S3">
 					            <l:content>
 					                <Title text=""/>
-					                <Title level="H5" text="Constant">
+					                <Title level="H5" text="p0">
 					                </Title>
-					                <Title level="H5" text="Mean">
+					                <Title level="H5" text="p1">
 					                </Title>
-					                <Title level="H5" text="Sigma">
-					                </Title>
-					                 <Title level="H5" text="Constant">
+					                 <Title level="H5" text="p2">
 					                </Title>
 					                 <Title level="H5" text="Constant">
 					                </Title>
@@ -124,7 +123,7 @@
 					            </l:content>
 				        	</l:Grid>
 				    	</content>
-					</Panel>
+					</Panel> -->
 				</l:content>
 			</l:Grid>
 			<!-- Tabs -->

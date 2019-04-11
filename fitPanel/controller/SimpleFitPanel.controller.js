@@ -2,10 +2,9 @@ sap.ui.define([
    'rootui5/panel/Controller',
    'sap/ui/model/json/JSONModel',
    'sap/ui/unified/ColorPickerPopover',
-   'sap/m/MessageBox',
-   'sap/m/MessageToast',
-   'sap/m/Button'
-], function (GuiPanelController, JSONModel, ColorPickerPopover, MessageBox, MessageToast, Button) {
+   'sap/m/Button',
+   'sap/m/Table'
+], function (GuiPanelController, JSONModel, ColorPickerPopover, Button, Table) {
 
    "use strict";
    var count = 0;
@@ -162,9 +161,92 @@ sap.ui.define([
       },
 
       setParametersDialog: function(){
+         var aColumnData = [{
+            columnId: "Name"
+         },
+         {
+            columnId: "Fix"
+         },
+         {
+            columnId: "Bound"
+         },
+         {
+            columnId: "Value"
+         },
+         {
+            columnId: "Min"
+         },
+         {
+            columnId: "Range"
+         },
+         {
+            columnId: "Max"
+         },
+         {
+            columnId: "Steps"
+         },
+         {
+            columnId: "Errors"
+         }];
+
+         var colModel = new sap.ui.model.json.JSONModel();
+         colModel.setData({
+            columns: aColumnData
+         });
+
          var oPersonalizationDialog = sap.ui.xmlfragment("localapp.view.SetParameters", this);
          this.getView().addDependent(oPersonalizationDialog);
          oPersonalizationDialog.open();
+         var func = this.getView().byId("selectedOpText").getText();
+         var oTable = new sap.m.Table({});
+         oTable.setModel(colModel);
+
+         oTable.bindAggregation("columns", "/columns", function(index, context) {
+            return new sap.m.Column({
+               header: new sap.m.Label({
+                  text: context.getObject().columnId
+               }),
+            });
+         });
+
+         oTable.bindItems("/rows", function(index, context) {
+            var obj = context.getObject();
+            var row = new sap.m.ColumnListItem();
+
+            for(var k in obj) {
+               row.addCell(new sap.m.Text({
+                  text: obj[k]
+               }));
+            }
+
+            return row;
+         });
+
+         oTable.placeAt("content");
+
+         // if (func == "gaus"){
+         //    var par = 3;
+         //    for (var i=0; i<par; i++){
+         //       for (var j=0; j<8; j++){
+
+         //       }
+         //       //oPersonalizationDialog.addContent(new sap.m.Title)
+         //    }
+         // }
+         // for (var i=0; i<5; i++){
+         //    oTable.addContent(new sap.m.Label({
+         //       text: "label",
+         //       columns: [ new sap.m.Column({
+         //          header: new sap.m.Text
+         //       })
+
+         //       ]
+         //    }));
+         //    oPersonalizationDialog.addContent(new sap.m.Text({
+         //       text: "text"
+         //    }));
+         // }
+
       },
 
 
@@ -190,7 +272,6 @@ sap.ui.define([
          //oView.byId(this.inputId).setValue(oEvent.getParameter("colorString"));
          this.inputId = "";
          var color = oEvent.getParameter("colorString");
-         MessageToast.show("Chosen color string: " + color);
       },
 
       updateRange: function() {
@@ -202,8 +283,7 @@ sap.ui.define([
          data.fUpdateRange[0] = range[0];
          data.fUpdateRange[1] = range[1];
       },
-  
-
+      
    });
 
    return 
