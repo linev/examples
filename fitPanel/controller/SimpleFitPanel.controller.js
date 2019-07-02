@@ -2,13 +2,12 @@ sap.ui.define([
    'rootui5/panel/Controller',
    'sap/ui/model/json/JSONModel',
    'sap/ui/unified/ColorPickerPopover',
-   'sap/m/MessageBox',
-   'sap/m/MessageToast',
-   'sap/m/Button'
-], function (GuiPanelController, JSONModel, ColorPickerPopover, MessageBox, MessageToast, Button) {
+   'sap/m/Button',
+   'sap/m/Table'
+], function (GuiPanelController, JSONModel, ColorPickerPopover, Button, Table) {
 
    "use strict";
-
+   var count = 0;
    return GuiPanelController.extend("localapp.controller.SimpleFitPanel",{
 
          //function called from GuiPanelController
@@ -19,33 +18,14 @@ sap.ui.define([
          var data = {
                //fDataSet:[ { fId:"1", fSet: "----" } ],
                fSelectDataId: "2",
-               fMinRange: -4,
-               fMaxRange: 4,
+               // fMinRange: -4,
+               // fMaxRange: 4,
                fStep: 0.01,
-               fRange: [-4,4]
+               fRange: [-4,4],
+               fUpdateRange: [-4,4]
          };
          this.getView().setModel(new JSONModel(data));
          this._data = data; 
-         var myControl = new Button({ color: "#f00" });
-
-         // var style = document.createElement("style");
-         // document.head.appendChild(style);
-         // style.type = "text/css";
-         // style.innerHTML = "";
-         // var oDUmmy = new sap.ui.core.Control();
-         // sap.ui.core.Control.prototype.changeColor = function(oColor){
-         //    style.innerHTML = style.innerHTML + '.' + oColor + '{background-color:' + oColor + ' !important;}';
-         //    this.addStyleClass(oColor);
-         //  }
-         // sap.ui.core.Control.prototype.addCustomStyle = function(oClassName,oStyle){
-         //    style.innerHTML = style.innerHTML + '.' + oClassName + '{' + oStyle + ' !important;}';
-         //    this.addStyleClass(oClassName);
-         // }
-
-         // var oButton = this.getView().byId("test");
-         // oButton.changeColor("red"); // change the color of the button
-
-
       },
 
 
@@ -64,17 +44,15 @@ sap.ui.define([
                this.copyModel = JSROOT.extend({},data);
             }
          }
-
-
          else {
          }
-
 
       },
 
       //Fitting Button
       doFit: function() {
-
+         //Keep the #times the button is clicked
+         count++;
          //Data is a new model. With getValue() we select the value of the parameter specified from id
          var data = this.getView().getModel().getData();
          //var func = this.getView().byId("TypeXY").getValue();
@@ -82,18 +60,14 @@ sap.ui.define([
          //We pass the value from func to C++ fRealFunc
          data.fRealFunc = func;
 
-         var range = this.getView().byId("Slider").getRange();
-         console.log("Slider " + range);
-
-         //We pass the values from range array in JS to C++ fRange array
-         data.fRange[0] = range[0];
-         data.fRange[1] = range[1];
-
          //Refresh the model
          this.getView().getModel().refresh();
+         //Each time we click the button, we keep the current state of the model
+         this.copyModel[count] = JSROOT.extend({},data);
 
          if (this.websocket)
             this.websocket.Send('DOFIT:'+this.getView().getModel().getJSON());
+
       },
 
       onPanelExit: function(){
@@ -105,6 +79,30 @@ sap.ui.define([
          if(!this.copyModel) return;
 
          JSROOT.extend(this._data, this.copyModel);
+         this.getView().getModel().updateBindings();
+         this.byId("selectedOpText").setText("gaus");
+         this.byId("OperationText").setValue("");
+         return;
+      },
+
+      backPanel: function() {
+         //Each time we click the button, we go one step back
+         count--;
+         if(count < 0) return;
+         if(!this.copyModel[count]) return;
+
+         JSROOT.extend(this._data, this.copyModel[count]);
+         this.getView().getModel().updateBindings();
+         return;
+      },
+
+      backPanel: function() {
+         //Each time we click the button, we go one step back
+         count--;
+         if(count < 0) return;
+         if(!this.copyModel[count]) return;
+
+         JSROOT.extend(this._data, this.copyModel[count]);
          this.getView().getModel().updateBindings();
          return;
       },
@@ -174,9 +172,92 @@ sap.ui.define([
       },
 
       setParametersDialog: function(){
+         var aColumnData = [{
+            columnId: "Name"
+         },
+         {
+            columnId: "Fix"
+         },
+         {
+            columnId: "Bound"
+         },
+         {
+            columnId: "Value"
+         },
+         {
+            columnId: "Min"
+         },
+         {
+            columnId: "Range"
+         },
+         {
+            columnId: "Max"
+         },
+         {
+            columnId: "Steps"
+         },
+         {
+            columnId: "Errors"
+         }];
+
+         var colModel = new sap.ui.model.json.JSONModel();
+         colModel.setData({
+            columns: aColumnData
+         });
+
          var oPersonalizationDialog = sap.ui.xmlfragment("localapp.view.SetParameters", this);
          this.getView().addDependent(oPersonalizationDialog);
          oPersonalizationDialog.open();
+         var func = this.getView().byId("selectedOpText").getText();
+         var oTable = new sap.m.Table({});
+         oTable.setModel(colModel);
+
+         oTable.bindAggregation("columns", "/columns", function(index, context) {
+            return new sap.m.Column({
+               header: new sap.m.Label({
+                  text: context.getObject().columnId
+               }),
+            });
+         });
+
+         oTable.bindItems("/rows", function(index, context) {
+            var obj = context.getObject();
+            var row = new sap.m.ColumnListItem();
+
+            for(var k in obj) {
+               row.addCell(new sap.m.Text({
+                  text: obj[k]
+               }));
+            }
+
+            return row;
+         });
+
+         oTable.placeAt("content");
+
+         // if (func == "gaus"){
+         //    var par = 3;
+         //    for (var i=0; i<par; i++){
+         //       for (var j=0; j<8; j++){
+
+         //       }
+         //       //oPersonalizationDialog.addContent(new sap.m.Title)
+         //    }
+         // }
+         // for (var i=0; i<5; i++){
+         //    oTable.addContent(new sap.m.Label({
+         //       text: "label",
+         //       columns: [ new sap.m.Column({
+         //          header: new sap.m.Text
+         //       })
+
+         //       ]
+         //    }));
+         //    oPersonalizationDialog.addContent(new sap.m.Text({
+         //       text: "text"
+         //    }));
+         // }
+
       },
 
 
@@ -197,25 +278,23 @@ sap.ui.define([
          this.oColorPickerPopover.openBy(oEvent.getSource());
       },
 
-
       handleChange: function (oEvent) {
          var oView = this.getView();
          //oView.byId(this.inputId).setValue(oEvent.getParameter("colorString"));
          this.inputId = "";
          var color = oEvent.getParameter("colorString");
-         var oButtonContour = this.getView().byId("colorContour");
-         var oButtonInnerContour = oButtonContour.$().find('.sapMBtnInner');
-         oButtonInnerContour.css('background',color);
-         oButtonInnerContour.css('color','#FFFFFF');
-         oButtonInnerContour.css('text-shadow','1px 1px 2px #333333');
-
-         var oButtonConf = this.getView().byId("colorConf");
-         var oButtonInnerConf = oButtonConf.$().find('.sapMBtnInner');
-         oButtonInnerConf.css('background',color);
-         oButtonInnerConf.css('color','#FFFFFF');
-         oButtonInnerConf.css('text-shadow','1px 1px 2px #333333');
       },
 
+      updateRange: function() {
+         var data = this.getView().getModel().getData();
+         var range = this.getView().byId("Slider").getRange();
+         console.log("Slider " + range);
+
+         //We pass the values from range array in JS to C++ fRange array
+         data.fUpdateRange[0] = range[0];
+         data.fUpdateRange[1] = range[1];
+      },
+      
    });
 
    return 
