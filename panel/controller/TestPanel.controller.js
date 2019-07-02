@@ -16,6 +16,8 @@ sap.ui.define([
             fSelectModelId: "0"
          });
          this.getView().setModel(model);
+
+         if (document) document.title = "TestPanel";
       },
 
       // function called from GuiPanelController
