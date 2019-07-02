@@ -1,16 +1,14 @@
 sap.ui.define([
-   'sap/ui/jsroot/GuiPanelController',
+   'rootui5/panel/Controller',
    'sap/ui/model/json/JSONModel'
 ], function (GuiPanelController, JSONModel) {
    "use strict";
 
    return GuiPanelController.extend("localapp.controller.TestPanel", {
 
-      // function called from GuiPanelController
+      // function called from panel.Controller
       onPanelInit : function() {
-         var id = this.getView().getId();
-         // console.log("Initialization TestPanel id = " + id);
-         // such data will be produced on server from TFitPanelModel
+         // dummy model for initialization
          var model = new JSONModel({
             fDataNames:[ { fId:"1", fName: "----" } ],
             fSelectDataId: "0",
@@ -23,17 +21,17 @@ sap.ui.define([
       // function called from GuiPanelController
       onPanelExit : function() {
       },
-      
+
 
       OnWebsocketMsg: function(handle, msg, offset) {
          if (typeof msg != "string") {
             // console.log('TestPanel ArrayBuffer size ' +  msg.byteLength + ' offset ' + offset);
             var arr = new Float32Array(msg, offset);
 
-            this.getView().byId("SampleText").setText("Got binary as float array\n" + 
+            this.getView().byId("SampleText").setText("Got binary as float array\n" +
                   'array length ' + arr.length + '\n' +
                   ' [0] = ' + arr[0] + '\n' +
-                  ' [7] = ' + arr[7] + '\n' + 
+                  ' [7] = ' + arr[7] + '\n' +
                   ' [last] = ' + arr[arr.length-1]);
 
             return;
@@ -52,7 +50,7 @@ sap.ui.define([
             this.getView().byId("SampleText").setText("Get message:\n" + msg);
          }
       },
-      
+
       handleGetBinary: function() {
          // just request binary data
          if (this.websocket)
