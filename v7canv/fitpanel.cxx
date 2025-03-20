@@ -27,8 +27,8 @@ void fitpanel0() {
   using namespace ROOT;
 
   // Create the histogram.
-  Experimental::TAxisConfig xaxis(10, 0., 10.);
-  auto pHist = std::make_shared<Experimental::TH1D>(xaxis);
+  TAxisConfig xaxis(10, 0., 10.);
+  auto pHist = std::make_shared<TH1D>(xaxis);
 
   // Fill a few points.
   pHist->Fill(1);
@@ -37,17 +37,17 @@ void fitpanel0() {
   pHist->Fill(3);
 
 
-  auto panel = std::make_shared<ROOT::Experimental::TFitPanel>("FitPanel Title");
+  auto panel = std::make_shared<ROOT::TFitPanel>("FitPanel Title");
   panel->Show();
 
   // Register the histogram with ROOT: now it lives even after draw() ends.
-  Experimental::TDirectory::Heap().Add("fitpanel", panel);
+  TDirectory::Heap().Add("fitpanel", panel);
 
 
   // Create a canvas to be displayed.
-  // auto canvas = Experimental::TCanvas::Create("Canvas Title");
-  // canvas->Draw(pHist)->SetLineColor(Experimental::TColor::kRed);
-  // canvas->Draw(pHist2)->SetLineColor(Experimental::TColor::kBlue);
+  // auto canvas = TCanvas::Create("Canvas Title");
+  // canvas->Draw(pHist)->SetLineColor(TColor::kRed);
+  // canvas->Draw(pHist2)->SetLineColor(TColor::kBlue);
 
   // canvas->Show();
 }
@@ -57,9 +57,9 @@ void fitpanel() {
    using namespace ROOT;
 
    // TODO - also keep axis correctly in the help
-   auto xaxis = std::make_shared<Experimental::TAxisConfig>(10, 0., 10.);
+   auto xaxis = std::make_shared<TAxisConfig>(10, 0., 10.);
    // Create the histogram.
-   auto pHist = std::make_shared<Experimental::TH1D>(*xaxis.get());
+   auto pHist = std::make_shared<TH1D>(*xaxis.get());
 
    // Fill a few points.
    pHist->Fill(1);
@@ -67,17 +67,17 @@ void fitpanel() {
    pHist->Fill(2);
    pHist->Fill(3);
 
-   auto canvas = Experimental::TCanvas::Create("Canvas Title");
-   canvas->Draw(pHist)->SetLineColor(Experimental::TColor::kRed);
+   auto canvas = TCanvas::Create("Canvas Title");
+   canvas->Draw(pHist)->SetLineColor(TColor::kRed);
 
    canvas->Show();
    canvas->Update(); // need to ensure canvas is drawn
 
-   auto panel = std::make_shared<ROOT::Experimental::TFitPanel>("FitPanel Title");
+   auto panel = std::make_shared<ROOT::TFitPanel>("FitPanel Title");
 
-   Experimental::TDirectory::Heap().Add("fitpanel", panel);
-   Experimental::TDirectory::Heap().Add("firsthisto", pHist);
-   Experimental::TDirectory::Heap().Add("firstaxis", xaxis);
+   TDirectory::Heap().Add("fitpanel", panel);
+   TDirectory::Heap().Add("firsthisto", pHist);
+   TDirectory::Heap().Add("firstaxis", xaxis);
 
    // TODO: how combine there methods together
    // here std::shread_ptr<> on both sides

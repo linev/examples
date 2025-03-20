@@ -24,9 +24,9 @@ void draw_two() {
   using namespace ROOT;
 
   // Create the histogram.
-  Experimental::TAxisConfig xaxis(10, 0., 10.);
-  auto pHist = std::make_shared<Experimental::TH1D>(xaxis);
-  auto pHist2 = std::make_shared<Experimental::TH1D>(xaxis);
+  TAxisConfig xaxis(10, 0., 10.);
+  auto pHist = std::make_shared<TH1D>(xaxis);
+  auto pHist2 = std::make_shared<TH1D>(xaxis);
 
   // Fill a few points.
   pHist->Fill(1);
@@ -40,12 +40,12 @@ void draw_two() {
   pHist2->Fill(7);
 
   // Create a canvas to be displayed.
-  auto canvas = Experimental::TCanvas::Create("Canvas Title");
+  auto canvas = TCanvas::Create("Canvas Title");
 
   auto draw1 = canvas->Draw(pHist);
-  draw1->SetLineColor(Experimental::TColor::kRed);
+  draw1->SetLineColor(TColor::kRed);
 
-  canvas->Draw(pHist2)->SetLineColor(Experimental::TColor::kBlue);
+  canvas->Draw(pHist2)->SetLineColor(TColor::kBlue);
 
   canvas->Show();
  

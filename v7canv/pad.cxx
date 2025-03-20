@@ -30,17 +30,17 @@ void pad()
    // using namespace ROOT;
    // using namespace ROOT::Experimental;
 
-   auto canvas = ROOT::Experimental::TCanvas::Create("what to do with a pad!");
+   auto canvas = ROOT::TCanvas::Create("what to do with a pad!");
    auto pads = canvas->Divide(3, 3);
    auto &pad12 = pads[1][2];
    pad12->SetAllAxisBounds({{50., 250.}, {-1., 1.}});
    // Please fix TLine such that {x,y} are TPadPos!
-   //pad12->Draw(Experimental::TLine({100._user, 0.5_normal}, {200._user, 0.5_normal}));
+   //pad12->Draw(TLine({100._user, 0.5_normal}, {200._user, 0.5_normal}));
 
    // Create the histogram.
-     ROOT::Experimental::TAxisConfig xaxis(10, 0., 10.);
-     auto pHist = std::make_shared<ROOT::Experimental::TH1D>(xaxis);
-     auto pHist2 = std::make_shared<ROOT::Experimental::TH1D>(xaxis);
+     ROOT::TAxisConfig xaxis(10, 0., 10.);
+     auto pHist = std::make_shared<ROOT::TH1D>(xaxis);
+     auto pHist2 = std::make_shared<ROOT::TH1D>(xaxis);
 
      // Fill a few points.
      pHist->Fill(1);
@@ -53,9 +53,9 @@ void pad()
      pHist2->Fill(6);
      pHist2->Fill(7);
 
-     pads[1][1]->Draw(pHist)->SetLineColor(ROOT::Experimental::TColor::kRed);
-     pads[0][0]->Draw(pHist2)->SetLineColor(ROOT::Experimental::TColor::kBlue);
-     pads[1][2]->Draw(pHist2)->SetLineColor(ROOT::Experimental::TColor::kRed);
+     pads[1][1]->Draw(pHist)->SetLineColor(ROOT::TColor::kRed);
+     pads[0][0]->Draw(pHist2)->SetLineColor(ROOT::TColor::kBlue);
+     pads[1][2]->Draw(pHist2)->SetLineColor(ROOT::TColor::kRed);
 
    canvas->SaveAs("pad.json");
    canvas->Show();

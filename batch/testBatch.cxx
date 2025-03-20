@@ -20,7 +20,7 @@
 
 class WHandler {
 private:
-   std::shared_ptr<ROOT::Experimental::RWebWindow>  fWindow;
+   std::shared_ptr<ROOT::RWebWindow>  fWindow;
    unsigned fConnId{0};
 
 public:
@@ -87,7 +87,7 @@ public:
    void popupTest()
    {
 
-      fWindow =  ROOT::Experimental::RWebWindowsManager::Instance()->CreateWindow();
+      fWindow =  ROOT::RWebWindowsManager::Instance()->CreateWindow();
 
       // this is very important, it defines name of openui5 widget, which
       // will run on the client side

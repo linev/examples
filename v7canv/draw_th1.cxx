@@ -33,8 +33,8 @@ void draw_th1() {
 
    // Create histograms
    TAxisConfig xaxis(100, -10., 10.);
-   auto pHist = std::make_shared<ROOT::Experimental::TH1D>(xaxis);
-   auto pHist2 = std::make_shared<ROOT::Experimental::TH1D>(xaxis);
+   auto pHist = std::make_shared<ROOT::TH1D>(xaxis);
+   auto pHist2 = std::make_shared<ROOT::TH1D>(xaxis);
 
    TRandom3 random;
    Float_t px, py;

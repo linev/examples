@@ -29,15 +29,15 @@ void line()
    using namespace ROOT;
    using namespace ROOT::Experimental;
 
-   auto canvas = ROOT::Experimental::TCanvas::Create("user coordinate");
+   auto canvas = ROOT::TCanvas::Create("user coordinate");
 
    // create user coordiantes
    canvas->SetAllAxisBounds({{50., 250.}, {-1., 1.}});
 
    // Please fix TLine such that {x,y} are TPadPos!
-   //pad12->Draw(Experimental::TLine({100._user, 0.5_normal}, {200._user, 0.5_normal}));
+   //pad12->Draw(TLine({100._user, 0.5_normal}, {200._user, 0.5_normal}));
 
-   canvas->Draw(ROOT::Experimental::TLine({100._user + 0.1_normal - 50._px, 0.2_normal}, {200._user, 0.8_normal}));
+   canvas->Draw(ROOT::TLine({100._user + 0.1_normal - 50._px, 0.2_normal}, {200._user, 0.8_normal}));
 
    canvas->SaveAs("line.json");
    canvas->Show();

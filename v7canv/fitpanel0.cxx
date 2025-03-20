@@ -20,11 +20,11 @@
 
 void fitpanel0() 
 {
-  auto panel = std::make_shared<ROOT::Experimental::TFitPanel>("FitPanel Title");
+  auto panel = std::make_shared<ROOT::TFitPanel>("FitPanel Title");
   panel->Show();
 
   // Register the histogram with ROOT: now it lives even after draw() ends.
-  ROOT::Experimental::TDirectory::Heap().Add("fitpanel", panel);
+  ROOT::TDirectory::Heap().Add("fitpanel", panel);
 }
 
 

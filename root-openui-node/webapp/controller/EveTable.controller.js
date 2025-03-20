@@ -45,7 +45,7 @@ sap.ui.define([
       },
 
       findTable: function(holder) {
-         if ( holder.fRnrSelf && holder._typename == "ROOT::Experimental::REveDataTable" )
+         if ( holder.fRnrSelf && holder._typename == "ROOT::REveDataTable" )
             return holder;
 
          for (var i = 0; i < holder.childs.length; ++i)

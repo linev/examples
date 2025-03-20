@@ -260,7 +260,7 @@ sap.ui.define([
       },
 
       makeDataForGED : function (element) {
-         // remove ROOT::Experimental::
+         // remove ROOT::
          var shtype = element._typename.substring(20);
          var cgd = this.oGuiClassDef[shtype];
          var arrw = [];

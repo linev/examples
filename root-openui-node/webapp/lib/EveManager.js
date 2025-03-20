@@ -396,7 +396,7 @@
 
       for (var k=0;k<chlds.length;++k) {
          if (!chlds[k].childs) continue;
-         if (chlds[k]._typename == "ROOT::Experimental::REveViewerList") return chlds[k].childs;
+         if (chlds[k]._typename == "ROOT::REveViewerList") return chlds[k].childs;
          var res = this.FindViewers(chlds[k].childs);
          if (res) return res;
       }
