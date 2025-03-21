@@ -7,9 +7,9 @@ sap.ui.define([
    return GuiPanelController.extend("localapp.controller.TestPanel", {
 
       // function called from panel.Controller
-      onPanelInit : function() {
+      onPanelInit() {
          // dummy model for initialization
-         var model = new JSONModel({
+         let model = new JSONModel({
             fDataNames:[ { fId:"1", fName: "----" } ],
             fSelectDataId: "0",
             fModelNames: [ { fId:"1", fName: "----" } ],
@@ -21,14 +21,14 @@ sap.ui.define([
       },
 
       // function called from GuiPanelController
-      onPanelExit : function() {
+      onPanelExit() {
       },
 
 
-      OnWebsocketMsg: function(handle, msg, offset) {
+      onPanelReceive(msg, offset) {
          if (typeof msg != "string") {
             // console.log('TestPanel ArrayBuffer size ' +  msg.byteLength + ' offset ' + offset);
-            var arr = new Float32Array(msg, offset);
+            let arr = new Float32Array(msg, offset);
 
             this.getView().byId("SampleText").setText("Got binary as float array\n" +
                   'array length ' + arr.length + '\n' +
@@ -40,8 +40,8 @@ sap.ui.define([
          }
 
          if (msg.indexOf("MODEL:")==0) {
-            var json = msg.substr(6);
-            var data = JSROOT.parse(json);
+            var json = msg.slice(6);
+            var data = JSON.parse(json);
 
             this.getView().byId("SampleText").setText("Model size:" + json.length);
 
@@ -53,20 +53,19 @@ sap.ui.define([
          }
       },
 
-      handleGetBinary: function() {
+      handleGetBinary() {
          // just request binary data
-         if (this.websocket)
-            this.websocket.Send("GET_BINARY");
+         this.panelSend("GET_BINARY");
       },
 
-      handleFitPress : function() {
+      handleFitPress() {
          // To now with very simple logic
          // One can bind some parameters direct to the model and use values from model
          var v1 = this.getView().byId("FitData"),
              v2 = this.getView().byId("FitModel");
 
-         if (this.websocket && v1 && v2)
-            this.websocket.Send('DOFIT:"' + v1.getValue() + '","' + v2.getValue() + '"');
+         if (v1 && v2)
+            this.panelSend('DOFIT:"' + v1.getValue() + '","' + v2.getValue() + '"');
          console.log("test!" + v1);
       }
 
