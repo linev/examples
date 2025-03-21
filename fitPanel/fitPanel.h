@@ -1,4 +1,4 @@
-#include <ROOT/RWebWindowsManager.hxx>
+#include <ROOT/RWebWindow.hxx>
 
 #include <vector>
 #include <string>
@@ -85,9 +85,9 @@ struct FitPanelModel {
 
 class FitPanel {
 private:
-   std::shared_ptr<ROOT::Experimental::RWebWindow> fWindow;
-   unsigned fConnId{0};
-   TH1 *fHist{nullptr};
+   std::shared_ptr<ROOT::RWebWindow> fWindow;
+   unsigned fConnId = 0;
+   TH1 *fHist = nullptr;
 
 public:
    FitPanel() {};
@@ -99,202 +99,202 @@ public:
       fHist = hist;
    }
 
+   void ProcessConnection(unsigned connid)
+   {
+      fConnId = connid;
+      printf("connection established %u\n", fConnId);
+      fConnId = connid;
+      //printf("connection established %u\n", fConnId);
+      fWindow->Send(fConnId, "INITDONE");
+
+      FitPanelModel model;
+
+      //ComboBox for Data Set
+      //model.fDataSet.push_back(ComboBoxItem("1", "No Selection"));
+      model.fDataSet.push_back(ComboBoxItem("1", "TH1F::hpx"));
+      model.fDataSet.push_back(ComboBoxItem("2", "TH2F::hpxhpy"));
+      model.fDataSet.push_back(ComboBoxItem("3", "TProfile::hprof"));
+      model.fDataSet.push_back(ComboBoxItem("4", "TNtuple::ntuple"));
+      model.fSelectDataId = "2";
+
+      //ComboBox for Fit Function --- Type
+      model.fTypeFunc.push_back(ComboBoxItem("0", "Predef-1D"));
+      model.fTypeFunc.push_back(ComboBoxItem("1", "User Func"));
+      model.fSelectTypeId = "0";
+
+      //Sub ComboBox for Type Function
+      model.fSelectXYId = "1";
+
+
+      //corresponds when Type == Predef-1D (fSelectedTypeID == 0)
+      model.fTypeXYAll.emplace_back();
+      std::vector<ComboBoxItem> &vec0 = model.fTypeXYAll.back();
+      vec0.push_back(ComboBoxItem("1", "gaus"));
+      vec0.push_back(ComboBoxItem("2", "gausn"));
+      vec0.push_back(ComboBoxItem("3", "expo"));
+      vec0.push_back(ComboBoxItem("4", "landau"));
+      vec0.push_back(ComboBoxItem("5", "landaun"));
+      vec0.push_back(ComboBoxItem("6", "pol0"));
+      vec0.push_back(ComboBoxItem("7", "pol1"));
+      vec0.push_back(ComboBoxItem("8", "pol2"));
+      vec0.push_back(ComboBoxItem("9", "pol3"));
+      vec0.push_back(ComboBoxItem("10", "pol4"));
+      vec0.push_back(ComboBoxItem("11", "pol5"));
+      vec0.push_back(ComboBoxItem("12", "pol6"));
+      vec0.push_back(ComboBoxItem("13", "pol7"));
+      vec0.push_back(ComboBoxItem("14", "pol8"));
+      vec0.push_back(ComboBoxItem("15", "pol9"));
+      vec0.push_back(ComboBoxItem("16", "cheb0"));
+      vec0.push_back(ComboBoxItem("17", "cheb1"));
+      vec0.push_back(ComboBoxItem("18", "cheb2"));
+      vec0.push_back(ComboBoxItem("19", "cheb3"));
+      vec0.push_back(ComboBoxItem("20", "cheb4"));
+      vec0.push_back(ComboBoxItem("21", "cheb5"));
+      vec0.push_back(ComboBoxItem("22", "cheb6"));
+      vec0.push_back(ComboBoxItem("23", "cheb7"));
+      vec0.push_back(ComboBoxItem("24", "cheb8"));
+      vec0.push_back(ComboBoxItem("25", "cheb9"));
+      vec0.push_back(ComboBoxItem("26", "user"));
+
+
+      //corresponds when Type == User Func (fSelectedTypeID == 1)
+      model.fTypeXYAll.emplace_back();
+      std::vector<ComboBoxItem> &vec1 = model.fTypeXYAll.back();
+      vec1.push_back(ComboBoxItem("1", "chebyshev0"));
+      vec1.push_back(ComboBoxItem("2", "chebyshev1"));
+      vec1.push_back(ComboBoxItem("3", "chebyshev2"));
+      vec1.push_back(ComboBoxItem("4", "chebyshev3"));
+      vec1.push_back(ComboBoxItem("5", "chebyshev4"));
+      vec1.push_back(ComboBoxItem("6", "chebyshev5"));
+      vec1.push_back(ComboBoxItem("7", "chebyshev6"));
+      vec1.push_back(ComboBoxItem("8", "chebyshev7"));
+      vec1.push_back(ComboBoxItem("9", "chebyshev8"));
+      vec1.push_back(ComboBoxItem("10", "chebyshev9"));
+
+      //ComboBox for General Tab --- Method
+      model.fMethod.push_back(ComboBoxItem("1", "Linear Chi-square"));
+      model.fMethod.push_back(ComboBoxItem("2", "Non-Linear Chi-square"));
+      model.fMethod.push_back(ComboBoxItem("3", "Linear Chi-square with Robust"));
+      model.fMethod.push_back(ComboBoxItem("4", "Binned Likelihood"));
+      model.fSelectMethodId = "1";
+
+      //Sub ComboBox for Minimization Tab --- Method
+      model.fSelectMethodMinId = "1";
+
+      // corresponds to library == 0
+      model.fMethodMinAll.emplace_back();
+      std::vector<ComboBoxItem> &vect0 = model.fMethodMinAll.back();
+      vect0.push_back(ComboBoxItem("1", "MIGRAD"));
+      vect0.push_back(ComboBoxItem("2", "SIMPLEX"));
+      vect0.push_back(ComboBoxItem("3", "SCAN"));
+      vect0.push_back(ComboBoxItem("4", "Combination"));
+
+      // corresponds to library == 1
+      model.fMethodMinAll.emplace_back();
+      std::vector<ComboBoxItem> &vect1 = model.fMethodMinAll.back();
+      vect1.push_back(ComboBoxItem("1", "MIGRAD"));
+      vect1.push_back(ComboBoxItem("2", "SIMPLEX"));
+      vect1.push_back(ComboBoxItem("3", "SCAN"));
+      vect1.push_back(ComboBoxItem("4", "Combination"));
+
+      // corresponds to library == 2
+      model.fMethodMinAll.emplace_back();
+      std::vector<ComboBoxItem> &vect2 = model.fMethodMinAll.back();
+      vect2.push_back(ComboBoxItem("1", "FUMILI"));
+
+      // corresponds to library == 3
+      model.fMethodMinAll.emplace_back();
+      std::vector<ComboBoxItem> &vect3 = model.fMethodMinAll.back();
+      // vect3.push_back(ComboBoxItem("1", "Lib3_1"));
+      // vect3.push_back(ComboBoxItem("2", "Lib3_2"));
+
+      // corresponds to library == 4
+      model.fMethodMinAll.emplace_back();
+      std::vector<ComboBoxItem> &vect4 = model.fMethodMinAll.back();
+      vect4.push_back(ComboBoxItem("1", "TMVA Genetic Algorithm"));
+
+      // select items list for initial display
+      model.fMethodMin = model.fMethodMinAll[model.fLibrary];
+      model.fTypeXY = model.fTypeXYAll[model.fTypeId];
+
+      //Contour ComboBoxes
+      model.fContourPar1.push_back(ComboBoxItem("1","Coeff0"));
+      model.fContourPar1.push_back(ComboBoxItem("2","Coeff1"));
+      model.fContourPar1.push_back(ComboBoxItem("3","Coeff3"));
+      model.fContourPar1Id = "1";
+
+      model.fContourPar2.push_back(ComboBoxItem("1","Coeff0"));
+      model.fContourPar2.push_back(ComboBoxItem("2","Coeff1"));
+      model.fContourPar2.push_back(ComboBoxItem("3","Coeff3"));
+      model.fContourPar2Id = "2";
+
+      //Scan ComboBox
+      model.fScanPar.push_back(ComboBoxItem("1","Coeff0"));
+      model.fScanPar.push_back(ComboBoxItem("2","Coeff1"));
+      model.fScanPar.push_back(ComboBoxItem("3","Coeff3"));
+      model.fScanParId = "1";
+
+      model.fUpdateMinRange = -4;
+      model.fUpdateMaxRange = 4;
+      model.fMinRange = -4;
+      model.fMaxRange = 4;
+      if (fHist) {
+         model.fUpdateMinRange = fHist->GetXaxis()->GetXmin();
+         model.fUpdateMaxRange = fHist->GetXaxis()->GetXmax();
+      }
+
+      //defined values
+      model.fStep = (model.fMaxRange - model.fMinRange) / 100;
+      model.fRange[0] = model.fMinRange;
+      model.fRange[1] = model.fMaxRange;
+
+      model.fUpdateRange[0] = model.fUpdateMinRange;
+      model.fUpdateRange[1] = model.fUpdateMaxRange;
+      //model.fOperation = 0;
+      model.fFitOptions = 3;
+      model.fRobust = false;
+      model.fLibrary = 0;
+      model.fPrint = 0;
+
+
+      //Checkboxes Values
+      model.fIntegral = false;
+      model.fWeights = false;
+      model.fBins = false;
+      //model.fUseRange = false;
+      model.fAddList = false;
+      model.fUseGradient = false;
+      model.fSame = false;
+      model.fNoStore = false;
+      model.fMinusErrors = false;
+      //model.fImproveFit = false;
+
+      if(model.fNoStore){
+         model.fNoDrawing = true;
+      }
+      else{
+         model.fNoDrawing = false;
+      }
+
+      if((model.fFuncChangeInt >= 6) && (model.fFuncChangeInt <= 15)){
+         model.fLinear = true;
+
+      }
+      else {
+         model.fLinear = false;
+
+      }
+
+      //Communication with the JSONModel in JS
+      // TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("FitPanelModel"));
+      TString json = TBufferJSON::ToJSON(&model);
+
+      fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
+   }
+
    void ProcessData(unsigned connid, const std::string &arg)
    {
 
-      if (arg == "CONN_READY") {
-         printf("Start here\n");
-
-         fConnId = connid;
-         //printf("connection established %u\n", fConnId);
-         fWindow->Send(fConnId, "INITDONE");
-
-         FitPanelModel model;
-
-         //ComboBox for Data Set
-         //model.fDataSet.push_back(ComboBoxItem("1", "No Selection"));
-         model.fDataSet.push_back(ComboBoxItem("1", "TH1F::hpx"));
-         model.fDataSet.push_back(ComboBoxItem("2", "TH2F::hpxhpy"));
-         model.fDataSet.push_back(ComboBoxItem("3", "TProfile::hprof"));
-         model.fDataSet.push_back(ComboBoxItem("4", "TNtuple::ntuple"));
-         model.fSelectDataId = "2";
-
-         //ComboBox for Fit Function --- Type
-         model.fTypeFunc.push_back(ComboBoxItem("0", "Predef-1D"));
-         model.fTypeFunc.push_back(ComboBoxItem("1", "User Func"));
-         model.fSelectTypeId = "0";
-
-         //Sub ComboBox for Type Function
-         model.fSelectXYId = "1";
-
-
-         //corresponds when Type == Predef-1D (fSelectedTypeID == 0)
-         model.fTypeXYAll.emplace_back();
-         std::vector<ComboBoxItem> &vec0 = model.fTypeXYAll.back();
-         vec0.push_back(ComboBoxItem("1", "gaus"));
-         vec0.push_back(ComboBoxItem("2", "gausn"));
-         vec0.push_back(ComboBoxItem("3", "expo"));
-         vec0.push_back(ComboBoxItem("4", "landau"));
-         vec0.push_back(ComboBoxItem("5", "landaun"));
-         vec0.push_back(ComboBoxItem("6", "pol0"));
-         vec0.push_back(ComboBoxItem("7", "pol1"));
-         vec0.push_back(ComboBoxItem("8", "pol2"));
-         vec0.push_back(ComboBoxItem("9", "pol3"));
-         vec0.push_back(ComboBoxItem("10", "pol4"));
-         vec0.push_back(ComboBoxItem("11", "pol5"));
-         vec0.push_back(ComboBoxItem("12", "pol6"));
-         vec0.push_back(ComboBoxItem("13", "pol7"));
-         vec0.push_back(ComboBoxItem("14", "pol8"));
-         vec0.push_back(ComboBoxItem("15", "pol9"));
-         vec0.push_back(ComboBoxItem("16", "cheb0"));
-         vec0.push_back(ComboBoxItem("17", "cheb1"));
-         vec0.push_back(ComboBoxItem("18", "cheb2"));
-         vec0.push_back(ComboBoxItem("19", "cheb3"));
-         vec0.push_back(ComboBoxItem("20", "cheb4"));
-         vec0.push_back(ComboBoxItem("21", "cheb5"));
-         vec0.push_back(ComboBoxItem("22", "cheb6"));
-         vec0.push_back(ComboBoxItem("23", "cheb7"));
-         vec0.push_back(ComboBoxItem("24", "cheb8"));
-         vec0.push_back(ComboBoxItem("25", "cheb9"));
-         vec0.push_back(ComboBoxItem("26", "user"));
-
-
-         //corresponds when Type == User Func (fSelectedTypeID == 1)
-         model.fTypeXYAll.emplace_back();
-         std::vector<ComboBoxItem> &vec1 = model.fTypeXYAll.back();
-         vec1.push_back(ComboBoxItem("1", "chebyshev0"));
-         vec1.push_back(ComboBoxItem("2", "chebyshev1"));
-         vec1.push_back(ComboBoxItem("3", "chebyshev2"));
-         vec1.push_back(ComboBoxItem("4", "chebyshev3"));
-         vec1.push_back(ComboBoxItem("5", "chebyshev4"));
-         vec1.push_back(ComboBoxItem("6", "chebyshev5"));
-         vec1.push_back(ComboBoxItem("7", "chebyshev6"));
-         vec1.push_back(ComboBoxItem("8", "chebyshev7"));
-         vec1.push_back(ComboBoxItem("9", "chebyshev8"));
-         vec1.push_back(ComboBoxItem("10", "chebyshev9"));
-
-         //ComboBox for General Tab --- Method
-         model.fMethod.push_back(ComboBoxItem("1", "Linear Chi-square"));
-         model.fMethod.push_back(ComboBoxItem("2", "Non-Linear Chi-square"));
-         model.fMethod.push_back(ComboBoxItem("3", "Linear Chi-square with Robust"));
-         model.fMethod.push_back(ComboBoxItem("4", "Binned Likelihood"));
-         model.fSelectMethodId = "1";
-
-         //Sub ComboBox for Minimization Tab --- Method
-         model.fSelectMethodMinId = "1";
-
-         // corresponds to library == 0
-         model.fMethodMinAll.emplace_back();
-         std::vector<ComboBoxItem> &vect0 = model.fMethodMinAll.back();
-         vect0.push_back(ComboBoxItem("1", "MIGRAD"));
-         vect0.push_back(ComboBoxItem("2", "SIMPLEX"));
-         vect0.push_back(ComboBoxItem("3", "SCAN"));
-         vect0.push_back(ComboBoxItem("4", "Combination"));
-
-         // corresponds to library == 1
-         model.fMethodMinAll.emplace_back();
-         std::vector<ComboBoxItem> &vect1 = model.fMethodMinAll.back();
-         vect1.push_back(ComboBoxItem("1", "MIGRAD"));
-         vect1.push_back(ComboBoxItem("2", "SIMPLEX"));
-         vect1.push_back(ComboBoxItem("3", "SCAN"));
-         vect1.push_back(ComboBoxItem("4", "Combination"));
-
-         // corresponds to library == 2
-         model.fMethodMinAll.emplace_back();
-         std::vector<ComboBoxItem> &vect2 = model.fMethodMinAll.back();
-         vect2.push_back(ComboBoxItem("1", "FUMILI"));
-
-         // corresponds to library == 3
-         model.fMethodMinAll.emplace_back();
-         std::vector<ComboBoxItem> &vect3 = model.fMethodMinAll.back();
-         // vect3.push_back(ComboBoxItem("1", "Lib3_1"));
-         // vect3.push_back(ComboBoxItem("2", "Lib3_2"));
-
-         // corresponds to library == 4
-         model.fMethodMinAll.emplace_back();
-         std::vector<ComboBoxItem> &vect4 = model.fMethodMinAll.back();
-         vect4.push_back(ComboBoxItem("1", "TMVA Genetic Algorithm"));
-
-         // select items list for initial display
-         model.fMethodMin = model.fMethodMinAll[model.fLibrary];
-         model.fTypeXY = model.fTypeXYAll[model.fTypeId];
-
-         //Contour ComboBoxes
-         model.fContourPar1.push_back(ComboBoxItem("1","Coeff0"));
-         model.fContourPar1.push_back(ComboBoxItem("2","Coeff1"));
-         model.fContourPar1.push_back(ComboBoxItem("3","Coeff3"));
-         model.fContourPar1Id = "1";
-
-         model.fContourPar2.push_back(ComboBoxItem("1","Coeff0"));
-         model.fContourPar2.push_back(ComboBoxItem("2","Coeff1"));
-         model.fContourPar2.push_back(ComboBoxItem("3","Coeff3"));
-         model.fContourPar2Id = "2";
-
-         //Scan ComboBox
-         model.fScanPar.push_back(ComboBoxItem("1","Coeff0"));
-         model.fScanPar.push_back(ComboBoxItem("2","Coeff1"));
-         model.fScanPar.push_back(ComboBoxItem("3","Coeff3"));
-         model.fScanParId = "1";
-
-         model.fUpdateMinRange = -4;
-         model.fUpdateMaxRange = 4;
-         model.fMinRange = -4;
-         model.fMaxRange = 4;
-         if (fHist) {
-            model.fUpdateMinRange = fHist->GetXaxis()->GetXmin();
-            model.fUpdateMaxRange = fHist->GetXaxis()->GetXmax();
-         }
-
-         //defined values
-         model.fStep = (model.fMaxRange - model.fMinRange) / 100;
-         model.fRange[0] = model.fMinRange;
-         model.fRange[1] = model.fMaxRange;
-
-         model.fUpdateRange[0] = model.fUpdateMinRange;
-         model.fUpdateRange[1] = model.fUpdateMaxRange;
-         //model.fOperation = 0;
-         model.fFitOptions = 3;
-         model.fRobust = false;
-         model.fLibrary = 0;
-         model.fPrint = 0;
-
-
-         //Checkboxes Values
-         model.fIntegral = false;
-         model.fWeights = false;
-         model.fBins = false;
-         //model.fUseRange = false;
-         model.fAddList = false;
-         model.fUseGradient = false;
-         model.fSame = false;
-         model.fNoStore = false;
-         model.fMinusErrors = false;
-         //model.fImproveFit = false;
-
-         if(model.fNoStore){
-            model.fNoDrawing = true;
-         }
-         else{
-            model.fNoDrawing = false;
-         }
-
-         if((model.fFuncChangeInt >= 6) && (model.fFuncChangeInt <= 15)){
-            model.fLinear = true;
-
-         }
-         else {
-            model.fLinear = false;
-
-         }
-
-         //Communication with the JSONModel in JS
-         // TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("FitPanelModel"));
-         TString json = TBufferJSON::ToJSON(&model);
-
-         fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
-
-         return;
-      }
       //FITTING
       if (arg.find("DOFIT:") == 0) {
          std::string arg1 = arg;
@@ -351,34 +351,27 @@ public:
             }
             delete obj;
          }
-
       }
-
 
    }
 
    //Create the window
-   void Show(const std::string &where = "")
+   void Show()
    {
-
-      fWindow = ROOT::Experimental::RWebWindowsManager::Instance()->CreateWindow();
+      fWindow = ROOT::RWebWindow::Create();
 
       // this is very important, it defines name of openui5 widget, which
       // will run on the client side
       fWindow->SetPanelName("localapp.view.SimpleFitPanel");
 
-      //fWindow->SetDefaultPage("file:fclWithRouting.html");
+      fWindow->SetConnectCallBack([this](unsigned connid) { ProcessConnection(connid); });
 
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
 
       fWindow->SetGeometry(450, 650); // configure predefined geometry
 
-      fWindow->Show(where);
-
-      // instead showing of window just generate URL, which can be copied into the browser
-      std::string url = fWindow->GetUrl(true);
-      printf("Example: %s\n", url.c_str());
+      fWindow->Show();
    }
 };
 
