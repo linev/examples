@@ -1,15 +1,13 @@
 sap.ui.define([
-   'sap/ui/jsroot/GuiPanelController',
+   'rootui5/panel/Controller',
    'sap/ui/model/json/JSONModel'
 ], function (GuiPanelController, JSONModel) {
-   
+
    "use strict";
 
    return GuiPanelController.extend("localapp.controller.SimpleBrowser",{
 
-
-
-   	OnWebsocketMsg: function(handle, msg){
+   	onPanelReceive(msg){
 
    		if(msg.indexOf("MODEL:") == 0){
 
@@ -30,9 +28,9 @@ sap.ui.define([
    		}
    	},
 
-   	onPanelExit: function(){
+   	onPanelExit() {
 
-      },
+      }
 
    });
 

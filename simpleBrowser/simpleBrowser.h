@@ -1,4 +1,4 @@
-#include <ROOT/RWebWindowsManager.hxx>
+#include <ROOT/RWebWindow.hxx>
 
 #include <vector>
 #include <string>
@@ -25,63 +25,57 @@ struct BrowserModel{
 
 class SimpleBrowser {
 private:
-	std::shared_ptr<ROOT::Experimental::RWebWindow> fWindow;
-	unsigned fConnId{0};
+	std::shared_ptr<ROOT::RWebWindow> fWindow;
+	unsigned fConnId = 0;
 	//TH1 *fHist{nullptr};
 
 public:
-	SimpleBrowser() {};
-
-	virtual ~SimpleBrowser() {};
+	SimpleBrowser() {}
 
 
-	void ProcessData(unsigned connid, const std::string &arg){
+	void ProcessConnection(unsigned connid)
+   {
+      fConnId = connid;
+      printf("connection established %u\n", fConnId);
 
-		if (arg == "CONN_READY"){
-			printf("Start Here\n");
+		fWindow->Send(fConnId, "INITDONE");
 
-			fConnId = connid;
-			fWindow->Send(fConnId, "INITDONE");
+		BrowserModel model;
+		int count = 1;
 
-			BrowserModel model;
-			int count = 1;
-
-			//Tree Data
-	         model.ftree.push_back(TreeListItem("Node 1"));
-	         model.ftree.push_back(TreeListItem("Node 2"));
-	         model.ftree.back().treelist.push_back(TreeListItem("Node 2-1"));
-	         for (int i = 0; i<500; i++){
-	         	model.ftree.back().treelist.push_back(TreeListItem(Form("Node 2-1-%d", i)));
-	         	for (int j = 0; j<2; j++){
-	         		model.ftree.back().treelist.back().treelist.push_back(TreeListItem(Form("Node 2-1-1-%d",j)));
-
-	         	}
-
-
-	         }
-
-	        
-
-	         model.ftree.push_back(TreeListItem("Node3"));
-
-         TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("BrowserModel"));
-         fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
-
+		//Tree Data
+		model.ftree.push_back(TreeListItem("Node 1"));
+		model.ftree.push_back(TreeListItem("Node 2"));
+		model.ftree.back().treelist.push_back(TreeListItem("Node 2-1"));
+		for (int i = 0; i<500; i++){
+			model.ftree.back().treelist.push_back(TreeListItem(Form("Node 2-1-%d", i)));
+			for (int j = 0; j<2; j++){
+				model.ftree.back().treelist.back().treelist.push_back(TreeListItem(Form("Node 2-1-1-%d",j)));
+			}
 		}
+
+		model.ftree.push_back(TreeListItem("Node3"));
+
+		TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("BrowserModel"));
+		fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
 	}
 
-	void Show(const std::string	&where = ""){
-		fWindow = ROOT::Experimental::RWebWindowsManager::Instance()->CreateWindow();
+
+	void ProcessData(unsigned connid, const std::string &arg)
+	{
+	}
+
+	void Show() {
+		fWindow = ROOT::RWebWindow::Create();
 
 		fWindow->SetPanelName("localapp.view.SimpleBrowser");
+
+		fWindow->SetConnectCallBack([this](unsigned connid) { ProcessConnection(connid); });
 
 		fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) {ProcessData(connid, arg); });
 		fWindow->SetGeometry(450, 550);
 
-		fWindow->Show(where);
-
-		std::string url = fWindow->GetUrl(true);
-		printf("Example: %s\n",url.c_str() );
+		fWindow->Show();
 	}
 
 };

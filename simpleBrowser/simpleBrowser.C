@@ -1,6 +1,7 @@
 #include "simpleBrowser.h"
 
-void simpleBrowser(){
+void simpleBrowser()
+{
 	auto browser = new SimpleBrowser();
 
 	browser->Show();
