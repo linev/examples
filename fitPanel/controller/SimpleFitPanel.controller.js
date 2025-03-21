@@ -30,8 +30,6 @@ sap.ui.define([
          this._data = data;
       },
 
-
-
       // Assign the new JSONModel to data
       onPanelReceive(msg){
 
