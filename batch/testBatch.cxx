@@ -72,8 +72,10 @@ public:
 
          printf("Create file.png size %u\n", (unsigned) binary.Length());
 
-         if (++fImgCnt == 2)
+         if (++fImgCnt == 2) {
             fWindow->CloseConnection(connid);
+            fWindow->TerminateROOT();
+         }
 
          return;
       }
@@ -88,8 +90,10 @@ public:
          printf("Create file.png size %u\n", (unsigned) arg.length()-4);
 
 
-         if (++fImgCnt == 2)
+         if (++fImgCnt == 2) {
             fWindow->CloseConnection(connid);
+            fWindow->TerminateROOT();
+         }
 
          return;
       }
@@ -118,7 +122,15 @@ public:
 
       fWindow->SetGeometry(300, 300); // configure predefined geometry  900x700
 
-      fWindow->Show();
+      ROOT::RWebDisplayArgs args;
+      // special browser mode when window is not shown, but all functionality can be used
+      // works only with --web=chrome and --web=firefox
+      if (gROOT->IsBatch()) {
+         printf("Start browser in headless mode and just wait for connection\n");
+         args.SetHeadless(true);
+      }
+
+      fWindow->Show(args);
    }
 
 };
