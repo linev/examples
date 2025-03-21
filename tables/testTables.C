@@ -6,7 +6,7 @@
 /// \author Sergey Linev
 
 
-#include <ROOT/RWebWindowsManager.hxx>
+#include <ROOT/RWebWindow.hxx>
 
 #include <vector>
 #include <string>
@@ -32,48 +32,41 @@ struct TestPanelModel {
 
 class WHandler {
 private:
-   std::shared_ptr<ROOT::Experimental::RWebWindow> fWindow;
+   std::shared_ptr<ROOT::RWebWindow> fWindow;
    unsigned fConnId{0};
 
 public:
-   WHandler() {};
+   WHandler() {}
 
-   virtual ~WHandler() { printf("Destructor!!!!\n"); }
+   void ProcessConnection(unsigned connid)
+   {
+      fConnId = connid;
+
+      printf("connection established %u\n", fConnId);
+      fWindow->Send(fConnId, "INITDONE");
+
+      TestPanelModel model;
+      model.fDataNames.push_back(ComboBoxItem("1", "RootData1"));
+      model.fDataNames.push_back(ComboBoxItem("2", "RootData2"));
+      model.fDataNames.push_back(ComboBoxItem("3", "RootData3"));
+      model.fDataNames.push_back(ComboBoxItem("4", "RootData-4"));
+      model.fDataNames.push_back(ComboBoxItem("5", "RootData-5"));
+      model.fDataNames.push_back(ComboBoxItem("6", "RootData-6"));
+      model.fSelectDataId = "1";
+
+      model.fModelNames.push_back(ComboBoxItem("1", "RootModel1"));
+      model.fModelNames.push_back(ComboBoxItem("2", "RootModel2"));
+      model.fModelNames.push_back(ComboBoxItem("3", "RootModel3"));
+      model.fSelectModelId = "3";
+
+      TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("TestPanelModel"));
+
+      fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
+
+   }
 
    void ProcessData(unsigned connid, const std::string &arg)
    {
-      if (arg == "CONN_READY") {
-         fConnId = connid;
-         printf("connection established %u\n", fConnId);
-         fWindow->Send(fConnId, "INITDONE");
-
-         TestPanelModel model;
-         model.fDataNames.push_back(ComboBoxItem("1", "RootData1"));
-         model.fDataNames.push_back(ComboBoxItem("2", "RootData2"));
-         model.fDataNames.push_back(ComboBoxItem("3", "RootData3"));
-         model.fDataNames.push_back(ComboBoxItem("4", "RootData-4"));
-         model.fDataNames.push_back(ComboBoxItem("5", "RootData-5"));
-         model.fDataNames.push_back(ComboBoxItem("6", "RootData-6"));
-         model.fSelectDataId = "1";
-
-         model.fModelNames.push_back(ComboBoxItem("1", "RootModel1"));
-         model.fModelNames.push_back(ComboBoxItem("2", "RootModel2"));
-         model.fModelNames.push_back(ComboBoxItem("3", "RootModel3"));
-         model.fSelectModelId = "3";
-
-         TString json = TBufferJSON::ConvertToJSON(&model, gROOT->GetClass("TestPanelModel"));
-
-         fWindow->Send(fConnId, std::string("MODEL:") + json.Data());
-
-         return;
-      }
-
-      if (arg == "CONN_CLOSED") {
-         printf("connection closed\n");
-         fConnId = 0;
-         return;
-      }
-
       if (arg == "GET_BINARY") {
          float arr[1000];
          for (int n=0;n<1000;++n) arr[n] = n*1.11111;
@@ -92,27 +85,25 @@ public:
 
    }
 
-   void popupWindow(const std::string &where = "")
+   void popupWindow()
    {
 
-      fWindow = ROOT::Experimental::RWebWindowsManager::Instance()->CreateWindow();
+      printf("Example does not work while sap.ui.table libs is not loaded\n");
+
+      fWindow = ROOT::RWebWindow::Create();
 
       // this is very important, it defines name of openui5 widget, which
       // will run on the client side
       fWindow->SetPanelName("localapp.view.TestTables");
 
-      // fWindow->SetDefaultPage("file:fclWithRouting.html");
+		fWindow->SetConnectCallBack([this](unsigned connid) { ProcessConnection(connid); });
 
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
 
       fWindow->SetGeometry(900, 500); // configure predefined geometry
 
-      fWindow->Show(where);
-
-      // instead showing of window just generate URL, which can be copied into the browser
-      std::string url = fWindow->GetUrl(true);
-      printf("Example: %s\n", url.c_str());
+      fWindow->Show();
    }
 };
 
@@ -124,23 +115,3 @@ void testTables()
    handler = new WHandler();
    handler->popupWindow();
 }
-
-/*
-
-[
- {
-    "globalId": 1,
-    "parentId": 0,
-    "name": "Global Scene"
- }, {
-    "globalId": 2,
-    "parentId": 1,
-    "name": "Geomerty",
-    "renderdata" : 0,
-    "renderdatasize" : 1024
-
- }
-
-]
-
-*/
