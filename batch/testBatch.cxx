@@ -1,13 +1,13 @@
 /// \file
 /// \ingroup tutorial_http
-///  This program show usage of JSROOT graphics inside batch RWebWindow
+///  This program show usage of batch JSROOT graphics inside RWebWindow
 ///
 /// \macro_code
 ///
 /// \author Sergey Linev
 
 
-#include <ROOT/RWebWindowsManager.hxx>
+#include <ROOT/RWebWindow.hxx>
 
 #include "TFile.h"
 #include "TH2.h"
@@ -20,8 +20,9 @@
 
 class WHandler {
 private:
-   std::shared_ptr<ROOT::Experimental::RWebWindow>  fWindow;
-   unsigned fConnId{0};
+   std::shared_ptr<ROOT::RWebWindow>  fWindow;
+   unsigned fConnId = 0;
+   int fImgCnt = 0;
 
 public:
    WHandler() {};
@@ -32,6 +33,7 @@ public:
    {
       if (arg == "CONN_READY") {
          fConnId = connid;
+         fImgCnt = 0;
          printf("connection established %u\n", fConnId);
          //fWindow->Send(fConnId, "INITDONE");
          return;
@@ -40,6 +42,7 @@ public:
       if (arg == "CONN_CLOSED") {
          printf("connection closed\n");
          fConnId = 0;
+
          return;
       }
 
@@ -57,13 +60,20 @@ public:
       }
 
       if (arg.substr(0,4) == "PNG:") {
-         printf("GET PNG IMAGE len = %lu\n", arg.length()-4);
+         printf("GET PNG IMAGE len = %lu\n", arg.length() - 4);
 
-         TString binary = TBase64::Decode(arg.c_str()+4);
+         auto pos = arg.find("base64,");
+
+         TString binary = TBase64::Decode(arg.c_str() + pos + 7);
 
          std::ofstream ofs("file.png", std::ios::binary);
          ofs.write(binary.Data(), binary.Length());
          ofs.close();
+
+         printf("Create file.png size %u\n", (unsigned) binary.Length());
+
+         if (++fImgCnt == 2)
+            fWindow->CloseConnection(connid);
 
          return;
       }
@@ -75,11 +85,19 @@ public:
          ofs.write(arg.c_str()+4, arg.length()-4);
          ofs.close();
 
-         fWindow->CloseConnection(connid);
+         printf("Create file.png size %u\n", (unsigned) arg.length()-4);
+
+
+         if (++fImgCnt == 2)
+            fWindow->CloseConnection(connid);
 
          return;
       }
 
+      if (arg.substr(0,4) == "DBG:") {
+         printf("Debug: %s\n", arg.c_str() + 4);
+         return;
+      }
 
       printf("msg -> %s\n", arg.c_str());
    }
@@ -87,7 +105,7 @@ public:
    void popupTest()
    {
 
-      fWindow =  ROOT::Experimental::RWebWindowsManager::Instance()->CreateWindow();
+      fWindow =  ROOT::RWebWindow::Create();
 
       // this is very important, it defines name of openui5 widget, which
       // will run on the client side
@@ -98,11 +116,9 @@ public:
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
 
-      fWindow->SetGeometry(1600, 1400); // configure predefined geometry  900x700
+      fWindow->SetGeometry(300, 300); // configure predefined geometry  900x700
 
-      // printf("Win URL = %s\n", fWindow->GetUrl(true).c_str());
-
-      fWindow->MakeBatch();
+      fWindow->Show();
    }
 
 };
@@ -111,8 +127,6 @@ WHandler* handler = nullptr;
 
 void testBatch()
 {
-   // gEnv->SetValue("WebGui.ChromeBatch", "fork: --headless --remote-debugging-pipe $url");
-
    handler = new WHandler();
 
    handler->popupTest();
