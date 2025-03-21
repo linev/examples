@@ -7,7 +7,7 @@
 /// \author Sergey Linev
 
 
-#include <ROOT/RWebWindowsManager.hxx>
+#include <ROOT/RWebWindow.hxx>
 
 #include "TFile.h"
 #include "TGraph.h"
@@ -19,32 +19,26 @@
 
 class WHandler {
 private:
-   std::shared_ptr<ROOT::Experimental::RWebWindow>  fWindow;
-   unsigned fConnId{0};
-   bool fSendCanvas{false};
+   std::shared_ptr<ROOT::RWebWindow> fWindow;
+   unsigned fConnId = 0;
+   bool fSendCanvas = false;
 
 public:
    WHandler(bool send_canv = true) : fSendCanvas(send_canv) {};
 
    virtual ~WHandler() { printf("Destructor!!!!\n"); }
 
+   void ProcessConnection(unsigned connid)
+   {
+      fConnId = connid;
+      printf("connection established %u\n", fConnId);
+   }
+
+
    void ProcessData(unsigned connid, const std::string &arg)
    {
-      if (arg == "CONN_READY") {
-         fConnId = connid;
-         printf("connection established %u\n", fConnId);
-         //fWindow->Send(fConnId, "INITDONE");
-         return;
-      }
-
-      if (arg == "CONN_CLOSED") {
-         printf("connection closed\n");
-         fConnId = 0;
-         return;
-      }
-
-      if (arg!="Init") {
-         printf("Get msg:\n%s\n", arg.c_str());
+      if (arg != "Init") {
+         printf("Get msg len %u:\n%s\n", (unsigned) arg.length(), arg.substr(0,100).c_str());
          // printf("Get msg %s\n", arg.substr(0,200).c_str());
 
          /* TGraphAsymmErrors *gr3 = nullptr;
@@ -112,30 +106,28 @@ public:
       }
    }
 
-   void popupTest(const std::string &where = "")
+   void popupTest()
    {
 
-      fWindow =  ROOT::Experimental::RWebWindowsManager::Instance()->CreateWindow();
-
-      // this is very important, it defines name of openui5 widget, which
-      // will run on the client side
-      // fWindow->SetPanelName("TextTest");
+      fWindow = ROOT::RWebWindow::Create();
 
       fWindow->SetDefaultPage("file:testGraphics.html");
+
+      fWindow->SetConnectCallBack([this](unsigned connid) { ProcessConnection(connid); });
 
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
 
       fWindow->SetGeometry(800, 500); // configure predefined geometry
 
-      fWindow->Show(where);
+      fWindow->Show();
    }
 
 };
 
 WHandler* handler = nullptr;
 
-void testGraphics(bool send_canvas = false)
+void testGraphics(bool send_canvas = true)
 {
    handler = new WHandler(send_canvas);
 
