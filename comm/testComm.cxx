@@ -9,12 +9,12 @@
 /// \author Sergey Linev
 
 
-#include <ROOT/RWebWindowsManager.hxx>
+#include <ROOT/RWebWindow.hxx>
 
 class WHandler {
 private:
-   std::shared_ptr<ROOT::Experimental::RWebWindow>  fWindow;
-   unsigned fConnId{0};
+   std::shared_ptr<ROOT::RWebWindow>  fWindow;
+   unsigned fConnId = 0;
 
 public:
    WHandler() {};
@@ -38,34 +38,29 @@ public:
 
       printf("Get msg %s \n", arg.c_str());
 
-      float arr[100000];
-      for (int n=0;n<100000;++n)
+      float arr[10000];
+      for (int n=0;n<10000;++n)
          arr[n] = n;
 
       for (int n=0;n<8;n++) {
-         fWindow->Send(fConnId, Form("Message%d",n));
+         fWindow->Send(fConnId, TString::Format("Message%d",n).Data());
          arr[0] = n;
          fWindow->SendBinary(fConnId, arr, (n%2 == 0) ? sizeof(arr) : 40);
       }
    }
 
-   void popupTest(const std::string &where = "")
+   void popupTest()
    {
-
-      fWindow =  ROOT::Experimental::RWebWindowsManager::Instance()->CreateWindow();
-
-      // this is very important, it defines name of openui5 widget, which
-      // will run on the client side
-      // fWindow->SetPanelName("TextTest");
+      fWindow = ROOT::RWebWindow::Create();
 
       fWindow->SetDefaultPage("file:testComm.html");
 
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
 
-      fWindow->SetGeometry(300, 500); // configure predefined geometry
+      fWindow->SetGeometry(300, 700); // configure predefined geometry
 
-      fWindow->Show(where);
+      fWindow->Show();
    }
 
 };
