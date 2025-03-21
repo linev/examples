@@ -22,7 +22,7 @@ jQuery.sap.declare("localapp.controller.CustomPanel");
 				}
 			}
 		},
-		renderer: function (oRm, oControl) {
+		renderer(oRm, oControl) {
 			if (!oControl.getVisible()) {
 				return;
 			}

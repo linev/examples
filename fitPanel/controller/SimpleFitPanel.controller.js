@@ -7,15 +7,17 @@ sap.ui.define([
 ], function (GuiPanelController, JSONModel, ColorPickerPopover, Button, Table) {
 
    "use strict";
-   var count = 0;
+   let count = 0;
    return GuiPanelController.extend("localapp.controller.SimpleFitPanel",{
 
          //function called from GuiPanelController
-      onPanelInit : function() {
-         var id = this.getView().getId();
+      onPanelInit() {
+         console.log('INIT PANEL');
+
+         let id = this.getView().getId();
          this.inputId = "";
-         var opText = this.getView().byId("OperationText");
-         var data = {
+         let opText = this.getView().byId("OperationText");
+         let data = {
                //fDataSet:[ { fId:"1", fSet: "----" } ],
                fSelectDataId: "2",
                // fMinRange: -4,
@@ -25,133 +27,127 @@ sap.ui.define([
                fUpdateRange: [-4,4]
          };
          this.getView().setModel(new JSONModel(data));
-         this._data = data; 
+         this._data = data;
       },
 
 
 
-      // Assign the new JSONModel to data      
-      OnWebsocketMsg: function(handle, msg){
+      // Assign the new JSONModel to data
+      onPanelReceive(msg){
 
          if(msg.startsWith("MODEL:")){
-            var json = msg.substr(6);
-            var data = JSROOT.parse(json);
+            let json = msg.substr(6);
+            let data = this.jsroot.parse(json);
 
             if(data) {
                this.getView().setModel(new JSONModel(data));
                this._data = data;
 
-               this.copyModel = JSROOT.extend({},data);
+               this.copyModel = Object.assign({},data);
             }
-         }
-         else {
          }
 
       },
 
       //Fitting Button
-      doFit: function() {
+      doFit() {
          //Keep the #times the button is clicked
          count++;
          //Data is a new model. With getValue() we select the value of the parameter specified from id
-         var data = this.getView().getModel().getData();
-         //var func = this.getView().byId("TypeXY").getValue();
-         var func = this.getView().byId("selectedOpText").getText();
+         let data = this.getView().getModel().getData();
+         //let func = this.getView().byId("TypeXY").getValue();
+         let func = this.getView().byId("selectedOpText").getText();
          //We pass the value from func to C++ fRealFunc
          data.fRealFunc = func;
 
          //Refresh the model
          this.getView().getModel().refresh();
          //Each time we click the button, we keep the current state of the model
-         this.copyModel[count] = JSROOT.extend({},data);
+         this.copyModel[count] = Object.assign({},data);
 
-         if (this.websocket)
-            this.websocket.Send('DOFIT:'+this.getView().getModel().getJSON());
+         this.panelSend('DOFIT:'+this.getView().getModel().getJSON());
+      },
+
+      onPanelExit(){
 
       },
 
-      onPanelExit: function(){
-
-      },
-
-      resetPanel: function(oEvent){
+      resetPanel(oEvent){
 
          if(!this.copyModel) return;
 
-         JSROOT.extend(this._data, this.copyModel);
+         Object.assign(this._data, this.copyModel);
          this.getView().getModel().updateBindings();
          this.byId("selectedOpText").setText("gaus");
          this.byId("OperationText").setValue("");
-         return;
       },
 
-      backPanel: function() {
+      backPanel() {
          //Each time we click the button, we go one step back
          count--;
          if(count < 0) return;
          if(!this.copyModel[count]) return;
 
-         JSROOT.extend(this._data, this.copyModel[count]);
+         Object.assign(this._data, this.copyModel[count]);
          this.getView().getModel().updateBindings();
-         return;
       },
 
-      backPanel: function() {
+      backPanel() {
          //Each time we click the button, we go one step back
          count--;
          if(count < 0) return;
          if(!this.copyModel[count]) return;
 
-         JSROOT.extend(this._data, this.copyModel[count]);
+         Object.assign(this._data, this.copyModel[count]);
          this.getView().getModel().updateBindings();
          return;
       },
 
-     //Change the input text field. When a function is seleced, it appears on the text input field and
+     //Change the input text field. When a function is selected, it appears on the text input field and
      //on the text area.
-       onTypeXYChange: function(){
-         var data = this.getView().getModel().getData();
-         var linear = this.getView().getModel().getData().fSelectXYId;
+      onTypeXYChange(){
+         let data = this.getView().getModel().getData();
+         let linear = this.getView().getModel().getData().fSelectXYId;
          data.fFuncChange = linear;
          this.getView().getModel().refresh();
 
          //updates the text area and text in selected tab, depending on the choice in TypeXY ComboBox
-         var func = this.getView().byId("TypeXY").getValue();
+         let func = this.getView().byId("TypeXY").getValue();
          this.byId("OperationText").setValueLiveUpdate();
          this.byId("OperationText").setValue(func);
          this.byId("selectedOpText").setText(func);
-       },
+      },
 
-        operationTextChange: function(oEvent) {
-         var newValue = oEvent.getParameter("value");
+      operationTextChange(oEvent) {
+         let newValue = oEvent.getParameter("value");
          this.byId("selectedOpText").setText(newValue);
-       },
+      },
 
 
       //change the combo box in Minimization Tab --- Method depending on Radio Buttons values
-      selectRB: function(){
-         
-         var data = this.getView().getModel().getData();
-         var lib = this.getView().getModel().getData().fLibrary;
-         
+      selectRB(){
+
+         let data = this.getView().getModel().getData();
+         let lib = this.getView().getModel().getData().fLibrary;
+
          // same code as initialization
          data.fMethodMin = data.fMethodMinAll[parseInt(lib)];
-         
-         
+
+
          // refresh all UI elements
          this.getView().getModel().refresh();
          console.log("Method = ", data.fMethodMinAll[parseInt(lib)]);
-         
+
     },
       //Change the combobox in Type Function
-      //When the Type (TypeFunc) is changed (Predef etc) then the combobox with the funtions (TypeXY), 
-      //is also changed 
-      selectTypeFunc: function(){
+      //When the Type (TypeFunc) is changed (Predef etc) then the combobox with the funtions (TypeXY),
+      //is also changed
+      selectTypeFunc(){
 
-         var data = this.getView().getModel().getData();
+         let data = this.getView().getModel().getData();
 
-         var typeXY = this.getView().getModel().getData().fSelectTypeId;
-         var dataSet = this.getView().getModel().getData().fSelectDataId;
+         let typeXY = this.getView().getModel().getData().fSelectTypeId;
+         let dataSet = this.getView().getModel().getData().fSelectDataId;
          console.log("typeXY = " + dataSet);
 
          data.fTypeXY = data.fTypeXYAll[parseInt(typeXY)];
@@ -160,19 +156,19 @@ sap.ui.define([
          console.log("Type = ", data.fTypeXYAll[parseInt(typeXY)]);
       },
 
-      //Change the selected checkbox of Draw Options 
+      //Change the selected checkbox of Draw Options
       //if Do not Store is selected then No Drawing is also selected
-      storeChange: function(){
-         var data = this.getView().getModel().getData();
-         var fDraw = this.getView().byId("noStore").getSelected();
+      storeChange(){
+         let data = this.getView().getModel().getData();
+         let fDraw = this.getView().byId("noStore").getSelected();
          console.log("fDraw = ", fDraw);
          data.fNoStore = fDraw;
          this.getView().getModel().refresh();
          console.log("fNoDrawing ", data.fNoStore);
       },
 
-      setParametersDialog: function(){
-         var aColumnData = [{
+      setParametersDialog(){
+         let aColumnData = [{
             columnId: "Name"
          },
          {
@@ -200,16 +196,16 @@ sap.ui.define([
             columnId: "Errors"
          }];
 
-         var colModel = new sap.ui.model.json.JSONModel();
+         let colModel = new sap.ui.model.json.JSONModel();
          colModel.setData({
             columns: aColumnData
          });
 
-         var oPersonalizationDialog = sap.ui.xmlfragment("localapp.view.SetParameters", this);
+         let oPersonalizationDialog = sap.ui.xmlfragment("localapp.view.SetParameters", this);
          this.getView().addDependent(oPersonalizationDialog);
          oPersonalizationDialog.open();
-         var func = this.getView().byId("selectedOpText").getText();
-         var oTable = new sap.m.Table({});
+         let func = this.getView().byId("selectedOpText").getText();
+         let oTable = new sap.m.Table({});
          oTable.setModel(colModel);
 
          oTable.bindAggregation("columns", "/columns", function(index, context) {
@@ -221,10 +217,10 @@ sap.ui.define([
          });
 
          oTable.bindItems("/rows", function(index, context) {
-            var obj = context.getObject();
-            var row = new sap.m.ColumnListItem();
+            let obj = context.getObject();
+            let row = new sap.m.ColumnListItem();
 
-            for(var k in obj) {
+            for(let k in obj) {
                row.addCell(new sap.m.Text({
                   text: obj[k]
                }));
@@ -236,15 +232,15 @@ sap.ui.define([
          oTable.placeAt("content");
 
          // if (func == "gaus"){
-         //    var par = 3;
-         //    for (var i=0; i<par; i++){
-         //       for (var j=0; j<8; j++){
+         //    let par = 3;
+         //    for (let i=0; i<par; i++){
+         //       for (let j=0; j<8; j++){
 
          //       }
          //       //oPersonalizationDialog.addContent(new sap.m.Title)
          //    }
          // }
-         // for (var i=0; i<5; i++){
+         // for (let i=0; i<5; i++){
          //    oTable.addContent(new sap.m.Label({
          //       text: "label",
          //       columns: [ new sap.m.Column({
@@ -262,11 +258,11 @@ sap.ui.define([
 
 
       //Cancel Button on Set Parameters Dialog Box
-      onCancel: function(oEvent){
+      onCancel(oEvent){
          oEvent.getSource().close();
       },
 
-      colorPicker: function (oEvent) {
+      colorPicker(oEvent) {
          this.inputId = oEvent.getSource().getId();
          if (!this.oColorPickerPopover) {
             this.oColorPickerPopover = new sap.ui.unified.ColorPickerPopover({
@@ -278,24 +274,23 @@ sap.ui.define([
          this.oColorPickerPopover.openBy(oEvent.getSource());
       },
 
-      handleChange: function (oEvent) {
-         var oView = this.getView();
+      handleChange(oEvent) {
+         let oView = this.getView();
          //oView.byId(this.inputId).setValue(oEvent.getParameter("colorString"));
          this.inputId = "";
-         var color = oEvent.getParameter("colorString");
+         let color = oEvent.getParameter("colorString");
       },
 
-      updateRange: function() {
-         var data = this.getView().getModel().getData();
-         var range = this.getView().byId("Slider").getRange();
+      updateRange() {
+         let data = this.getView().getModel().getData();
+         let range = this.getView().byId("Slider").getRange();
          console.log("Slider " + range);
 
          //We pass the values from range array in JS to C++ fRange array
          data.fUpdateRange[0] = range[0];
          data.fUpdateRange[1] = range[1];
       },
-      
+
    });
 
-   return 
 });
