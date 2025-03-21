@@ -11,11 +11,11 @@ sap.ui.define([
 
    		if(msg.indexOf("MODEL:") == 0){
 
-   			var json = msg.substr(6);
-   			var data = JSROOT.parse(json);
+   			const json = msg.slice(6),
+   			      data = JSON.parse(json);
 
    			if(data){
-   				var oModel = new JSONModel(data);
+   				const oModel = new JSONModel(data);
                this.getView().setModel(oModel);
                console.log("OMODEL" + oModel);
    				this._data = data;
@@ -23,13 +23,11 @@ sap.ui.define([
    			}
 
    			else {
-   				//this.getView().byId("SampleText").setText("Get message:\n" + msg);
    			}
    		}
    	},
 
    	onPanelExit() {
-
       }
 
    });
