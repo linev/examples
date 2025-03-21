@@ -24,6 +24,9 @@ public:
    void ProcessData(unsigned connid, const std::string &arg)
    {
       printf("Get msg %s \n", arg.c_str());
+
+      if (arg == "QUIT_ROOT")
+         fWindow->TerminateROOT();
    }
 
    void popupWindow()

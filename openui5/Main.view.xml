@@ -14,14 +14,12 @@
         <Button text="File" type="sap.m.ButtonType.Transparent" press="onPress" />
         <Button icon="sap-icon://arrow-left" tootlip="previous event" press="onPress" />
         <Button icon="sap-icon://arrow-right" tootlip="previous event" press="onPress" />
-	<tnt:ToolHeaderUtilitySeparator />
-	<ToolbarSpacer minWidth="20px" priority="sap.m.OverflowToolbarPriority.NeverOverflow" />
-	<tnt:ToolHeaderUtilitySeparator />
-	<Label id="mylt" text="Event:" />
-
-	<Label id="mylt2" text="Luminosity:" />
-
-        <Button icon="sap-icon://log" tootlip="kill http server" press="killRoot" />
+        <tnt:ToolHeaderUtilitySeparator />
+        <ToolbarSpacer minWidth="20px" priority="sap.m.OverflowToolbarPriority.NeverOverflow" />
+        <tnt:ToolHeaderUtilitySeparator />
+        <Label id="mylt" text="Event:" />
+        <Label id="mylt2" text="Luminosity:" />
+        <Button icon="sap-icon://log" type="Transparent" tootlip="terminate ROOT application" press="onPressQuitRoot"/>
       </tnt:ToolHeader>
     </subHeader>
     <content>

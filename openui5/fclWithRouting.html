@@ -28,11 +28,6 @@
             onWebsocketOpened(handle) {
               console.log('Connected');
 				  handle.send('Init msg from client');
-
-
-					//sap.ui.require(["sap/m/App", "sap/m/Page" ], function(mApp, mPage) {
-					//}); // sap.ui.require
-
            },
 
            onWebsocketMsg(handle, msg, offset) {
@@ -49,10 +44,7 @@
         }
       }).then(handle => {
 
-			console.log('now init app');
-
-			//sap.ui.getCore().loadLibrary("sap.tnt");
-	      //jQuery.sap.registerModulePath("flexiblecolumnlayout", "/currentdir/");
+			globalThis.main_handle = handle;
 			sap.ui.loader.config({
 				paths: {
 					'flexiblecolumnlayout': '/currentdir/'
@@ -63,15 +55,14 @@
 				initialPage: "idMain"
 			});
 
-			var page = sap.ui.view({
-				id: "idMain",
-				viewName: "flexiblecolumnlayout.Main",
+			let page = sap.ui.view({
+				id: 'idMain',
+				viewName: 'flexiblecolumnlayout.Main',
 				type: sap.ui.core.mvc.ViewType.XML
-
 			});
+
 			app.addPage(page);
 			app.placeAt("content");
-
 		});
 
 	</script>
