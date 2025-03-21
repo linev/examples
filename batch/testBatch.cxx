@@ -29,23 +29,15 @@ public:
 
    virtual ~WHandler() { printf("Destructor!!!!\n"); }
 
+   void ProcessConnection(unsigned connid)
+   {
+      fConnId = connid;
+      fImgCnt = 0;
+      printf("connection established %u\n", fConnId);
+   }
+
    void ProcessData(unsigned connid, const std::string &arg)
    {
-      if (arg == "CONN_READY") {
-         fConnId = connid;
-         fImgCnt = 0;
-         printf("connection established %u\n", fConnId);
-         //fWindow->Send(fConnId, "INITDONE");
-         return;
-      }
-
-      if (arg == "CONN_CLOSED") {
-         printf("connection closed\n");
-         fConnId = 0;
-
-         return;
-      }
-
       if (arg == "Init") {
          TFile *f = TFile::Open("https://root.cern/js/files/hsimple.root");
          if (!f) return;
@@ -116,6 +108,8 @@ public:
       // fWindow->SetPanelName("TextTest");
 
       fWindow->SetDefaultPage("file:testBatch.html");
+
+      fWindow->SetConnectCallBack([this](unsigned connid) { ProcessConnection(connid); });
 
       // this is call-back, invoked when message received via websocket
       fWindow->SetDataCallBack([this](unsigned connid, const std::string &arg) { ProcessData(connid, arg); });
